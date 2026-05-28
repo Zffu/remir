@@ -2,6 +2,7 @@
 
 pub mod float;
 pub mod int;
+pub mod ptr;
 
 /// The type of the SSA MIR values.
 #[derive(Clone, PartialEq)]
