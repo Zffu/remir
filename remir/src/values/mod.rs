@@ -5,14 +5,14 @@ pub mod int;
 pub mod ptr;
 
 /// The type of the SSA MIR values.
-#[derive(Clone, PartialEq)]
+#[derive(Clone, Copy, PartialEq)]
 pub enum ValueType {
     Float(bool, usize),
     Int(bool, usize),
     Pointer,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Copy)]
 pub struct BaseSSAValue {
     /// The index responsible to the creation of said value
     pub inst_ind: usize,

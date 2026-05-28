@@ -1,6 +1,7 @@
 use crate::values::{BaseSSAValue, ValueType};
 
 /// A variant of [`BaseSSAValue`] that is an integer
+#[derive(Clone, Copy)]
 pub struct SSAIntValue {
     pub base: BaseSSAValue,
     pub signed: bool,
