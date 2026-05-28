@@ -2,8 +2,8 @@
 
 /// The type of the SSA MIR values.
 pub enum ValueType {
-    Float,
-    Int,
+    Float(bool, usize),
+    Int(bool, usize),
     Pointer,
 }
 
