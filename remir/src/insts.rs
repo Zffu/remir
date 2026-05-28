@@ -80,6 +80,21 @@ pub enum Instruction {
         signed: bool,
     },
 
+    // Branch instructions
+    UncondBr {
+        branch: usize,
+    },
+
+    Condbr {
+        cond: SSAIntValue,
+        true_label: usize,
+        false_label: usize,
+    },
+
+    Phi {
+        label_set: Vec<(usize, BaseSSAValue)>,
+    },
+
     // Memory instructions
     AllocConst {
         size: usize,
