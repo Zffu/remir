@@ -93,6 +93,10 @@ pub enum Instruction {
         false_label: usize,
     },
 
+    IndirectBranch {
+        target: SSAPointerValue,
+    },
+
     Phi {
         label_set: Vec<(usize, BaseSSAValue)>,
     },
