@@ -145,6 +145,28 @@ pub enum Instruction {
         offset: SSAIntValue,
     },
 
+    LoadIndexedConst {
+        base: SSAPointerValue,
+        index: usize,
+    },
+
+    LoadIndexed {
+        base: SSAPointerValue,
+        index: SSAIntValue,
+    },
+
+    StoreIndexedConst {
+        base: SSAPointerValue,
+        index: usize,
+        val: BaseSSAValue,
+    },
+
+    StoreIndexed {
+        base: SSAPointerValue,
+        index: usize,
+        val: BaseSSAValue,
+    },
+
     // Value manipulation instructions
     BitCast {
         src: BaseSSAValue,
