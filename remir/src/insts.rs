@@ -156,4 +156,35 @@ pub enum Instruction {
         true_val: BaseSSAValue,
         false_val: BaseSSAValue,
     },
+
+    // Number instructions
+    IntToFloat {
+        val: SSAIntValue,
+        into: ValueType,
+    },
+
+    FloatToInt {
+        val: SSAFloatValue,
+        into: ValueType,
+    },
+
+    IntExtend {
+        val: SSAIntValue,
+        into: ValueType,
+    },
+
+    IntTruncate {
+        val: SSAIntValue,
+        into: ValueType,
+    },
+
+    FloatExtend {
+        val: SSAFloatValue,
+        into: ValueType,
+    },
+
+    FloatTruncate {
+        val: SSAFloatValue,
+        into: ValueType,
+    },
 }
