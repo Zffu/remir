@@ -3,4 +3,5 @@
 //! It uses a block-like representation with instructions and SSA values.
 
 pub mod insts;
+pub mod utils;
 pub mod values;
