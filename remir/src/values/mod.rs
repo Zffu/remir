@@ -1,12 +1,16 @@
 //! Definitions for values in the Remir MIR
 
+pub mod int;
+
 /// The type of the SSA MIR values.
+#[derive(Clone, PartialEq)]
 pub enum ValueType {
     Float(bool, usize),
     Int(bool, usize),
     Pointer,
 }
 
+#[derive(Clone)]
 pub struct BaseSSAValue {
     /// The index responsible to the creation of said value
     pub inst_ind: usize,
