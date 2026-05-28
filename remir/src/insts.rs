@@ -95,6 +95,23 @@ pub enum Instruction {
         label_set: Vec<(usize, BaseSSAValue)>,
     },
 
+    // Function instructions
+    Call {
+        func_label: usize,
+        args: Vec<BaseSSAValue>,
+
+        pure: bool,
+        no_capture: bool,
+        no_return: bool,
+
+        fast_calling_conv: bool,
+    },
+
+    RetNull,
+    Ret {
+        val: BaseSSAValue,
+    },
+
     // Memory instructions
     AllocConst {
         size: usize,
