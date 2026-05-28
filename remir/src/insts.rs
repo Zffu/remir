@@ -1,7 +1,10 @@
 //! Definitions of the instruction set of Remir
 
 use crate::{
-    utils::operators::{CompareOperator, MathOperator},
+    utils::{
+        atomic::MemoryOrder,
+        operators::{CompareOperator, MathOperator},
+    },
     values::{
         BaseSSAValue, ValueType, float::SSAFloatValue, int::SSAIntValue, ptr::SSAPointerValue,
     },
@@ -224,5 +227,41 @@ pub enum Instruction {
         struct_val: BaseSSAValue,
         index: usize,
         val: BaseSSAValue,
+    },
+
+    Switch {
+        cond: SSAIntValue,
+        default: BaseSSAValue,
+        cases: Vec<(i128, BaseSSAValue)>,
+
+        min_neg: i128,
+        max: i128,
+    },
+
+    // Atomic instructions
+    LoadAtomic {
+        source: SSAPointerValue,
+        ordering: MemoryOrder,
+    },
+
+    StoreAtomic {
+        dest: SSAPointerValue,
+        val: BaseSSAValue,
+        ordering: MemoryOrder,
+    },
+
+    Fence {
+        ordering: MemoryOrder,
+    },
+
+    /// SSA Hints
+    Unreachable,
+
+    Crash {
+        message: Option<String>,
+    },
+
+    Assume {
+        val: SSAIntValue,
     },
 }
