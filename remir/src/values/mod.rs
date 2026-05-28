@@ -1,5 +1,6 @@
 //! Definitions for values in the Remir MIR
 
+pub mod float;
 pub mod int;
 
 /// The type of the SSA MIR values.
