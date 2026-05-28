@@ -10,3 +10,12 @@ pub enum MathOperator {
     Shl,
     Shr,
 }
+
+pub enum CompareOperator {
+    Eq,
+    Ne,
+    Lt,
+    Le,
+    Gt,
+    Ge,
+}

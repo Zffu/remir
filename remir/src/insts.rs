@@ -1,7 +1,7 @@
 //! Definitions of the instruction set of Remir
 
 use crate::{
-    utils::math::MathOperator,
+    utils::operators::{CompareOperator, MathOperator},
     values::{BaseSSAValue, float::SSAFloatValue, int::SSAIntValue, ptr::SSAPointerValue},
 };
 
@@ -62,6 +62,23 @@ pub enum Instruction {
     },
 
     // Cmp instructions
+    CompareOperationInt {
+        a: SSAIntValue,
+        b: SSAIntValue,
+
+        op: CompareOperator,
+
+        signed: bool,
+    },
+
+    CompareOperationFloat {
+        a: SSAFloatValue,
+        b: SSAFloatValue,
+
+        op: CompareOperator,
+
+        signed: bool,
+    },
 
     // Memory instructions
     AllocConst {
