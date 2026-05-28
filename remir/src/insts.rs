@@ -2,7 +2,9 @@
 
 use crate::{
     utils::operators::{CompareOperator, MathOperator},
-    values::{BaseSSAValue, float::SSAFloatValue, int::SSAIntValue, ptr::SSAPointerValue},
+    values::{
+        BaseSSAValue, ValueType, float::SSAFloatValue, int::SSAIntValue, ptr::SSAPointerValue,
+    },
 };
 
 /// Represents an instruction in the MIR.
@@ -131,5 +133,27 @@ pub enum Instruction {
 
     Free {
         ptr: SSAPointerValue,
+    },
+
+    GepConst {
+        base: SSAPointerValue,
+        offset: usize,
+    },
+
+    Gep {
+        base: SSAPointerValue,
+        offset: SSAIntValue,
+    },
+
+    // Value manipulation instructions
+    BitCast {
+        src: BaseSSAValue,
+        into: ValueType,
+    },
+
+    Select {
+        cond: SSAIntValue,
+        true_val: BaseSSAValue,
+        false_val: BaseSSAValue,
     },
 }
