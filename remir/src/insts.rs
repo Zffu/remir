@@ -7,9 +7,14 @@ pub enum Instruction {
         size: usize,
         signed: bool,
     },
+
     ConstFloat {
         val: f64,
         size: usize,
         signed: bool,
+    },
+
+    ConstPointer {
+        addr: usize,
     },
 }
