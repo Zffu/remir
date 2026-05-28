@@ -209,4 +209,16 @@ pub enum Instruction {
         val: SSAFloatValue,
         into: ValueType,
     },
+
+    // Struct instructions
+    ExtractValue {
+        struct_val: BaseSSAValue,
+        index: usize,
+    },
+
+    InsertValue {
+        struct_val: BaseSSAValue,
+        index: usize,
+        val: BaseSSAValue,
+    },
 }
