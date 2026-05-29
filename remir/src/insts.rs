@@ -280,6 +280,7 @@ impl Instruction {
             Self::InsertValue { .. } => false,
             Self::Ret { .. } => false,
             Self::RetNull => false,
+            Self::Switch { .. } => false,
             Self::Store { .. } => false,
             Self::StoreAtomic { .. } => false,
             Self::StoreIndexed { .. } => false,
