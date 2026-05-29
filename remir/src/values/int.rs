@@ -3,7 +3,7 @@
 use crate::values::{BaseSSAValue, ValueType};
 
 /// A variant of [`BaseSSAValue`] that is an integer
-#[derive(Clone, Copy)]
+#[derive(Clone)]
 pub struct SSAIntValue {
     /// The base of the value
     pub base: BaseSSAValue,

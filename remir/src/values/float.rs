@@ -3,7 +3,7 @@
 use crate::values::{BaseSSAValue, ValueType};
 
 /// A variant of [`BaseSSAValue`] that is a float
-#[derive(Clone, Copy)]
+#[derive(Clone)]
 pub struct SSAFloatValue {
     /// The base of the value
     pub base: BaseSSAValue,

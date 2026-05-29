@@ -3,7 +3,7 @@
 use crate::values::{BaseSSAValue, ValueType};
 
 /// A variant of [`BaseSSAValue`] that is a pointer.
-#[derive(Clone, Copy)]
+#[derive(Clone)]
 pub struct SSAPointerValue {
     /// The base of the value
     pub base: BaseSSAValue,
