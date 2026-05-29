@@ -1,6 +1,7 @@
 //! Definitions of the instruction set of Remir
 
 use crate::{
+    block::BlockReference,
     utils::{
         atomic::MemoryOrder,
         operators::{CompareOperator, MathOperator},
@@ -87,13 +88,13 @@ pub enum Instruction {
 
     // Branch instructions
     UncondBr {
-        branch: usize,
+        branch: BlockReference,
     },
 
     Condbr {
         cond: SSAIntValue,
-        true_label: usize,
-        false_label: usize,
+        true_label: BlockReference,
+        false_label: BlockReference,
     },
 
     IndirectBranch {
@@ -101,7 +102,7 @@ pub enum Instruction {
     },
 
     Phi {
-        label_set: Vec<(usize, BaseSSAValue)>,
+        label_set: Vec<(BlockReference, BaseSSAValue)>,
     },
 
     // Function instructions
