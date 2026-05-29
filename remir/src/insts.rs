@@ -8,6 +8,7 @@ use crate::{
     },
     values::{
         BaseSSAValue, ValueType, float::SSAFloatValue, int::SSAIntValue, ptr::SSAPointerValue,
+        structs::SSAStructValue,
     },
 };
 
@@ -220,12 +221,12 @@ pub enum Instruction {
 
     // Struct instructions
     ExtractValue {
-        struct_val: BaseSSAValue,
+        struct_val: SSAStructValue,
         index: usize,
     },
 
     InsertValue {
-        struct_val: BaseSSAValue,
+        struct_val: SSAStructValue,
         index: usize,
         val: BaseSSAValue,
     },
