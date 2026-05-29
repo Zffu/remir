@@ -1,5 +1,6 @@
 //! Compare / Math operator related utilities
 
+#[derive(Clone)]
 pub enum MathOperator {
     Add,
     Sub,
@@ -13,6 +14,7 @@ pub enum MathOperator {
     Shr,
 }
 
+#[derive(Clone)]
 pub enum CompareOperator {
     Eq,
     Ne,

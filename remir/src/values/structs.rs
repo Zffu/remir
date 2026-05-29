@@ -3,6 +3,7 @@
 use crate::values::{BaseSSAValue, ValueType};
 
 /// A variant of [`BaseSSAValue`] that is a structure
+#[derive(Clone)]
 pub struct SSAStructValue {
     pub base: BaseSSAValue,
     pub fields: Vec<ValueType>,

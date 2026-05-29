@@ -13,6 +13,7 @@ use crate::{
 };
 
 /// Represents an instruction in the MIR.
+#[derive(Clone)]
 pub enum Instruction {
     // Constant instructions
     ConstInt {

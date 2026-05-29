@@ -21,6 +21,7 @@ pub struct Block {
 }
 
 /// Represents instructions that are held in a [`Block`]
+#[derive(Clone)]
 pub struct BlockInstruction {
     pub instruction: Instruction,
     pub value: Option<BaseSSAValue>,
@@ -47,5 +48,12 @@ impl BlockInstruction {
     /// Creates a new [`BlockInstruction`]
     pub fn new(instruction: Instruction, value: Option<BaseSSAValue>) -> Self {
         Self { instruction, value }
+    }
+
+    pub fn get(&self) -> Result<BaseSSAValue, ()> {
+        match &self.value {
+            Option::None => Err(()),
+            Option::Some(v) => Ok(v.clone()),
+        }
     }
 }

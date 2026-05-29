@@ -7,3 +7,4 @@ pub mod insts;
 pub mod module;
 pub mod utils;
 pub mod values;
+pub mod writer;

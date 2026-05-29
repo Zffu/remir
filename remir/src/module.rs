@@ -1,9 +1,12 @@
-use crate::block::Block;
+use crate::block::{Block, BlockReference};
 
 pub struct Module {
     pub name: String,
 
     pub blocks: Vec<Block>,
+
+    pub pos_block: Option<BlockReference>,
+    pub pos_is_start: bool,
 
     value_index_counter: usize,
 }
@@ -13,6 +16,10 @@ impl Module {
         Self {
             name,
             blocks: vec![],
+
+            pos_block: None,
+            pos_is_start: false,
+
             value_index_counter: 0,
         }
     }
