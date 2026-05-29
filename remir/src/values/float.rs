@@ -1,10 +1,17 @@
+//! Definitions for float values in the MIR
+
 use crate::values::{BaseSSAValue, ValueType};
 
 /// A variant of [`BaseSSAValue`] that is a float
 #[derive(Clone, Copy)]
 pub struct SSAFloatValue {
+    /// The base of the value
     pub base: BaseSSAValue,
+
+    /// The signed state
     pub signed: bool,
+
+    /// The size state
     pub size: usize,
 }
 

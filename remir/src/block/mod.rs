@@ -1,8 +1,12 @@
 //! Definitions for blocks in the Remir IR representation
 
+/// Represents a reference to a [`Block`]
 #[derive(Clone)]
 pub struct BlockReference {
+    /// The name of the block
     pub name: String,
+
+    /// The internal numerical ID of the block
     pub id: usize,
 }
 

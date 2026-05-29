@@ -1,8 +1,11 @@
+//! Definitions for the pointer values in the MIR
+
 use crate::values::{BaseSSAValue, ValueType};
 
 /// A variant of [`BaseSSAValue`] that is a pointer.
 #[derive(Clone, Copy)]
 pub struct SSAPointerValue {
+    /// The base of the value
     pub base: BaseSSAValue,
 }
 

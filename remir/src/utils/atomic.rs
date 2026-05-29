@@ -1,3 +1,5 @@
+//! Atomic-related utilities
+
 pub enum MemoryOrder {
     Relaxed,
     Consume,

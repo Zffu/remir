@@ -1,3 +1,5 @@
+//! Compare / Math operator related utilities
+
 pub enum MathOperator {
     Add,
     Sub,
