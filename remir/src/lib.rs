@@ -4,5 +4,6 @@
 
 pub mod block;
 pub mod insts;
+pub mod module;
 pub mod utils;
 pub mod values;

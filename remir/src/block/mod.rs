@@ -1,5 +1,7 @@
 //! Definitions for blocks in the Remir IR representation
 
+use crate::{insts::Instruction, values::BaseSSAValue};
+
 /// Represents a reference to a [`Block`]
 #[derive(Clone)]
 pub struct BlockReference {
@@ -14,16 +16,36 @@ pub struct BlockReference {
 pub struct Block {
     /// The inner reference to feed.
     pub reference: BlockReference,
+
+    pub instructions: Vec<BlockInstruction>,
+}
+
+/// Represents instructions that are held in a [`Block`]
+pub struct BlockInstruction {
+    pub instruction: Instruction,
+    pub value: Option<BaseSSAValue>,
 }
 
 impl BlockReference {
+    /// Creates a new [`BlockReference`]
     pub fn new(name: String, id: usize) -> Self {
         Self { name, id }
     }
 }
 
 impl Block {
+    /// Creates a new [`Block`]
     pub fn new(reference: BlockReference) -> Self {
-        Self { reference }
+        Self {
+            reference,
+            instructions: vec![],
+        }
+    }
+}
+
+impl BlockInstruction {
+    /// Creates a new [`BlockInstruction`]
+    pub fn new(instruction: Instruction, value: Option<BaseSSAValue>) -> Self {
+        Self { instruction, value }
     }
 }
