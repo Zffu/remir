@@ -1,7 +1,8 @@
 use crate::{
-    block::{self, BlockInstruction, BlockReference},
+    block::{BlockInstruction, BlockReference},
     insts::Instruction,
     module::Module,
+    values::BaseSSAValue,
 };
 
 /// Represents something that can write instructions
@@ -32,6 +33,26 @@ impl InstructionWriter for Module {
             panic!("No block position defined! Use move_start or move_end before write");
         }
 
-        todo!()
+        let pos_block = unsafe { self.pos_block.clone().unwrap_unchecked() };
+
+        let mut value = None;
+
+        if inst.outputs_value() {
+            value = Some(BaseSSAValue::new(self.obtain_value_ind(), unsafe {
+                inst.get_output_type().unwrap_unchecked()
+            }))
+        }
+
+        let held = BlockInstruction::new(inst, value);
+
+        if self.pos_is_start {
+            self.blocks[pos_block.id]
+                .instructions
+                .insert(0, held.clone());
+        } else {
+            self.blocks[pos_block.id].instructions.push(held.clone());
+        }
+
+        held
     }
 }
