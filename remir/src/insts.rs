@@ -266,3 +266,28 @@ pub enum Instruction {
         val: SSAIntValue,
     },
 }
+
+impl Instruction {
+    /// Checks if the given instruction is supposed to return a value
+    pub fn outputs_value(&self) -> bool {
+        match self {
+            Self::Assume { .. } => false,
+            Self::Condbr { .. } => false,
+            Self::Crash { .. } => false,
+            Self::Fence { .. } => false,
+            Self::Free { .. } => false,
+            Self::IndirectBranch { .. } => false,
+            Self::InsertValue { .. } => false,
+            Self::Ret { .. } => false,
+            Self::RetNull => false,
+            Self::Store { .. } => false,
+            Self::StoreAtomic { .. } => false,
+            Self::StoreIndexed { .. } => false,
+            Self::StoreIndexedConst { .. } => false,
+            Self::UncondBr { .. } => false,
+            Self::Unreachable => false,
+
+            _ => true,
+        }
+    }
+}
