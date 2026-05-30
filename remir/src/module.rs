@@ -29,4 +29,13 @@ impl Module {
         self.value_index_counter += 1;
         self.value_index_counter - 1
     }
+
+    pub fn create_block(&mut self, name: String) -> BlockReference {
+        let reference = BlockReference::new(name, self.blocks.len());
+
+        let block = Block::new(reference.clone());
+
+        self.blocks.push(block);
+        reference
+    }
 }

@@ -4,6 +4,7 @@
 
 pub mod block;
 pub mod builders;
+pub mod func;
 pub mod insts;
 pub mod module;
 pub mod utils;
