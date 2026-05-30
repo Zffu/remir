@@ -7,6 +7,12 @@ use crate::{
 };
 
 pub fn build_unconditional_branch(module: &mut Module, branch: BlockReference) -> Result<(), ()> {
+    let origin = module.pos_block.clone().unwrap();
+
+    module.blocks[branch.id].origins.insert(origin.clone()); // Append origin
+
+    module.blocks[origin.id].destinations.insert(branch.clone()); // Append destination
+
     let inst = Instruction::UncondBr { branch };
 
     module.write(inst);
@@ -20,6 +26,24 @@ pub fn build_conditional_branch(
     false_branch: BlockReference,
 ) -> Result<(), ()> {
     cond.enforces_boolean()?;
+
+    let origin = module.pos_block.clone().unwrap();
+
+    // Origin
+
+    module.blocks[true_branch.id].origins.insert(origin.clone());
+    module.blocks[false_branch.id]
+        .origins
+        .insert(origin.clone());
+
+    // Destination
+
+    module.blocks[origin.id]
+        .destinations
+        .insert(true_branch.clone());
+    module.blocks[origin.id]
+        .destinations
+        .insert(false_branch.clone());
 
     let inst = Instruction::Condbr {
         cond,

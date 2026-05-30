@@ -7,7 +7,7 @@ use crate::{block::vars::BlockVariable, insts::Instruction, values::BaseSSAValue
 pub mod vars;
 
 /// Represents a reference to a [`Block`]
-#[derive(Clone)]
+#[derive(Clone, Hash, PartialEq, Eq)]
 pub struct BlockReference {
     /// The name of the block
     pub name: String,
