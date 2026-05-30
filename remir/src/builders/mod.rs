@@ -1,5 +1,6 @@
 //! Functions used to build instructions and directly append them into the module.
 
+pub mod atomic;
 pub mod branches;
 pub mod cmp;
 pub mod consts;
