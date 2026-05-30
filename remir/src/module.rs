@@ -42,10 +42,12 @@ impl Module {
         self.value_index_counter - 1
     }
 
-    pub fn create_block(&mut self, name: String) -> BlockReference {
+    pub fn create_block(&mut self, name: String, func: FunctionReference) -> BlockReference {
         let reference = BlockReference::new(name, self.blocks.len());
 
         let block = Block::new(reference.clone());
+
+        self.block_to_function.insert(reference.clone(), func);
 
         self.blocks.push(block);
         reference
