@@ -1,7 +1,10 @@
 //! Definitions for block variables
 
 use crate::{
-    builders::{build_load, build_store},
+    builders::{
+        atomic::{build_load_atomic, build_store_atomic},
+        build_load, build_store,
+    },
     module::Module,
     utils::atomic::MemoryOrder,
     values::{BaseSSAValue, ptr::SSAPointerValue},
@@ -66,7 +69,9 @@ impl BlockVariable {
             return build_store(module, ptr, val);
         }
 
-        todo!()
+        let atomic_state = unsafe { self.atomic_state.clone().unwrap_unchecked() };
+
+        return build_store_atomic(module, ptr, val, atomic_state);
     }
 
     pub fn read(&self, module: &mut Module) -> Result<BaseSSAValue, ()> {
@@ -89,6 +94,8 @@ impl BlockVariable {
             return build_load(module, ptr);
         }
 
-        todo!()
+        let atomic_state = unsafe { self.atomic_state.clone().unwrap_unchecked() };
+
+        return build_load_atomic(module, ptr, atomic_state);
     }
 }
