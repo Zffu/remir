@@ -16,3 +16,21 @@ pub fn build_load(module: &mut Module, source: SSAPointerValue) -> Result<BaseSS
 
     module.write(inst).get()
 }
+
+pub fn build_store(
+    module: &mut Module,
+    destination: SSAPointerValue,
+    source: BaseSSAValue,
+) -> Result<(), ()> {
+    if destination.inner_type != source.value_type {
+        return Err(());
+    }
+
+    let inst = Instruction::Store {
+        destination,
+        source,
+    };
+
+    module.write(inst);
+    Ok(())
+}
