@@ -7,8 +7,8 @@ use crate::{
         operators::{CompareOperator, MathOperator},
     },
     values::{
-        BaseSSAValue, ValueType, float::SSAFloatValue, int::SSAIntValue, ptr::SSAPointerValue,
-        structs::SSAStructValue,
+        BaseSSAValue, ValueType, consts::ConstantData, float::SSAFloatValue, int::SSAIntValue,
+        ptr::SSAPointerValue, structs::SSAStructValue,
     },
 };
 
@@ -384,6 +384,26 @@ impl Instruction {
             } => Some(true_val.value_type.clone()),
 
             _ => None,
+        }
+    }
+
+    pub fn get_output_constant(&self) -> ConstantData {
+        match self {
+            Self::ConstInt {
+                val,
+                size: _,
+                signed: _,
+            } => ConstantData::Int(*val),
+
+            Self::ConstFloat {
+                val,
+                size: _,
+                signed: _,
+            } => ConstantData::Float(*val),
+
+            Self::ConstPointer { addr } => ConstantData::Pointer(*addr),
+
+            _ => ConstantData::None,
         }
     }
 }
