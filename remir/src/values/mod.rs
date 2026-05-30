@@ -1,5 +1,6 @@
 //! Definitions for values in the Remir MIR
 
+pub mod consts;
 pub mod float;
 pub mod int;
 pub mod ptr;
