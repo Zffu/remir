@@ -38,9 +38,10 @@ impl InstructionWriter for Module {
         let mut value = None;
 
         if inst.outputs_value() {
-            value = Some(BaseSSAValue::new(self.obtain_value_ind(), unsafe {
-                inst.get_output_type().unwrap_unchecked()
-            }))
+            value = Some(BaseSSAValue::new(
+                self.obtain_value_ind(pos_block.clone()),
+                unsafe { inst.get_output_type().unwrap_unchecked() },
+            ))
         }
 
         let held = BlockInstruction::new(inst, value);

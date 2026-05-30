@@ -13,6 +13,8 @@ pub struct Function {
 
     pub arguments: Vec<ValueType>,
     pub return_type: Option<ValueType>,
+
+    pub value_index_counter: usize,
 }
 
 impl Function {
@@ -26,6 +28,7 @@ impl Function {
             blocks: vec![],
             arguments,
             return_type,
+            value_index_counter: 0,
         }
     }
 
@@ -52,6 +55,12 @@ impl Function {
         self.blocks.push(reference.clone());
 
         reference
+    }
+
+    /// Obtains an index for the creation of a new [`BaseSSAValue`][`crate::values::BaseSSAValue`].
+    pub fn obtain_value_ind(&mut self) -> usize {
+        self.value_index_counter += 1;
+        self.value_index_counter - 1
     }
 }
 
