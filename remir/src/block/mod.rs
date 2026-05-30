@@ -1,6 +1,10 @@
 //! Definitions for blocks in the Remir IR representation
 
+use std::collections::HashMap;
+
 use crate::{insts::Instruction, values::BaseSSAValue};
+
+pub mod vars;
 
 /// Represents a reference to a [`Block`]
 #[derive(Clone)]
@@ -18,6 +22,8 @@ pub struct Block {
     pub reference: BlockReference,
 
     pub instructions: Vec<BlockInstruction>,
+
+    pub values: HashMap<String>,
 }
 
 /// Represents instructions that are held in a [`Block`]
