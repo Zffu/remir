@@ -2,8 +2,9 @@
 
 use std::collections::{HashMap, HashSet};
 
-use crate::{block::vars::BlockVariable, insts::Instruction, values::BaseSSAValue};
+use crate::{block::vars::BlockVariable, insts::Instruction, module::Module, values::BaseSSAValue};
 
+pub mod resolver;
 pub mod vars;
 
 /// Represents a reference to a [`Block`]
@@ -50,6 +51,8 @@ impl BlockReference {
 
 impl Block {
     /// Creates a new [`Block`]
+    ///     
+    /// **Warn: Variable grabbing is only done if explicitly said (eg: using [`Block::grab_variables`]
     pub fn new(reference: BlockReference) -> Self {
         Self {
             reference,
@@ -57,6 +60,19 @@ impl Block {
             variables: HashMap::new(),
             origins: HashSet::new(),
             destinations: HashSet::new(),
+        }
+    }
+
+    /// Grabs the block's variables.
+    ///
+    /// This is useful when making blocks that share the same function.
+    ///
+    /// **Warn: Variable grabbing is only done if explicitly said (eg: using [`Block::grab_variables`])
+    pub fn grab_variables(&mut self, module: &Module, source: BlockReference) {
+        let block = &module.blocks[source.id];
+
+        for var in &block.variables {
+            self.variables.insert(var.0.clone(), var.1.clone());
         }
     }
 }

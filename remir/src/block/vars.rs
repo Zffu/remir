@@ -12,6 +12,7 @@ use crate::{
 
 /// Helper to use variables inside of Remir.
 /// Allows to automatically handle things like atomic state, pointer writing and more.
+#[derive(Clone)]
 pub struct BlockVariable {
     pub name: String,
 
