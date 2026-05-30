@@ -25,6 +25,14 @@ impl SSAIntValue {
             size,
         }
     }
+
+    pub fn enforces_boolean(&self) -> Result<(), ()> {
+        if self.size != 1 {
+            return Err(());
+        }
+
+        Ok(())
+    }
 }
 
 impl TryFrom<BaseSSAValue> for SSAIntValue {
