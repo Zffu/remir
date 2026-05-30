@@ -1,5 +1,7 @@
 //! Definitions for values in the Remir MIR
 
+use crate::values::consts::ConstantData;
+
 pub mod consts;
 pub mod float;
 pub mod int;
@@ -34,6 +36,8 @@ pub struct BaseSSAValue {
 
     /// The type of value
     pub value_type: ValueType,
+
+    pub constant: ConstantData,
 }
 
 impl BaseSSAValue {
@@ -42,6 +46,16 @@ impl BaseSSAValue {
         Self {
             inst_ind,
             value_type,
+            constant: ConstantData::None,
+        }
+    }
+
+    /// Creates a new [`BaseSSAValue`] based on the given type and the given instruction index. This will hold constant data
+    pub fn new_const(inst_ind: usize, value_type: ValueType, constant: ConstantData) -> Self {
+        Self {
+            inst_ind,
+            value_type,
+            constant,
         }
     }
 }
