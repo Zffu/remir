@@ -1,6 +1,6 @@
 //! Definitions for blocks in the Remir IR representation
 
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 use crate::{block::vars::BlockVariable, insts::Instruction, values::BaseSSAValue};
 
@@ -24,6 +24,14 @@ pub struct Block {
     pub instructions: Vec<BlockInstruction>,
 
     pub variables: HashMap<String, BlockVariable>,
+
+    /// The origins of the block.
+    /// The blocks that are leading to this block
+    pub origins: HashSet<BlockReference>,
+
+    /// The destinations of the block
+    /// The blocks that the block is leading to
+    pub destinations: HashSet<BlockReference>,
 }
 
 /// Represents instructions that are held in a [`Block`]
@@ -47,6 +55,8 @@ impl Block {
             reference,
             instructions: vec![],
             variables: HashMap::new(),
+            origins: HashSet::new(),
+            destinations: HashSet::new(),
         }
     }
 }
