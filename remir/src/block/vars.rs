@@ -1,6 +1,8 @@
 //! Definitions for block variables
 
 use crate::{
+    builders::{build_load, build_store},
+    module::Module,
     utils::atomic::MemoryOrder,
     values::{BaseSSAValue, ptr::SSAPointerValue},
 };
@@ -44,5 +46,49 @@ impl BlockVariable {
             write_as_pointer: true,
             atomic_state: Some(order),
         }
+    }
+
+    pub fn write(&mut self, module: &mut Module, val: BaseSSAValue) -> Result<(), ()> {
+        if !self.write_as_pointer {
+            self.held_value = Some(val);
+            return Ok(());
+        }
+
+        let ptr: SSAPointerValue = unsafe {
+            self.held_value
+                .clone()
+                .unwrap_unchecked()
+                .try_into()
+                .unwrap_unchecked()
+        };
+
+        if self.atomic_state.is_none() {
+            return build_store(module, ptr, val);
+        }
+
+        todo!()
+    }
+
+    pub fn read(&self, module: &mut Module) -> Result<BaseSSAValue, ()> {
+        if !self.write_as_pointer {
+            return match &self.held_value {
+                Some(v) => Ok(v.clone()),
+                None => Err(()),
+            };
+        }
+
+        let ptr: SSAPointerValue = unsafe {
+            self.held_value
+                .clone()
+                .unwrap_unchecked()
+                .try_into()
+                .unwrap_unchecked()
+        };
+
+        if self.atomic_state.is_none() {
+            return build_load(module, ptr);
+        }
+
+        todo!()
     }
 }

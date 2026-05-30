@@ -2,7 +2,7 @@
 
 use std::collections::HashMap;
 
-use crate::{insts::Instruction, values::BaseSSAValue};
+use crate::{block::vars::BlockVariable, insts::Instruction, values::BaseSSAValue};
 
 pub mod vars;
 
@@ -23,7 +23,7 @@ pub struct Block {
 
     pub instructions: Vec<BlockInstruction>,
 
-    pub values: HashMap<String>,
+    pub variables: HashMap<String, BlockVariable>,
 }
 
 /// Represents instructions that are held in a [`Block`]
@@ -46,6 +46,7 @@ impl Block {
         Self {
             reference,
             instructions: vec![],
+            variables: HashMap::new(),
         }
     }
 }
