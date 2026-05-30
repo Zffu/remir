@@ -1,4 +1,8 @@
-use crate::{block::BlockReference, module::Module, values::ValueType};
+use crate::{
+    block::{Block, BlockReference, vars::BlockVariable},
+    module::Module,
+    values::{BaseSSAValue, ValueType},
+};
 
 #[derive(Clone, Hash, PartialEq, Eq)]
 pub struct FunctionReference {
@@ -11,7 +15,7 @@ pub struct Function {
 
     pub blocks: Vec<BlockReference>,
 
-    pub arguments: Vec<ValueType>,
+    pub arguments: Vec<(String, ValueType)>,
     pub return_type: Option<ValueType>,
 
     pub value_index_counter: usize,
@@ -20,7 +24,7 @@ pub struct Function {
 impl Function {
     pub fn new(
         reference: FunctionReference,
-        arguments: Vec<ValueType>,
+        arguments: Vec<(String, ValueType)>,
         return_type: Option<ValueType>,
     ) -> Self {
         Self {
@@ -41,9 +45,25 @@ impl Function {
             format!("{}::entry", self.reference.name),
             self.reference.clone(),
         );
+
         let block = &mut module.blocks[reference.id];
 
-        todo!("Add argument parsing")
+        self.append_arguments(block);
+
+        reference
+    }
+
+    fn append_arguments(&mut self, block: &mut Block) {
+        let mut ind = 0;
+
+        for arg in &self.arguments {
+            let value = BaseSSAValue::new(ind, arg.1.clone());
+
+            block
+                .variables
+                .insert(arg.0.clone(), BlockVariable::new_ssa(arg.0.clone(), val));
+            ind += 1;
+        }
     }
 
     pub fn append_block(&mut self, module: &mut Module, name: String) -> BlockReference {
