@@ -20,13 +20,13 @@ impl SSAPointerValue {
 }
 
 impl TryFrom<BaseSSAValue> for SSAPointerValue {
-    type Error = &'static str;
+    type Error = ();
 
     fn try_from(value: BaseSSAValue) -> Result<Self, Self::Error> {
         if let ValueType::Pointer = (&value).value_type {
             Ok(Self { base: value })
         } else {
-            Err("BaseSSAValue is not of type pointer")
+            Err(())
         }
     }
 }

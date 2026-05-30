@@ -23,7 +23,7 @@ impl SSAStructValue {
 }
 
 impl TryFrom<BaseSSAValue> for SSAStructValue {
-    type Error = &'static str;
+    type Error = ();
 
     fn try_from(value: BaseSSAValue) -> Result<Self, Self::Error> {
         if let ValueType::Struct(fields) = (&value).value_type.clone() {
@@ -32,7 +32,7 @@ impl TryFrom<BaseSSAValue> for SSAStructValue {
                 fields: fields.iter().map(|f| *f.clone()).collect(),
             })
         } else {
-            Err("BaseSSAValue is not of type pointer")
+            Err(())
         }
     }
 }

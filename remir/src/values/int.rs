@@ -28,7 +28,7 @@ impl SSAIntValue {
 }
 
 impl TryFrom<BaseSSAValue> for SSAIntValue {
-    type Error = &'static str;
+    type Error = ();
 
     fn try_from(value: BaseSSAValue) -> Result<Self, Self::Error> {
         if let ValueType::Int(signed, size) = (&value).value_type {
@@ -38,7 +38,7 @@ impl TryFrom<BaseSSAValue> for SSAIntValue {
                 size: size,
             })
         } else {
-            Err("BaseSSAValue is not of type int")
+            Err(())
         }
     }
 }

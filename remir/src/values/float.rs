@@ -28,7 +28,7 @@ impl SSAFloatValue {
 }
 
 impl TryFrom<BaseSSAValue> for SSAFloatValue {
-    type Error = &'static str;
+    type Error = ();
 
     fn try_from(value: BaseSSAValue) -> Result<Self, Self::Error> {
         if let ValueType::Float(signed, size) = (&value).value_type {
@@ -38,7 +38,7 @@ impl TryFrom<BaseSSAValue> for SSAFloatValue {
                 size: size,
             })
         } else {
-            Err("BaseSSAValue is not of type float")
+            Err(())
         }
     }
 }
