@@ -127,17 +127,29 @@ pub enum Instruction {
     // Memory instructions
     AllocConst {
         size: usize,
+        val_type: ValueType,
     },
 
     Alloc {
+        size: SSAIntValue,
+        val_type: ValueType,
+    },
+
+    AllocUntyped {
         size: SSAIntValue,
     },
 
     AllocaConst {
         size: usize,
+        val_type: ValueType,
     },
 
     Alloca {
+        size: SSAIntValue,
+        val_type: ValueType,
+    },
+
+    AllocaUntyped {
         size: SSAIntValue,
     },
 
@@ -296,10 +308,22 @@ impl Instruction {
 
     pub fn get_output_type(&self) -> Option<ValueType> {
         match self {
-            Self::Alloc { .. } => Some(ValueType::Pointer),
-            Self::AllocConst { .. } => Some(ValueType::Pointer),
-            Self::Alloca { .. } => Some(ValueType::Pointer),
-            Self::AllocaConst { .. } => Some(ValueType::Pointer),
+            Self::Alloc { size: _, val_type } => {
+                Some(ValueType::Pointer(Box::new(val_type.clone())))
+            }
+            Self::AllocConst { size: _, val_type } => {
+                Some(ValueType::Pointer(Box::new(val_type.clone())))
+            }
+            Self::AllocUntyped { .. } => Some(ValueType::Pointer(Box::new(ValueType::Unknown))),
+
+            Self::Alloca { size: _, val_type } => {
+                Some(ValueType::Pointer(Box::new(val_type.clone())))
+            }
+            Self::AllocaConst { size: _, val_type } => {
+                Some(ValueType::Pointer(Box::new(val_type.clone())))
+            }
+            Self::AllocaUntyped { .. } => Some(ValueType::Pointer(Box::new(ValueType::Unknown))),
+
             Self::BitCast { src: _, into } => Some(into.clone()),
             Self::Call { .. } => todo!(),
             Self::CompareOperationFloat { .. } => Some(ValueType::Int(false, 1)),
@@ -314,7 +338,7 @@ impl Instruction {
                 size,
                 signed,
             } => Some(ValueType::Int(*signed, *size)),
-            Self::ConstPointer { .. } => Some(ValueType::Pointer),
+            Self::ConstPointer { .. } => Some(ValueType::Pointer(Box::new(ValueType::Unknown))),
             Self::Copy { val } => Some(val.value_type.clone()),
             Self::ExtractValue { struct_val, index } => Some(struct_val.fields[*index].clone()),
             Self::FloatExtend { val: _, into } => Some(into.clone()),
