@@ -1,9 +1,18 @@
-use crate::block::{Block, BlockReference};
+use std::collections::HashMap;
+
+use crate::{
+    block::{Block, BlockReference},
+    func::{self, Function, FunctionReference},
+    values::ValueType,
+};
 
 pub struct Module {
     pub name: String,
 
     pub blocks: Vec<Block>,
+    pub block_to_function: HashMap<BlockReference, FunctionReference>,
+
+    pub functions: Vec<Function>,
 
     pub pos_block: Option<BlockReference>,
     pub pos_is_start: bool,
@@ -16,6 +25,9 @@ impl Module {
         Self {
             name,
             blocks: vec![],
+            block_to_function: HashMap::new(),
+
+            functions: vec![],
 
             pos_block: None,
             pos_is_start: false,
@@ -36,6 +48,20 @@ impl Module {
         let block = Block::new(reference.clone());
 
         self.blocks.push(block);
+        reference
+    }
+
+    pub fn create_function(
+        &mut self,
+        name: String,
+        arguments: Vec<ValueType>,
+        return_type: Option<ValueType>,
+    ) -> FunctionReference {
+        let reference = FunctionReference::new(name, self.functions.len());
+
+        let function = Function::new(reference.clone(), arguments, return_type);
+
+        self.functions.push(function);
         reference
     }
 }

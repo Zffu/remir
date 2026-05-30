@@ -48,3 +48,9 @@ impl Function {
         reference
     }
 }
+
+impl FunctionReference {
+    pub fn new(name: String, id: usize) -> Self {
+        Self { name, id }
+    }
+}
