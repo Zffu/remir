@@ -125,6 +125,7 @@ pub enum Instruction {
     },
 
     // Memory instructions
+    #[deprecated = "const instructions might get removed soon"]
     AllocConst {
         size: usize,
         val_type: ValueType,
@@ -139,6 +140,7 @@ pub enum Instruction {
         size: SSAIntValue,
     },
 
+    #[deprecated = "const instructions might get removed soon"]
     AllocaConst {
         size: usize,
         val_type: ValueType,
@@ -157,6 +159,7 @@ pub enum Instruction {
         ptr: SSAPointerValue,
     },
 
+    #[deprecated = "const instructions might get removed soon"]
     GepConst {
         base: SSAPointerValue,
         offset: usize,
@@ -167,6 +170,7 @@ pub enum Instruction {
         offset: SSAIntValue,
     },
 
+    #[deprecated = "const instructions might get removed soon"]
     LoadIndexedConst {
         base: SSAPointerValue,
         index: usize,
@@ -177,6 +181,7 @@ pub enum Instruction {
         index: SSAIntValue,
     },
 
+    #[deprecated = "const instructions might get removed soon"]
     StoreIndexedConst {
         base: SSAPointerValue,
         index: usize,
