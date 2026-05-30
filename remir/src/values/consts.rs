@@ -27,4 +27,11 @@ impl ConstantData {
             _ => panic!("Expected Self::Pointer got {:#?}", self),
         }
     }
+
+    pub fn is_something(&self) -> bool {
+        match self {
+            Self::None => false,
+            _ => true,
+        }
+    }
 }
