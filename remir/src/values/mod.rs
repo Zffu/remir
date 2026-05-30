@@ -18,7 +18,10 @@ pub enum ValueType {
     Struct(Vec<Box<ValueType>>),
 
     /// The pointer value type.
-    Pointer,
+    Pointer(Box<ValueType>),
+
+    /// The unkown value type
+    Unknown,
 }
 
 /// Represents a base SSA value inside of the IR.
