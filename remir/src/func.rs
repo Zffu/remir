@@ -59,9 +59,10 @@ impl Function {
         for arg in &self.arguments {
             let value = BaseSSAValue::new(ind, arg.1.clone());
 
-            block
-                .variables
-                .insert(arg.0.clone(), BlockVariable::new_ssa(arg.0.clone(), val));
+            block.variables.insert(
+                arg.0.clone(),
+                BlockVariable::new_ssa(arg.0.clone(), Some(value)),
+            );
             ind += 1;
         }
     }
