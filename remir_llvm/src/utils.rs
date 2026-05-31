@@ -6,7 +6,9 @@ use std::rc::Rc;
 use inkwell::context::Context;
 use inkwell::{
     basic_block::BasicBlock,
-    types::{BasicMetadataTypeEnum, BasicTypeEnum, IntType, PointerType},
+    builder::Builder,
+    module::Module,
+    types::{BasicMetadataTypeEnum, BasicTypeEnum, IntType, PointerType, VoidType},
     values::{BasicValueEnum, FunctionValue},
 };
 
@@ -18,6 +20,10 @@ pub type LLVMType = LLVMSiblingObject<IntType<'static>>;
 pub type LLVMPointerType = LLVMSiblingObject<PointerType<'static>>;
 pub type LLVMTypeEnum = LLVMSiblingObject<BasicTypeEnum<'static>>;
 pub type LLVMMetadataEnum = LLVMSiblingObject<BasicMetadataTypeEnum<'static>>;
+pub type LLVMVoidType = LLVMSiblingObject<VoidType<'static>>;
+
+pub type LLVMModule = LLVMSiblingObject<Module<'static>>;
+pub type LLVMBuilder = LLVMSiblingObject<Builder<'static>>;
 
 pub struct LLVMSiblingObject<T: Clone> {
     pub innner: T,
