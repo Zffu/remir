@@ -1,2 +1,2 @@
 [workspace]
-members = ["remir"]
+members = ["remir", "remir_llvm"]
