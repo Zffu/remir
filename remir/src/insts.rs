@@ -2,6 +2,7 @@
 
 use crate::{
     block::BlockReference,
+    func::FunctionReference,
     utils::{
         atomic::MemoryOrder,
         operators::{CompareOperator, MathOperator},
@@ -109,7 +110,7 @@ pub enum Instruction {
 
     // Function instructions
     Call {
-        func_label: usize,
+        func_label: FunctionReference,
         args: Vec<BaseSSAValue>,
 
         pure: bool,
