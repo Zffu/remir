@@ -125,12 +125,6 @@ pub enum Instruction {
     },
 
     // Memory instructions
-    #[deprecated = "const instructions might get removed soon"]
-    AllocConst {
-        size: usize,
-        val_type: ValueType,
-    },
-
     Alloc {
         size: SSAIntValue,
         val_type: ValueType,
@@ -138,12 +132,6 @@ pub enum Instruction {
 
     AllocUntyped {
         size: SSAIntValue,
-    },
-
-    #[deprecated = "const instructions might get removed soon"]
-    AllocaConst {
-        size: usize,
-        val_type: ValueType,
     },
 
     Alloca {
@@ -159,33 +147,14 @@ pub enum Instruction {
         ptr: SSAPointerValue,
     },
 
-    #[deprecated = "const instructions might get removed soon"]
-    GepConst {
-        base: SSAPointerValue,
-        offset: usize,
-    },
-
     Gep {
         base: SSAPointerValue,
         offset: SSAIntValue,
     },
 
-    #[deprecated = "const instructions might get removed soon"]
-    LoadIndexedConst {
-        base: SSAPointerValue,
-        index: usize,
-    },
-
     LoadIndexed {
         base: SSAPointerValue,
         index: SSAIntValue,
-    },
-
-    #[deprecated = "const instructions might get removed soon"]
-    StoreIndexedConst {
-        base: SSAPointerValue,
-        index: usize,
-        val: BaseSSAValue,
     },
 
     StoreIndexed {
@@ -303,7 +272,6 @@ impl Instruction {
             Self::Store { .. } => false,
             Self::StoreAtomic { .. } => false,
             Self::StoreIndexed { .. } => false,
-            Self::StoreIndexedConst { .. } => false,
             Self::UncondBr { .. } => false,
             Self::Unreachable => false,
 
@@ -316,15 +284,9 @@ impl Instruction {
             Self::Alloc { size: _, val_type } => {
                 Some(ValueType::Pointer(Box::new(val_type.clone())))
             }
-            Self::AllocConst { size: _, val_type } => {
-                Some(ValueType::Pointer(Box::new(val_type.clone())))
-            }
             Self::AllocUntyped { .. } => Some(ValueType::Pointer(Box::new(ValueType::Unknown))),
 
             Self::Alloca { size: _, val_type } => {
-                Some(ValueType::Pointer(Box::new(val_type.clone())))
-            }
-            Self::AllocaConst { size: _, val_type } => {
                 Some(ValueType::Pointer(Box::new(val_type.clone())))
             }
             Self::AllocaUntyped { .. } => Some(ValueType::Pointer(Box::new(ValueType::Unknown))),
@@ -350,7 +312,6 @@ impl Instruction {
             Self::FloatToInt { val: _, into } => Some(into.clone()),
             Self::FloatTruncate { val: _, into } => Some(into.clone()),
             Self::Gep { base, offset: _ } => Some(base.base.value_type.clone()),
-            Self::GepConst { base, offset: _ } => Some(base.base.value_type.clone()),
             Self::IntExtend { val: _, into } => Some(into.clone()),
             Self::IntToFloat { val: _, into } => Some(into.clone()),
             Self::IntTruncate { val: _, into } => Some(into.clone()),
@@ -360,7 +321,6 @@ impl Instruction {
                 ordering: _,
             } => Some(source.inner_type.clone()),
             Self::LoadIndexed { base, index: _ } => Some(base.inner_type.clone()),
-            Self::LoadIndexedConst { base, index: _ } => Some(base.inner_type.clone()),
             Self::MathOperationFloat {
                 a,
                 b: _,
