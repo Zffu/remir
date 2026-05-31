@@ -147,3 +147,35 @@ pub fn build_float_truncate(
         Err(()) // Target type is not a float
     }
 }
+
+pub fn build_int_change_size(
+    module: &mut Module,
+    val: SSAIntValue,
+    into: ValueType,
+) -> Result<SSAIntValue, ()> {
+    if let ValueType::Int(_, size) = &into {
+        if val.size > *size {
+            build_int_truncate(module, val, into)
+        } else {
+            build_int_extend(module, val, into)
+        }
+    } else {
+        Err(()) // Target type is not an int
+    }
+}
+
+pub fn build_float_change_size(
+    module: &mut Module,
+    val: SSAFloatValue,
+    into: ValueType,
+) -> Result<SSAFloatValue, ()> {
+    if let ValueType::Float(_, size) = &into {
+        if val.size > *size {
+            build_float_truncate(module, val, into)
+        } else {
+            build_float_extend(module, val, into)
+        }
+    } else {
+        Err(()) // Target type is not an float
+    }
+}
