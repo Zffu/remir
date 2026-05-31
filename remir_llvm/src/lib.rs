@@ -15,7 +15,7 @@ pub mod utils;
 #[macro_export]
 macro_rules! llvm_to_base {
     ($expr: expr) => {
-        match expr {
+        match $expr {
             Ok(v) => v,
             Err(_) => return Err(()),
         }
