@@ -57,3 +57,20 @@ impl<T: Clone> Deref for LLVMSiblingObject<T> {
         &self.innner
     }
 }
+
+impl<T: Clone> Clone for LLVMSiblingObject<T> {
+    #[cfg(not(feature = "no_sibling_safety"))]
+    fn clone(&self) -> Self {
+        LLVMSiblingObject {
+            innner: self.innner.clone(),
+            safety_hold: self.safety_hold.clone(),
+        }
+    }
+
+    #[cfg(feature = "no_sibling_safety")]
+    fn clone(&self) -> Self {
+        LLVMSiblingObject {
+            innner: self.innner.clone(),
+        }
+    }
+}

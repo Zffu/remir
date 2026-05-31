@@ -9,7 +9,7 @@ pub mod ptr;
 pub mod structs;
 
 /// The type of the SSA MIR values.
-#[derive(Clone, PartialEq)]
+#[derive(Clone, PartialEq, Hash, Eq)]
 pub enum ValueType {
     /// The float value type. Contains the signed state and size state
     Float(bool, usize),
