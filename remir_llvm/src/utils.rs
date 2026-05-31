@@ -4,6 +4,20 @@ use std::rc::Rc;
 
 #[cfg(not(feature = "no_sibling_safety"))]
 use inkwell::context::Context;
+use inkwell::{
+    basic_block::BasicBlock,
+    types::{BasicMetadataTypeEnum, BasicTypeEnum, IntType, PointerType},
+    values::{BasicValueEnum, FunctionValue},
+};
+
+pub type LLVMBlock = LLVMSiblingObject<BasicBlock<'static>>;
+pub type LLVMBasicValue = LLVMSiblingObject<BasicValueEnum<'static>>;
+pub type LLVMFunction = LLVMSiblingObject<FunctionValue<'static>>;
+
+pub type LLVMType = LLVMSiblingObject<IntType<'static>>;
+pub type LLVMPointerType = LLVMSiblingObject<PointerType<'static>>;
+pub type LLVMTypeEnum = LLVMSiblingObject<BasicTypeEnum<'static>>;
+pub type LLVMMetadataEnum = LLVMSiblingObject<BasicMetadataTypeEnum<'static>>;
 
 pub struct LLVMSiblingObject<T: Clone> {
     pub innner: T,
