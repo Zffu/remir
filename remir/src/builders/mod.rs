@@ -8,6 +8,7 @@ pub mod func;
 pub mod math;
 pub mod mem;
 pub mod regs;
+pub mod vals;
 
 pub use branches::*;
 pub use cmp::*;
@@ -16,3 +17,4 @@ pub use func::*;
 pub use math::*;
 pub use mem::*;
 pub use regs::*;
+pub use vals::*;
