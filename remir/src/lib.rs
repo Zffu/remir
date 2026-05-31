@@ -10,3 +10,16 @@ pub mod module;
 pub mod utils;
 pub mod values;
 pub mod writer;
+
+pub enum OptimizationLevel {
+    None = 0,
+    Less = 1,
+    Default = 2,
+    Aggressive = 3,
+}
+
+impl Default for OptimizationLevel {
+    fn default() -> Self {
+        OptimizationLevel::Default
+    }
+}
