@@ -43,7 +43,7 @@ pub fn build_call(
     }
 }
 
-pub fn build_ret(module: &mut Module, val: Option<BaseSSAValue>) -> Result<(), ()> {
+pub fn build_ret(module: &mut Module, val: Option<BaseSSAValue>) {
     if val.is_none() {
         let inst = Instruction::RetNull;
 
@@ -57,6 +57,4 @@ pub fn build_ret(module: &mut Module, val: Option<BaseSSAValue>) -> Result<(), (
 
         module.write(inst);
     }
-
-    Ok(())
 }

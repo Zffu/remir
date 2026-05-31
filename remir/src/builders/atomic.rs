@@ -22,6 +22,10 @@ pub fn build_store_atomic(
     val: BaseSSAValue,
     ordering: MemoryOrder,
 ) -> Result<(), ()> {
+    if dest.inner_type != val.value_type {
+        return Err(());
+    }
+
     let inst = Instruction::StoreAtomic {
         dest,
         val,
@@ -32,9 +36,8 @@ pub fn build_store_atomic(
     Ok(())
 }
 
-pub fn build_fence(module: &mut Module, ordering: MemoryOrder) -> Result<(), ()> {
+pub fn build_fence(module: &mut Module, ordering: MemoryOrder) {
     let inst = Instruction::Fence { ordering };
 
     module.write(inst);
-    Ok(())
 }

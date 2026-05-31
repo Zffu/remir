@@ -72,7 +72,7 @@ impl BlockVariable {
 
         let atomic_state = unsafe { self.atomic_state.clone().unwrap_unchecked() };
 
-        return build_store_atomic(module, ptr, val, atomic_state);
+        build_store_atomic(module, ptr, val, atomic_state)
     }
 
     pub fn read(&self, module: &mut Module) -> Result<BaseSSAValue, ()> {

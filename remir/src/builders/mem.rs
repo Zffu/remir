@@ -47,11 +47,10 @@ pub fn build_alloca(
     val.try_into()
 }
 
-pub fn build_free(module: &mut Module, ptr: SSAPointerValue) -> Result<(), ()> {
+pub fn build_free(module: &mut Module, ptr: SSAPointerValue) {
     let inst = Instruction::Free { ptr };
 
     module.write(inst);
-    Ok(())
 }
 
 pub fn build_gep(

@@ -6,7 +6,7 @@ use crate::{
     writer::InstructionWriter,
 };
 
-pub fn build_unconditional_branch(module: &mut Module, branch: BlockReference) -> Result<(), ()> {
+pub fn build_unconditional_branch(module: &mut Module, branch: BlockReference) {
     let origin = module.pos_block.clone().unwrap();
 
     module.blocks[branch.id].origins.insert(origin.clone()); // Append origin
@@ -16,7 +16,6 @@ pub fn build_unconditional_branch(module: &mut Module, branch: BlockReference) -
     let inst = Instruction::UncondBr { branch };
 
     module.write(inst);
-    Ok(())
 }
 
 pub fn build_conditional_branch(
@@ -55,11 +54,10 @@ pub fn build_conditional_branch(
     Ok(())
 }
 
-pub fn build_indirect_branch(module: &mut Module, target: SSAPointerValue) -> Result<(), ()> {
+pub fn build_indirect_branch(module: &mut Module, target: SSAPointerValue) {
     let inst = Instruction::IndirectBranch { target };
 
     module.write(inst);
-    Ok(())
 }
 
 pub fn build_phi(
