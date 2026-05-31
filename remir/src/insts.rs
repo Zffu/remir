@@ -160,7 +160,7 @@ pub enum Instruction {
 
     StoreIndexed {
         base: SSAPointerValue,
-        index: usize,
+        index: SSAIntValue,
         val: BaseSSAValue,
     },
 
