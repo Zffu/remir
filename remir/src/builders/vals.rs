@@ -1,7 +1,9 @@
 use crate::{
     insts::Instruction,
     module::Module,
-    values::{BaseSSAValue, ValueType, float::SSAFloatValue, int::SSAIntValue},
+    values::{
+        BaseSSAValue, ValueType, float::SSAFloatValue, int::SSAIntValue, structs::SSAStructValue,
+    },
     writer::InstructionWriter,
 };
 
@@ -178,4 +180,70 @@ pub fn build_float_change_size(
     } else {
         Err(()) // Target type is not an float
     }
+}
+
+pub fn build_extract_value(
+    module: &mut Module,
+    struct_val: SSAStructValue,
+    index: usize,
+) -> Result<BaseSSAValue, ()> {
+    let inst = Instruction::ExtractValue { struct_val, index };
+
+    module.write(inst).get()
+}
+
+pub fn build_insert_value(
+    module: &mut Module,
+    struct_val: SSAStructValue,
+    index: usize,
+    val: BaseSSAValue,
+) -> Result<(), ()> {
+    if struct_val.fields[index] != val.value_type {
+        return Err(()); // Cannot put into diff field type
+    }
+
+    let inst = Instruction::InsertValue {
+        struct_val,
+        index,
+        val,
+    };
+
+    module.write(inst);
+    Ok(())
+}
+
+pub fn build_switch(
+    module: &mut Module,
+    cond: SSAIntValue,
+    default: BaseSSAValue,
+    cases: Vec<(i128, BaseSSAValue)>,
+) -> Result<BaseSSAValue, ()> {
+    cond.enforces_boolean()?;
+
+    let mut min_neg = 0;
+    let mut max = i128::MIN;
+
+    for case in &cases {
+        if case.1.value_type != default.value_type {
+            return Err(()); // Every choice must be of the same type
+        }
+
+        if case.0 < 0 && case.0 < min_neg {
+            min_neg = case.0;
+        }
+
+        if case.0 > max {
+            max = case.0;
+        }
+    }
+
+    let inst = Instruction::Switch {
+        cond,
+        default,
+        cases,
+        min_neg,
+        max,
+    };
+
+    module.write(inst).get()
 }
