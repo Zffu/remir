@@ -3,8 +3,8 @@ use remir::{block::BlockInstruction, insts::Instruction, module::Module};
 use crate::{
     LLVMBridge,
     inst::{
-        consts::bridge_llvm_const_instruction, math::bridge_llvm_math_instruction,
-        regs::bridge_llvm_reg_instructions,
+        cmp::bridge_llvm_cmp_instruction, consts::bridge_llvm_const_instruction,
+        math::bridge_llvm_math_instruction, regs::bridge_llvm_reg_instructions,
     },
     utils::LLVMBasicValue,
 };
@@ -30,6 +30,10 @@ pub fn bridge_llvm_instruction(
 
         Instruction::MathOperationInt { .. } | Instruction::MathOperationFloat { .. } => {
             bridge_llvm_math_instruction(instruction, bridge)
+        }
+
+        Instruction::CompareOperationInt { .. } | Instruction::CompareOperationFloat { .. } => {
+            bridge_llvm_cmp_instruction(instruction, bridge)
         }
 
         _ => todo!(),

@@ -12,7 +12,7 @@ pub mod structs;
 #[derive(Clone, PartialEq, Hash, Eq)]
 pub enum ValueType {
     /// The float value type. Contains the signed state and size state
-    Float(bool, usize),
+    Float(usize),
 
     /// The int value type. Contains the signed state and size state
     Int(bool, usize),
