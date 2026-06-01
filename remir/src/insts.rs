@@ -26,7 +26,6 @@ pub enum Instruction {
     ConstFloat {
         val: f64,
         size: usize,
-        signed: bool,
     },
 
     ConstPointer {
@@ -296,11 +295,7 @@ impl Instruction {
             Self::Call { .. } => todo!(),
             Self::CompareOperationFloat { .. } => Some(ValueType::Int(false, 1)),
             Self::CompareOperationInt { .. } => Some(ValueType::Int(false, 1)),
-            Self::ConstFloat {
-                val: _,
-                size,
-                signed,
-            } => Some(ValueType::Float(*signed, *size)),
+            Self::ConstFloat { val: _, size } => Some(ValueType::Float(*size)),
             Self::ConstInt {
                 val: _,
                 size,
@@ -361,12 +356,7 @@ impl Instruction {
                 signed: _,
             } => ConstantData::Int(*val),
 
-            Self::ConstFloat {
-                val,
-                size: _,
-                signed: _,
-            } => ConstantData::Float(*val),
-
+            Self::ConstFloat { val, size: _ } => ConstantData::Float(*val),
             Self::ConstPointer { addr } => ConstantData::Pointer(*addr),
 
             _ => ConstantData::None,
