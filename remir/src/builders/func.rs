@@ -8,7 +8,6 @@ pub fn build_call(
     label: FunctionReference,
     args: Vec<BaseSSAValue>,
     pure: bool,
-    no_capture: bool,
     no_return: bool,
     fast_calling_conv: bool,
 ) -> Result<Option<BaseSSAValue>, ()> {
@@ -28,7 +27,6 @@ pub fn build_call(
         func_label: label,
         args,
         pure,
-        no_capture,
         no_return,
         fast_calling_conv,
     };

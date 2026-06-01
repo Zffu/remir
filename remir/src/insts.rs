@@ -111,7 +111,6 @@ pub enum Instruction {
         args: Vec<BaseSSAValue>,
 
         pure: bool,
-        no_capture: bool,
         no_return: bool,
 
         fast_calling_conv: bool,
