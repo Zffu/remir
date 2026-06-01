@@ -25,7 +25,7 @@ macro_rules! llvm_to_base {
 #[macro_export]
 macro_rules! llvm_to_base_returnless {
     ($expr: expr) => {
-        match expr {
+        match $expr {
             Ok(_) => {}
             Err(_) => return Err(()),
         }
