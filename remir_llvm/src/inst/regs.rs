@@ -10,7 +10,7 @@ pub fn bridge_llvm_reg_instructions(
     bridge: &mut LLVMBridge,
 ) -> Result<Option<LLVMBasicValue>, ()> {
     let res: Option<BasicValueEnum<'static>> = match &instruction.instruction {
-        Instruction::Copy { val } => Some(bridge.values[&val.inst_ind].clone().innner),
+        Instruction::Copy { val } => Some(bridge.values[&val.inst_ind].clone().inner),
 
         Instruction::Load { source } => {
             let llvm_ptr = bridge.values[&source.base.inst_ind].into_pointer_value();

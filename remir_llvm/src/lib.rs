@@ -1,11 +1,11 @@
 use std::{collections::HashMap, mem::transmute, rc::Rc};
 
-use inkwell::{builder::Builder, context::Context, llvm_sys::LLVMBasicBlock, types::VoidType};
+use inkwell::{builder::Builder, context::Context, types::VoidType};
 use remir::{block::BlockReference, func::FunctionReference};
 
 use crate::{
     types::LLVMTypeStorage,
-    utils::{LLVMBasicValue, LLVMFunction, LLVMModule, LLVMSiblingObject, LLVMVoidType},
+    utils::{LLVMBasicValue, LLVMBlock, LLVMFunction, LLVMModule, LLVMSiblingObject, LLVMVoidType},
 };
 
 pub mod inst;
@@ -33,7 +33,7 @@ macro_rules! llvm_to_base_returnless {
 }
 
 pub struct LLVMBridge {
-    pub blocks: HashMap<BlockReference, LLVMBasicBlock>,
+    pub blocks: HashMap<BlockReference, LLVMBlock>,
     pub values: HashMap<usize, LLVMBasicValue>,
 
     pub functions: HashMap<FunctionReference, LLVMFunction>,

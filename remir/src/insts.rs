@@ -98,6 +98,7 @@ pub enum Instruction {
 
     IndirectBranch {
         target: SSAPointerValue,
+        destinations: Vec<BlockReference>,
     },
 
     Phi {

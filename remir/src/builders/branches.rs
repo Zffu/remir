@@ -54,8 +54,15 @@ pub fn build_conditional_branch(
     Ok(())
 }
 
-pub fn build_indirect_branch(module: &mut Module, target: SSAPointerValue) {
-    let inst = Instruction::IndirectBranch { target };
+pub fn build_indirect_branch(
+    module: &mut Module,
+    target: SSAPointerValue,
+    destinations: Vec<BlockReference>,
+) {
+    let inst = Instruction::IndirectBranch {
+        target,
+        destinations,
+    };
 
     module.write(inst);
 }

@@ -46,7 +46,7 @@ impl LLVMTypeStorage {
                 let mut fs = vec![];
 
                 for field in fields {
-                    fs.push(self.convert(*field.clone()).innner);
+                    fs.push(self.convert(*field.clone()).inner);
                 }
 
                 self.ctx_ref.struct_type(&fs, false).into()

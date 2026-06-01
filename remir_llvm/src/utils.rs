@@ -26,7 +26,7 @@ pub type LLVMModule = LLVMSiblingObject<Module<'static>>;
 pub type LLVMBuilder = LLVMSiblingObject<Builder<'static>>;
 
 pub struct LLVMSiblingObject<T: Clone> {
-    pub innner: T,
+    pub inner: T,
 
     /// Allows for the reference to make sure it lives
     #[cfg(not(feature = "no_sibling_safety"))]
@@ -37,7 +37,7 @@ impl<T: Clone> LLVMSiblingObject<T> {
     #[cfg(not(feature = "no_sibling_safety"))]
     pub fn new(val: T, held: &Rc<Context>) -> Self {
         LLVMSiblingObject {
-            innner: unsafe { std::mem::transmute(val) },
+            inner: unsafe { std::mem::transmute(val) },
             safety_hold: held.clone(),
         }
     }
@@ -54,7 +54,7 @@ impl<T: Clone> Deref for LLVMSiblingObject<T> {
     type Target = T;
 
     fn deref(&self) -> &Self::Target {
-        &self.innner
+        &self.inner
     }
 }
 
@@ -62,7 +62,7 @@ impl<T: Clone> Clone for LLVMSiblingObject<T> {
     #[cfg(not(feature = "no_sibling_safety"))]
     fn clone(&self) -> Self {
         LLVMSiblingObject {
-            innner: self.innner.clone(),
+            inner: self.inner.clone(),
             safety_hold: self.safety_hold.clone(),
         }
     }
@@ -70,7 +70,7 @@ impl<T: Clone> Clone for LLVMSiblingObject<T> {
     #[cfg(feature = "no_sibling_safety")]
     fn clone(&self) -> Self {
         LLVMSiblingObject {
-            innner: self.innner.clone(),
+            inner: self.innner.clone(),
         }
     }
 }
