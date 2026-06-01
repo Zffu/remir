@@ -40,20 +40,14 @@ pub fn build_math_op_float(
     a: SSAFloatValue,
     b: SSAFloatValue,
     op: MathOperator,
-    signed: bool,
     signed_wrap: bool,
     unsigned_wrap: bool,
     fast: bool,
 ) -> Result<SSAFloatValue, ()> {
-    if (a.signed != b.signed && !signed) || (a.signed && !signed) {
-        return Err(()); // Enforces sign	
-    }
-
     let inst = Instruction::MathOperationFloat {
         a,
         b,
         op,
-        signed,
         signed_wrap,
         unsigned_wrap,
         fast,

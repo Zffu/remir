@@ -63,7 +63,6 @@ pub enum Instruction {
         b: SSAFloatValue,
         op: MathOperator,
 
-        signed: bool,
         signed_wrap: bool,
         unsigned_wrap: bool,
         fast: bool,
@@ -84,8 +83,6 @@ pub enum Instruction {
         b: SSAFloatValue,
 
         op: CompareOperator,
-
-        signed: bool,
     },
 
     // Branch instructions
@@ -321,7 +318,6 @@ impl Instruction {
                 a,
                 b: _,
                 op: _,
-                signed: _,
                 signed_wrap: _,
                 unsigned_wrap: _,
                 fast: _,

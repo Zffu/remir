@@ -23,10 +23,10 @@ pub fn bridge_llvm_const_instruction(
             Some(res.into())
         }
 
-        Instruction::ConstFloat { val, size, signed } => {
+        Instruction::ConstFloat { val, size } => {
             let ty = bridge
                 .type_storage
-                .convert(ValueType::Float(*signed, *size))
+                .convert(ValueType::Float(*size))
                 .into_float_type();
 
             let res = unsafe { ty.const_float_from_string(&val.to_string()) };

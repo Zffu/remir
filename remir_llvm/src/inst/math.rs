@@ -70,7 +70,6 @@ pub fn bridge_llvm_math_instruction(
             a,
             b,
             op,
-            signed: _,
             signed_wrap,
             unsigned_wrap,
             fast,

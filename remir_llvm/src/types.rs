@@ -30,7 +30,7 @@ impl LLVMTypeStorage {
                 .unwrap()
                 .into(),
 
-            ValueType::Float(_, size) => match *size {
+            ValueType::Float(size) => match *size {
                 16 => self.ctx_ref.f16_type().into(),
                 32 => self.ctx_ref.f32_type().into(),
                 64 => self.ctx_ref.f64_type().into(),

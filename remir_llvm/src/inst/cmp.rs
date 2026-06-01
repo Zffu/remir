@@ -54,12 +54,7 @@ pub fn bridge_llvm_cmp_instruction(
             Some(res.into())
         }
 
-        Instruction::CompareOperationFloat {
-            a,
-            b,
-            op,
-            signed: _,
-        } => {
+        Instruction::CompareOperationFloat { a, b, op } => {
             let a = bridge.values[&a.base.inst_ind].into_float_value();
             let b = bridge.values[&b.base.inst_ind].into_float_value();
 

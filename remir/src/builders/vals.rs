@@ -43,7 +43,7 @@ pub fn int_to_float(
     val: SSAIntValue,
     into: ValueType,
 ) -> Result<SSAFloatValue, ()> {
-    if let ValueType::Float(_, _) = into {
+    if let ValueType::Float(_) = into {
         let inst = Instruction::IntToFloat { val, into };
 
         let val = module.write(inst).get()?;
@@ -115,7 +115,7 @@ pub fn build_float_extend(
     val: SSAFloatValue,
     into: ValueType,
 ) -> Result<SSAFloatValue, ()> {
-    if let ValueType::Float(_, size) = &into {
+    if let ValueType::Float(size) = &into {
         if val.size >= *size {
             return Err(()); // Use float truncate instead
         }
@@ -135,7 +135,7 @@ pub fn build_float_truncate(
     val: SSAFloatValue,
     into: ValueType,
 ) -> Result<SSAFloatValue, ()> {
-    if let ValueType::Float(_, size) = &into {
+    if let ValueType::Float(size) = &into {
         if val.size <= *size {
             return Err(()); // Use float extend instead
         }
@@ -171,7 +171,7 @@ pub fn build_float_change_size(
     val: SSAFloatValue,
     into: ValueType,
 ) -> Result<SSAFloatValue, ()> {
-    if let ValueType::Float(_, size) = &into {
+    if let ValueType::Float(size) = &into {
         if val.size > *size {
             build_float_truncate(module, val, into)
         } else {

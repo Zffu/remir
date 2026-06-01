@@ -29,13 +29,8 @@ pub fn build_float_compare(
     a: SSAFloatValue,
     b: SSAFloatValue,
     op: CompareOperator,
-    signed: bool,
 ) -> Result<SSAFloatValue, ()> {
-    if (a.signed != b.signed && !signed) || (a.signed && !signed) {
-        return Err(()); // Enforces sign	
-    }
-
-    let inst = Instruction::CompareOperationFloat { a, b, op, signed };
+    let inst = Instruction::CompareOperationFloat { a, b, op };
 
     let val = module.write(inst).get()?;
 

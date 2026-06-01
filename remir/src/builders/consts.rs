@@ -18,13 +18,8 @@ pub fn build_const_int(
     val.try_into()
 }
 
-pub fn build_const_float(
-    module: &mut Module,
-    val: f64,
-    size: usize,
-    signed: bool,
-) -> Result<SSAFloatValue, ()> {
-    let inst = Instruction::ConstFloat { val, size, signed };
+pub fn build_const_float(module: &mut Module, val: f64, size: usize) -> Result<SSAFloatValue, ()> {
+    let inst = Instruction::ConstFloat { val, size };
 
     let val = module.write(inst).get()?;
 
