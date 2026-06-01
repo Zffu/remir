@@ -9,6 +9,7 @@ use crate::{
     utils::LLVMBasicValue,
 };
 
+pub mod cmp;
 pub mod consts;
 pub mod math;
 pub mod regs;

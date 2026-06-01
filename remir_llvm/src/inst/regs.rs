@@ -1,7 +1,7 @@
 use std::hint::unreachable_unchecked;
 
 use inkwell::values::BasicValueEnum;
-use remir::{block::BlockInstruction, insts::Instruction, module::Module};
+use remir::{block::BlockInstruction, insts::Instruction};
 
 use crate::{LLVMBridge, llvm_to_base, llvm_to_base_returnless, utils::LLVMBasicValue};
 
