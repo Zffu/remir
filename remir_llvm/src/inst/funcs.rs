@@ -4,15 +4,13 @@ use inkwell::{
     attributes::{Attribute, AttributeLoc},
     llvm_sys::LLVMCallConv,
 };
-use remir::{block::BlockInstruction, insts::Instruction, module::Module};
+use remir::{block::BlockInstruction, insts::Instruction};
 
 use crate::{LLVMBridge, llvm_to_base, llvm_to_base_returnless, utils::LLVMBasicValue};
 
 pub fn bridge_llvm_function_instruction(
     instruction: BlockInstruction,
-    func: usize,
     bridge: &mut LLVMBridge,
-    module: &mut Module,
 ) -> Result<Option<LLVMBasicValue>, ()> {
     let res = match &instruction.instruction {
         Instruction::Call {

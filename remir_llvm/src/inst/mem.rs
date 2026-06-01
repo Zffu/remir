@@ -7,7 +7,6 @@ use crate::{LLVMBridge, llvm_to_base, llvm_to_base_returnless, utils::LLVMBasicV
 
 pub fn bridge_llvm_mem_instruction(
     instruction: BlockInstruction,
-    func: usize,
     bridge: &mut LLVMBridge,
     module: &mut Module,
 ) -> Result<Option<LLVMBasicValue>, ()> {

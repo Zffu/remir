@@ -6,7 +6,7 @@ use crate::{
         branches::bridge_llvm_branch_instruction, cmp::bridge_llvm_cmp_instruction,
         consts::bridge_llvm_const_instruction, funcs::bridge_llvm_function_instruction,
         math::bridge_llvm_math_instruction, mem::bridge_llvm_mem_instruction,
-        regs::bridge_llvm_reg_instructions,
+        regs::bridge_llvm_reg_instructions, vals::bridge_llvm_vals_instruction,
     },
     utils::LLVMBasicValue,
 };
@@ -18,6 +18,7 @@ pub mod funcs;
 pub mod math;
 pub mod mem;
 pub mod regs;
+pub mod vals;
 
 pub fn bridge_llvm_instruction(
     instruction: BlockInstruction,
@@ -47,7 +48,7 @@ pub fn bridge_llvm_instruction(
         | Instruction::Phi { .. } => bridge_llvm_branch_instruction(instruction, bridge),
 
         Instruction::Call { .. } | Instruction::RetNull | Instruction::Ret { .. } => {
-            bridge_llvm_function_instruction(instruction, func, bridge, module)
+            bridge_llvm_function_instruction(instruction, bridge)
         }
 
         Instruction::Alloc { .. }
@@ -58,8 +59,15 @@ pub fn bridge_llvm_instruction(
         | Instruction::Gep { .. }
         | Instruction::LoadIndexed { .. }
         | Instruction::StoreIndexed { .. } => {
-            bridge_llvm_mem_instruction(instruction, func, bridge, module)
+            bridge_llvm_mem_instruction(instruction, bridge, module)
         }
+
+        Instruction::IntToFloat { .. }
+        | Instruction::FloatToInt { .. }
+        | Instruction::IntExtend { .. }
+        | Instruction::IntTruncate { .. }
+        | Instruction::FloatExtend { .. }
+        | Instruction::FloatTruncate { .. } => bridge_llvm_vals_instruction(instruction, bridge),
 
         _ => todo!(),
     }
