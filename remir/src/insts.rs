@@ -219,10 +219,7 @@ pub enum Instruction {
         cond: SSAIntValue,
         default: BaseSSAValue,
         else_block: BlockReference,
-        cases: Vec<(i128, BaseSSAValue)>,
-
-        min_neg: i128,
-        max: i128,
+        cases: Vec<(SSAIntValue, BaseSSAValue)>,
     },
 
     // Atomic instructions

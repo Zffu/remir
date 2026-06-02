@@ -218,24 +218,13 @@ pub fn build_switch(
     cond: SSAIntValue,
     default: BaseSSAValue,
     else_block: BlockReference,
-    cases: Vec<(i128, BaseSSAValue)>,
+    cases: Vec<(SSAIntValue, BaseSSAValue)>,
 ) -> Result<BaseSSAValue, ()> {
     cond.enforces_boolean()?;
-
-    let mut min_neg = 0;
-    let mut max = i128::MIN;
 
     for case in &cases {
         if case.1.value_type != default.value_type {
             return Err(()); // Every choice must be of the same type
-        }
-
-        if case.0 < 0 && case.0 < min_neg {
-            min_neg = case.0;
-        }
-
-        if case.0 > max {
-            max = case.0;
         }
     }
 
@@ -244,8 +233,6 @@ pub fn build_switch(
         default,
         else_block,
         cases,
-        min_neg,
-        max,
     };
 
     module.write(inst).get()
