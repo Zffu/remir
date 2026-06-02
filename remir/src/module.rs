@@ -6,12 +6,21 @@ use crate::{
     values::ValueType,
 };
 
+/// A module represents the base of a program.
+/// It it recomended to use a module per file.
+///
+/// Every single module has it's own functions, blocks and instruction writer.
 pub struct Module {
+    /// The name of the module
     pub name: String,
 
+    /// The blocks contained in the module
     pub blocks: Vec<Block>,
+
+    /// A map in order to convert block references into their corresponding functions
     pub block_to_function: HashMap<BlockReference, FunctionReference>,
 
+    /// The functions contained in the module
     pub functions: Vec<Function>,
 
     pub pos_block: Option<BlockReference>,
@@ -19,6 +28,7 @@ pub struct Module {
 }
 
 impl Module {
+    /// Creates a new [`Module`] with the given name
     pub fn new(name: String) -> Self {
         Self {
             name,
@@ -37,6 +47,7 @@ impl Module {
         self.functions[self.block_to_function[&block].id].obtain_value_ind()
     }
 
+    /// Creates a [`Block`] with the given name for the given function.
     pub fn create_block(&mut self, name: String, func: FunctionReference) -> BlockReference {
         let reference = BlockReference::new(name, self.blocks.len());
 
@@ -48,6 +59,7 @@ impl Module {
         reference
     }
 
+    /// Creates a new function with the given name, arguments and return type inside of the module
     pub fn create_function(
         &mut self,
         name: String,

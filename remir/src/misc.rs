@@ -1,5 +1,7 @@
 //! Misc definitions
 
+/// The order of memory for atomic operations.
+/// Also named `AtomicOrder`
 #[derive(Clone)]
 pub enum MemoryOrder {
     Relaxed,
@@ -10,6 +12,7 @@ pub enum MemoryOrder {
     SeqCst,
 }
 
+/// The operators for math operations and instructions
 #[derive(Clone)]
 pub enum MathOperator {
     Add,
@@ -24,6 +27,7 @@ pub enum MathOperator {
     Shr,
 }
 
+/// The operators for compare instructions
 #[derive(Clone)]
 pub enum CompareOperator {
     Eq,
