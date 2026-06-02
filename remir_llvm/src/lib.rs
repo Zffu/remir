@@ -61,8 +61,10 @@ pub fn build_llvm_block(
         .builder
         .position_at_end(bridge.blocks[&block.reference].inner.clone());
 
+    let func_ref = module.block_to_function[&block.reference].clone();
+
     for inst in &block.instructions {
-        let res = bridge_llvm_instruction(inst.clone(), bridge, module).unwrap();
+        let res = bridge_llvm_instruction(inst.clone(), bridge, func_ref.clone(), module).unwrap();
 
         if res.is_some() {
             unsafe {

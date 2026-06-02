@@ -1,4 +1,4 @@
-use remir::{block::BlockInstruction, insts::Instruction, module::Module};
+use remir::{block::BlockInstruction, func::FunctionReference, insts::Instruction, module::Module};
 
 use crate::{
     LLVMBridge,
@@ -28,6 +28,7 @@ pub mod vals;
 pub fn bridge_llvm_instruction(
     instruction: BlockInstruction,
     bridge: &mut LLVMBridge,
+    func: FunctionReference,
     module: &mut Module,
 ) -> Result<Option<LLVMBasicValue>, ()> {
     match &instruction.instruction {
@@ -51,8 +52,11 @@ pub fn bridge_llvm_instruction(
         | Instruction::IndirectBranch { .. }
         | Instruction::Phi { .. } => bridge_llvm_branch_instruction(instruction, bridge),
 
-        Instruction::Call { .. } | Instruction::RetNull | Instruction::Ret { .. } => {
-            bridge_llvm_function_instruction(instruction, bridge)
+        Instruction::Call { .. }
+        | Instruction::RetNull
+        | Instruction::Ret { .. }
+        | Instruction::GrabArgument { .. } => {
+            bridge_llvm_function_instruction(instruction, func, bridge)
         }
 
         Instruction::Alloc { .. }

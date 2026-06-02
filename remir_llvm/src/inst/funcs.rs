@@ -4,12 +4,13 @@ use inkwell::{
     attributes::{Attribute, AttributeLoc},
     llvm_sys::LLVMCallConv,
 };
-use remir::{block::BlockInstruction, insts::Instruction};
+use remir::{block::BlockInstruction, func::FunctionReference, insts::Instruction};
 
 use crate::{LLVMBridge, llvm_to_base, llvm_to_base_returnless, utils::LLVMBasicValue};
 
 pub fn bridge_llvm_function_instruction(
     instruction: BlockInstruction,
+    func: FunctionReference,
     bridge: &mut LLVMBridge,
 ) -> Result<Option<LLVMBasicValue>, ()> {
     let res = match &instruction.instruction {
@@ -75,6 +76,12 @@ pub fn bridge_llvm_function_instruction(
 
             llvm_to_base_returnless!(bridge.builder.build_return(Some(&val)));
             None
+        }
+
+        Instruction::GrabArgument { index } => {
+            let func = bridge.functions[&func].clone();
+
+            func.get_nth_param(*index as u32)
         }
 
         _ => unsafe { unreachable_unchecked() },
