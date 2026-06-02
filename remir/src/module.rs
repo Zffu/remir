@@ -24,6 +24,7 @@ pub struct Module {
     pub functions: Vec<Function>,
 
     pub pos_block: Option<BlockReference>,
+    pub pos_function: Option<FunctionReference>,
     pub pos_is_start: bool,
 }
 
@@ -38,6 +39,7 @@ impl Module {
             functions: vec![],
 
             pos_block: None,
+            pos_function: None,
             pos_is_start: false,
         }
     }

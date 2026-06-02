@@ -1,5 +1,6 @@
 use crate::{
     block::{BlockInstruction, BlockReference},
+    func::FunctionReference,
     insts::Instruction,
     module::Module,
     values::BaseSSAValue,
@@ -8,23 +9,25 @@ use crate::{
 /// Represents something that can write instructions
 pub trait InstructionWriter {
     /// Moves at the start of the given block.
-    fn move_start(&mut self, block: BlockReference);
+    fn move_start(&mut self, block: BlockReference, func: FunctionReference);
 
     /// Moves at the end of the given block.
-    fn move_end(&mut self, block: BlockReference);
+    fn move_end(&mut self, block: BlockReference, func: FunctionReference);
 
     /// Writes an instruction at the given position
     fn write(&mut self, inst: Instruction) -> BlockInstruction;
 }
 
 impl InstructionWriter for Module {
-    fn move_start(&mut self, block: BlockReference) {
+    fn move_start(&mut self, block: BlockReference, func: FunctionReference) {
         self.pos_block = Some(block);
+        self.pos_function = Some(func);
         self.pos_is_start = true;
     }
 
-    fn move_end(&mut self, block: BlockReference) {
+    fn move_end(&mut self, block: BlockReference, func: FunctionReference) {
         self.pos_block = Some(block);
+        self.pos_function = Some(func);
         self.pos_is_start = false;
     }
 
