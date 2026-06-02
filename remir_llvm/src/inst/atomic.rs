@@ -1,17 +1,13 @@
 use std::hint::unreachable_unchecked;
 
 use inkwell::{AtomicOrdering, values::BasicValue};
-use remir::{
-    block::BlockInstruction, insts::Instruction, module::Module, utils::atomic::MemoryOrder,
-};
+use remir::{block::BlockInstruction, insts::Instruction, utils::atomic::MemoryOrder};
 
 use crate::{LLVMBridge, llvm_to_base, llvm_to_base_returnless, utils::LLVMBasicValue};
 
 pub fn bridge_llvm_atomic_instruction(
     instruction: BlockInstruction,
-    func: usize,
     bridge: &mut LLVMBridge,
-    module: &mut Module,
 ) -> Result<Option<LLVMBasicValue>, ()> {
     let res = match &instruction.instruction {
         Instruction::LoadAtomic { source, ordering } => {
