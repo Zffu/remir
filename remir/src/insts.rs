@@ -291,6 +291,12 @@ impl Instruction {
                 fast_calling_conv: _,
             } => module.functions[func_label.id].return_type.clone(),
 
+            Self::GrabArgument { index } => {
+                let curr_func = module.pos_function.as_ref().unwrap();
+
+                Some(module.functions[curr_func.id].arguments[*index].1.clone())
+            }
+
             Self::CompareOperationFloat { .. } => Some(ValueType::Int(false, 1)),
             Self::CompareOperationInt { .. } => Some(ValueType::Int(false, 1)),
             Self::ConstFloat { val: _, size } => Some(ValueType::Float(*size)),
