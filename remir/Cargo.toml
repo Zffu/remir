@@ -4,3 +4,7 @@ edition = "2024"
 
 name = "remir"
 [dependencies]
+
+[features]
+fmt = []
+default = ["fmt"]

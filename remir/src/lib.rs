@@ -11,6 +11,9 @@ pub mod utils;
 pub mod values;
 pub mod writer;
 
+#[cfg(feature = "fmt")]
+pub mod fmt;
+
 pub enum OptimizationLevel {
     None = 0,
     Less = 1,
