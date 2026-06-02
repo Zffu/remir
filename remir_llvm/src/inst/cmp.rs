@@ -1,7 +1,7 @@
 use std::hint::unreachable_unchecked;
 
 use inkwell::{FloatPredicate, IntPredicate};
-use remir::{block::BlockInstruction, insts::Instruction, utils::operators::CompareOperator};
+use remir::{block::BlockInstruction, insts::Instruction, operators::CompareOperator};
 
 use crate::{LLVMBridge, llvm_to_base, utils::LLVMBasicValue};
 

@@ -1,12 +1,10 @@
 //! Definitions of the instruction set of Remir
 
 use crate::{
+    atomic::MemoryOrder,
     block::BlockReference,
     func::FunctionReference,
-    utils::{
-        atomic::MemoryOrder,
-        operators::{CompareOperator, MathOperator},
-    },
+    operators::{CompareOperator, MathOperator},
     values::{
         BaseSSAValue, ValueType, consts::ConstantData, float::SSAFloatValue, int::SSAIntValue,
         ptr::SSAPointerValue, structs::SSAStructValue,

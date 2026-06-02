@@ -1,12 +1,12 @@
 //! Definitions for block variables
 
 use crate::{
+    atomic::MemoryOrder,
     builders::{
         atomic::{build_load_atomic, build_store_atomic},
         build_load, build_store,
     },
     module::Module,
-    utils::atomic::MemoryOrder,
     values::{BaseSSAValue, ptr::SSAPointerValue},
 };
 

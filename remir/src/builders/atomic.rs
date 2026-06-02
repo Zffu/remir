@@ -1,7 +1,7 @@
 use crate::{
+    atomic::MemoryOrder,
     insts::Instruction,
     module::Module,
-    utils::atomic::MemoryOrder,
     values::{BaseSSAValue, ptr::SSAPointerValue},
     writer::InstructionWriter,
 };
