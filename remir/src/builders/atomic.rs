@@ -35,9 +35,3 @@ pub fn build_store_atomic(
     module.write(inst);
     Ok(())
 }
-
-pub fn build_fence(module: &mut Module, ordering: MemoryOrder) {
-    let inst = Instruction::Fence { ordering };
-
-    module.write(inst);
-}

@@ -3,15 +3,16 @@ use remir::{block::BlockInstruction, insts::Instruction, module::Module};
 use crate::{
     LLVMBridge,
     inst::{
-        branches::bridge_llvm_branch_instruction, cmp::bridge_llvm_cmp_instruction,
-        consts::bridge_llvm_const_instruction, funcs::bridge_llvm_function_instruction,
-        math::bridge_llvm_math_instruction, mem::bridge_llvm_mem_instruction,
-        regs::bridge_llvm_reg_instructions, structs::bridge_llvm_struct_instruction,
-        vals::bridge_llvm_vals_instruction,
+        atomic::bridge_llvm_atomic_instruction, branches::bridge_llvm_branch_instruction,
+        cmp::bridge_llvm_cmp_instruction, consts::bridge_llvm_const_instruction,
+        funcs::bridge_llvm_function_instruction, math::bridge_llvm_math_instruction,
+        mem::bridge_llvm_mem_instruction, regs::bridge_llvm_reg_instructions,
+        structs::bridge_llvm_struct_instruction, vals::bridge_llvm_vals_instruction,
     },
     utils::LLVMBasicValue,
 };
 
+pub mod atomic;
 pub mod branches;
 pub mod cmp;
 pub mod consts;
@@ -75,6 +76,10 @@ pub fn bridge_llvm_instruction(
         | Instruction::ExtractValue { .. }
         | Instruction::InsertValue { .. }
         | Instruction::Switch { .. } => bridge_llvm_struct_instruction(instruction, bridge),
+
+        Instruction::LoadAtomic { .. } | Instruction::StoreAtomic { .. } => {
+            bridge_llvm_atomic_instruction(instruction, func, bridge, module)
+        }
 
         _ => todo!(),
     }

@@ -233,10 +233,6 @@ pub enum Instruction {
         ordering: MemoryOrder,
     },
 
-    Fence {
-        ordering: MemoryOrder,
-    },
-
     /// SSA Hints
     Unreachable,
 
@@ -256,7 +252,6 @@ impl Instruction {
             Self::Assume { .. } => false,
             Self::Condbr { .. } => false,
             Self::Crash { .. } => false,
-            Self::Fence { .. } => false,
             Self::Free { .. } => false,
             Self::IndirectBranch { .. } => false,
             Self::InsertValue { .. } => false,
