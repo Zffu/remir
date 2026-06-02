@@ -275,12 +275,12 @@ impl Instruction {
             Self::Alloc { size: _, val_type } => {
                 Some(ValueType::Pointer(Box::new(val_type.clone())))
             }
-            Self::AllocUntyped { .. } => Some(ValueType::Pointer(Box::new(ValueType::Unknown))),
+            Self::AllocUntyped { .. } => Some(ValueType::new_any_pointer()),
 
             Self::Alloca { size: _, val_type } => {
                 Some(ValueType::Pointer(Box::new(val_type.clone())))
             }
-            Self::AllocaUntyped { .. } => Some(ValueType::Pointer(Box::new(ValueType::Unknown))),
+            Self::AllocaUntyped { .. } => Some(ValueType::new_any_pointer()),
 
             Self::BitCast { src: _, into } => Some(into.clone()),
             Self::Call {
@@ -305,7 +305,7 @@ impl Instruction {
                 size,
                 signed,
             } => Some(ValueType::Int(*signed, *size)),
-            Self::ConstPointer { .. } => Some(ValueType::Pointer(Box::new(ValueType::Unknown))),
+            Self::ConstPointer { .. } => Some(ValueType::new_any_pointer()),
             Self::Copy { val } => Some(val.value_type.clone()),
             Self::ExtractValue { struct_val, index } => Some(struct_val.fields[*index].clone()),
             Self::FloatExtend { val: _, into } => Some(into.clone()),
