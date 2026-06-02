@@ -1,4 +1,5 @@
 use crate::{
+    block::BlockReference,
     insts::Instruction,
     module::Module,
     values::{
@@ -216,6 +217,7 @@ pub fn build_switch(
     module: &mut Module,
     cond: SSAIntValue,
     default: BaseSSAValue,
+    else_block: BlockReference,
     cases: Vec<(i128, BaseSSAValue)>,
 ) -> Result<BaseSSAValue, ()> {
     cond.enforces_boolean()?;
@@ -240,6 +242,7 @@ pub fn build_switch(
     let inst = Instruction::Switch {
         cond,
         default,
+        else_block,
         cases,
         min_neg,
         max,

@@ -218,6 +218,7 @@ pub enum Instruction {
     Switch {
         cond: SSAIntValue,
         default: BaseSSAValue,
+        else_block: BlockReference,
         cases: Vec<(i128, BaseSSAValue)>,
 
         min_neg: i128,
