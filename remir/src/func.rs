@@ -50,44 +50,6 @@ impl Function {
         }
     }
 
-    /// Appends an entry block inside of the function
-    ///
-    /// # Panics
-    /// This function will panic if the entry block is already present
-    /// or if there are already blocks inside of the function
-    ///
-    #[deprecated(note = "will be replaced by Function::append_block")]
-    pub fn append_entry_block(&mut self, module: &mut Module) -> BlockReference {
-        if !self.blocks.is_empty() {
-            panic!("Tried using append_entry_block on a non empty function");
-        }
-
-        let reference = module.create_block(
-            format!("{}::entry", self.reference.name),
-            self.reference.clone(),
-        );
-
-        let block = &mut module.blocks[reference.id];
-
-        self.append_arguments(block);
-
-        reference
-    }
-
-    fn append_arguments(&mut self, block: &mut Block) {
-        let mut ind = 0;
-
-        for arg in &self.arguments {
-            let value = BaseSSAValue::new(ind, arg.1.clone());
-
-            block.variables.insert(
-                arg.0.clone(),
-                BlockVariable::new_ssa(arg.0.clone(), Some(value)),
-            );
-            ind += 1;
-        }
-    }
-
     /// Appends a block inside of the [`Function`] with the given name and returns it's reference
     ///
     /// The block will be marked as owned by the function
