@@ -215,22 +215,18 @@ pub fn build_insert_value(
 
 pub fn build_switch(
     module: &mut Module,
-    cond: SSAIntValue,
-    default: BaseSSAValue,
+    value: SSAIntValue,
     else_block: BlockReference,
-    cases: Vec<(SSAIntValue, BaseSSAValue)>,
+    cases: Vec<(SSAIntValue, BlockReference)>,
 ) -> Result<BaseSSAValue, ()> {
-    cond.enforces_boolean()?;
-
     for case in &cases {
-        if case.1.value_type != default.value_type {
+        if case.0.base.value_type != value.base.value_type {
             return Err(()); // Every choice must be of the same type
         }
     }
 
     let inst = Instruction::Switch {
-        cond,
-        default,
+        value,
         else_block,
         cases,
     };

@@ -216,10 +216,9 @@ pub enum Instruction {
     },
 
     Switch {
-        cond: SSAIntValue,
-        default: BaseSSAValue,
+        value: SSAIntValue,
         else_block: BlockReference,
-        cases: Vec<(SSAIntValue, BaseSSAValue)>,
+        cases: Vec<(SSAIntValue, BlockReference)>,
     },
 
     // Atomic instructions
