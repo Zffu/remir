@@ -1,9 +1,14 @@
 use std::{collections::HashMap, mem::transmute, rc::Rc};
 
 use inkwell::{builder::Builder, context::Context, types::VoidType};
-use remir::{block::BlockReference, func::FunctionReference};
+use remir::{
+    block::{Block, BlockReference},
+    func::FunctionReference,
+    module::Module,
+};
 
 use crate::{
+    inst::bridge_llvm_instruction,
     types::LLVMTypeStorage,
     utils::{LLVMBasicValue, LLVMBlock, LLVMFunction, LLVMModule, LLVMSiblingObject, LLVMVoidType},
 };
@@ -45,6 +50,30 @@ pub struct LLVMBridge {
 
     pub builder: Builder<'static>,
     pub void_type: LLVMVoidType,
+}
+
+pub fn build_llvm_block(
+    bridge: &mut LLVMBridge,
+    block: &Block,
+    module: &mut Module,
+) -> Result<(), ()> {
+    bridge
+        .builder
+        .position_at_end(bridge.blocks[&block.reference].inner.clone());
+
+    for inst in &block.instructions {
+        let res = bridge_llvm_instruction(inst.clone(), bridge, module).unwrap();
+
+        if res.is_some() {
+            unsafe {
+                bridge
+                    .values
+                    .insert(inst.get()?.inst_ind, res.unwrap_unchecked())
+            };
+        }
+    }
+
+    Ok(())
 }
 
 impl LLVMBridge {
