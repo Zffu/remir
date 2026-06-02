@@ -6,7 +6,8 @@ use crate::{
         branches::bridge_llvm_branch_instruction, cmp::bridge_llvm_cmp_instruction,
         consts::bridge_llvm_const_instruction, funcs::bridge_llvm_function_instruction,
         math::bridge_llvm_math_instruction, mem::bridge_llvm_mem_instruction,
-        regs::bridge_llvm_reg_instructions, vals::bridge_llvm_vals_instruction,
+        regs::bridge_llvm_reg_instructions, structs::bridge_llvm_struct_instruction,
+        vals::bridge_llvm_vals_instruction,
     },
     utils::LLVMBasicValue,
 };
@@ -18,6 +19,7 @@ pub mod funcs;
 pub mod math;
 pub mod mem;
 pub mod regs;
+pub mod structs;
 pub mod vals;
 
 pub fn bridge_llvm_instruction(
@@ -68,6 +70,11 @@ pub fn bridge_llvm_instruction(
         | Instruction::IntTruncate { .. }
         | Instruction::FloatExtend { .. }
         | Instruction::FloatTruncate { .. } => bridge_llvm_vals_instruction(instruction, bridge),
+
+        Instruction::Select { .. }
+        | Instruction::ExtractValue { .. }
+        | Instruction::InsertValue { .. }
+        | Instruction::Switch { .. } => bridge_llvm_struct_instruction(instruction, bridge),
 
         _ => todo!(),
     }
