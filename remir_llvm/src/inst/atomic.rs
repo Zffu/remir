@@ -1,7 +1,7 @@
 use std::hint::unreachable_unchecked;
 
 use inkwell::{AtomicOrdering, values::BasicValue};
-use remir::{atomic::MemoryOrder, block::BlockInstruction, insts::Instruction};
+use remir::{block::BlockInstruction, insts::Instruction, misc::MemoryOrder};
 
 use crate::{LLVMBridge, llvm_to_base, llvm_to_base_returnless, utils::LLVMBasicValue};
 

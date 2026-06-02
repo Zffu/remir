@@ -1,4 +1,14 @@
-//! Compare / Math operator related utilities
+//! Misc definitions
+
+#[derive(Clone)]
+pub enum MemoryOrder {
+    Relaxed,
+    Consume,
+    Acquire,
+    Release,
+    AcqRel,
+    SeqCst,
+}
 
 #[derive(Clone)]
 pub enum MathOperator {

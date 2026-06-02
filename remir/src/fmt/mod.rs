@@ -3,8 +3,7 @@
 use std::fmt::Display;
 
 use crate::{
-    atomic::MemoryOrder,
-    operators::{CompareOperator, MathOperator},
+    misc::{CompareOperator, MathOperator, MemoryOrder},
     values::ValueType,
 };
 

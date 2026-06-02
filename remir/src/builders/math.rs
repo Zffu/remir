@@ -1,7 +1,7 @@
 use crate::{
     insts::Instruction,
+    misc::MathOperator,
     module::Module,
-    operators::MathOperator,
     values::{float::SSAFloatValue, int::SSAIntValue},
     writer::InstructionWriter,
 };

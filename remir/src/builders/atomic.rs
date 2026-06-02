@@ -1,6 +1,6 @@
 use crate::{
-    atomic::MemoryOrder,
     insts::Instruction,
+    misc::MemoryOrder,
     module::Module,
     values::{BaseSSAValue, ptr::SSAPointerValue},
     writer::InstructionWriter,

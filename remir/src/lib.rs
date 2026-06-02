@@ -2,13 +2,12 @@
 //!
 //! It uses a block-like representation with instructions and SSA values.
 
-pub mod atomic;
 pub mod block;
 pub mod builders;
 pub mod func;
 pub mod insts;
+pub mod misc;
 pub mod module;
-pub mod operators;
 pub mod values;
 pub mod writer;
 
