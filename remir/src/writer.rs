@@ -40,7 +40,7 @@ impl InstructionWriter for Module {
         if inst.outputs_value() {
             value = Some(BaseSSAValue::new(
                 self.obtain_value_ind(pos_block.clone()),
-                unsafe { inst.get_output_type().unwrap_unchecked() },
+                unsafe { inst.get_output_type(self).unwrap_unchecked() },
             ))
         }
 

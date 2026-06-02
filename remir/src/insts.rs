@@ -4,6 +4,7 @@ use crate::{
     block::BlockReference,
     func::FunctionReference,
     misc::{CompareOperator, MathOperator, MemoryOrder},
+    module::Module,
     values::{
         BaseSSAValue, ValueType, consts::ConstantData, float::SSAFloatValue, int::SSAIntValue,
         ptr::SSAPointerValue, structs::SSAStructValue,
@@ -116,6 +117,10 @@ pub enum Instruction {
     RetNull,
     Ret {
         val: BaseSSAValue,
+    },
+
+    GrabArgument {
+        index: usize,
     },
 
     // Memory instructions
@@ -265,7 +270,7 @@ impl Instruction {
         }
     }
 
-    pub fn get_output_type(&self) -> Option<ValueType> {
+    pub fn get_output_type(&self, module: &mut Module) -> Option<ValueType> {
         match self {
             Self::Alloc { size: _, val_type } => {
                 Some(ValueType::Pointer(Box::new(val_type.clone())))
@@ -278,7 +283,14 @@ impl Instruction {
             Self::AllocaUntyped { .. } => Some(ValueType::Pointer(Box::new(ValueType::Unknown))),
 
             Self::BitCast { src: _, into } => Some(into.clone()),
-            Self::Call { .. } => todo!(),
+            Self::Call {
+                func_label,
+                args: _,
+                pure: _,
+                no_return: _,
+                fast_calling_conv: _,
+            } => module.functions[func_label.id].return_type.clone(),
+
             Self::CompareOperationFloat { .. } => Some(ValueType::Int(false, 1)),
             Self::CompareOperationInt { .. } => Some(ValueType::Int(false, 1)),
             Self::ConstFloat { val: _, size } => Some(ValueType::Float(*size)),
