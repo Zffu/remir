@@ -25,16 +25,16 @@ macro_rules! decl_value_display {
                 let const_data = self.get_constant_data();
                 let display_const_data = const_data.is_something();
 
-                write!(f, "{} ", self.get_type());
+                write!(f, "{} ", self.get_type())?;
 
                 if display_const_data {
-                    write!(f, "{} (", const_data);
+                    write!(f, "{} (", const_data)?;
                 }
 
-                write!(f, "#{}", self.get_inst_index());
+                write!(f, "#{}", self.get_inst_index())?;
 
                 if display_const_data {
-                    write!(f, ")");
+                    write!(f, ")")?;
                 }
 
                 Ok(())
