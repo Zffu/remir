@@ -1,27 +1,41 @@
+//! Declarations related to functions
+
 use crate::{
     block::{Block, BlockReference, vars::BlockVariable},
     module::Module,
     values::{BaseSSAValue, ValueType},
 };
 
+/// Represents a reference to a [`Function`]
 #[derive(Clone, Hash, PartialEq, Eq)]
 pub struct FunctionReference {
+    /// The name of the function
     pub name: String,
+
+    /// The internal ID (index) of the function
     pub id: usize,
 }
 
+/// Represents a function inside of the Remir IR.
 pub struct Function {
+    /// The self reference to the function
     pub reference: FunctionReference,
 
+    /// The blocks owned by the function.
     pub blocks: Vec<BlockReference>,
 
+    /// The argument types of the function
     pub arguments: Vec<(String, ValueType)>,
+
+    /// The return type of the function
     pub return_type: Option<ValueType>,
 
+    /// The counter used to generate [`BaseSSAValue`] indexes
     pub value_index_counter: usize,
 }
 
 impl Function {
+    /// Creates a new [`Function`] with the given reference, argument types and return types
     pub fn new(
         reference: FunctionReference,
         arguments: Vec<(String, ValueType)>,
@@ -36,6 +50,13 @@ impl Function {
         }
     }
 
+    /// Appends an entry block inside of the function
+    ///
+    /// # Panics
+    /// This function will panic if the entry block is already present
+    /// or if there are already blocks inside of the function
+    ///
+    #[deprecated(note = "will be replaced by Function::append_block")]
     pub fn append_entry_block(&mut self, module: &mut Module) -> BlockReference {
         if !self.blocks.is_empty() {
             panic!("Tried using append_entry_block on a non empty function");
@@ -67,6 +88,10 @@ impl Function {
         }
     }
 
+    /// Appends a block inside of the [`Function`] with the given name and returns it's reference
+    ///
+    /// The block will be marked as owned by the function
+    ///
     pub fn append_block(&mut self, module: &mut Module, name: String) -> BlockReference {
         let reference = module.create_block(
             format!("{}::{}", self.reference.name, name),
@@ -86,6 +111,7 @@ impl Function {
 }
 
 impl FunctionReference {
+    /// Creates a new [`FunctionReference`]
     pub fn new(name: String, id: usize) -> Self {
         Self { name, id }
     }

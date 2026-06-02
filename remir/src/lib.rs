@@ -14,6 +14,7 @@ pub mod writer;
 #[cfg(feature = "fmt")]
 pub mod fmt;
 
+/// Represents the optimization level used for the compiler bridges
 pub enum OptimizationLevel {
     None = 0,
     Less = 1,
