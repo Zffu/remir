@@ -1,10 +1,6 @@
 //! Declarations related to functions
 
-use crate::{
-    block::{Block, BlockReference, vars::BlockVariable},
-    module::Module,
-    values::{BaseSSAValue, ValueType},
-};
+use crate::{block::BlockReference, module::Module, values::ValueType};
 
 /// Represents a reference to a [`Function`]
 #[derive(Clone, Hash, PartialEq, Eq)]
