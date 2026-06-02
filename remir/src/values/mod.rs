@@ -7,25 +7,9 @@ pub mod float;
 pub mod int;
 pub mod ptr;
 pub mod structs;
+pub mod types;
 
-/// The type of the SSA MIR values.
-#[derive(Clone, PartialEq, Hash, Eq)]
-pub enum ValueType {
-    /// The float value type. Contains the signed state and size state
-    Float(usize),
-
-    /// The int value type. Contains the signed state and size state
-    Int(bool, usize),
-
-    /// The structure value type. Contains the fields
-    Struct(Vec<Box<ValueType>>),
-
-    /// The pointer value type.
-    Pointer(Box<ValueType>),
-
-    /// The unkown value type
-    Unknown,
-}
+pub use types::ValueType;
 
 /// Represents a base SSA value inside of the IR.
 /// An SSA value is a value potentially obtained from using an instruction.
