@@ -1,6 +1,6 @@
 //! Definitions for the structure values in the MIR
 
-use crate::values::{BaseSSAValue, ValueType};
+use crate::values::{BaseSSAValue, SSAValueLike, ValueType, consts::ConstantData};
 
 /// A variant of [`BaseSSAValue`] that is a structure
 #[derive(Clone)]
@@ -40,5 +40,19 @@ impl TryFrom<BaseSSAValue> for SSAStructValue {
 impl Into<BaseSSAValue> for SSAStructValue {
     fn into(self) -> BaseSSAValue {
         self.base.clone()
+    }
+}
+
+impl SSAValueLike for SSAStructValue {
+    fn get_type(&self) -> ValueType {
+        self.base.get_type()
+    }
+
+    fn get_constant_data(&self) -> ConstantData {
+        self.base.get_constant_data()
+    }
+
+    fn get_inst_index(&self) -> usize {
+        self.base.get_inst_index()
     }
 }

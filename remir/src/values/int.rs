@@ -1,6 +1,6 @@
 //! Definitions for the int values in the MIR
 
-use crate::values::{BaseSSAValue, ValueType};
+use crate::values::{BaseSSAValue, SSAValueLike, ValueType, consts::ConstantData};
 
 /// A variant of [`BaseSSAValue`] that is an integer
 #[derive(Clone)]
@@ -54,5 +54,19 @@ impl TryFrom<BaseSSAValue> for SSAIntValue {
 impl Into<BaseSSAValue> for SSAIntValue {
     fn into(self) -> BaseSSAValue {
         self.base.clone()
+    }
+}
+
+impl SSAValueLike for SSAIntValue {
+    fn get_type(&self) -> ValueType {
+        self.base.get_type()
+    }
+
+    fn get_constant_data(&self) -> ConstantData {
+        self.base.get_constant_data()
+    }
+
+    fn get_inst_index(&self) -> usize {
+        self.base.get_inst_index()
     }
 }

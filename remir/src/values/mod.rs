@@ -40,6 +40,12 @@ pub struct BaseSSAValue {
     pub constant: ConstantData,
 }
 
+pub trait SSAValueLike {
+    fn get_type(&self) -> ValueType;
+    fn get_constant_data(&self) -> ConstantData;
+    fn get_inst_index(&self) -> usize;
+}
+
 impl BaseSSAValue {
     /// Creates a new [`BaseSSAValue`] based on the given type and the given instruction index
     pub fn new(inst_ind: usize, value_type: ValueType) -> Self {
@@ -57,5 +63,19 @@ impl BaseSSAValue {
             value_type,
             constant,
         }
+    }
+}
+
+impl SSAValueLike for BaseSSAValue {
+    fn get_type(&self) -> ValueType {
+        self.value_type.clone()
+    }
+
+    fn get_constant_data(&self) -> ConstantData {
+        self.constant.clone()
+    }
+
+    fn get_inst_index(&self) -> usize {
+        self.inst_ind
     }
 }
