@@ -39,7 +39,7 @@ pub fn build_select(
     module.write(inst).get()
 }
 
-pub fn int_to_float(
+pub fn build_int_to_float(
     module: &mut Module,
     val: SSAIntValue,
     into: ValueType,
@@ -55,7 +55,7 @@ pub fn int_to_float(
     }
 }
 
-pub fn float_to_int(
+pub fn build_float_to_int(
     module: &mut Module,
     val: SSAFloatValue,
     into: ValueType,

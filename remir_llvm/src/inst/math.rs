@@ -1,6 +1,6 @@
 use std::hint::unreachable_unchecked;
 
-use inkwell::values::{BasicValueEnum, FastMathFlags};
+use inkwell::values::{BasicValue, BasicValueEnum, FastMathFlags};
 use remir::{block::BlockInstruction, insts::Instruction, misc::MathOperator};
 
 use crate::{LLVMBridge, llvm_to_base, llvm_to_base_returnless, utils::LLVMBasicValue};
@@ -17,7 +17,7 @@ pub fn bridge_llvm_math_instruction(
             signed,
             signed_wrap,
             unsigned_wrap,
-            fast,
+            fast: _,
         } => {
             let a = bridge.values[&a.base.inst_ind].into_int_value();
             let b = bridge.values[&b.base.inst_ind].into_int_value();
@@ -50,18 +50,11 @@ pub fn bridge_llvm_math_instruction(
             };
 
             let res = llvm_to_base!(res);
-            let res2 = res.as_instruction().unwrap();
 
-            llvm_to_base_returnless!(res2.set_no_signed_wrap_flag(!*signed_wrap));
-            llvm_to_base_returnless!(res2.set_no_unsigned_wrap_flag(!*unsigned_wrap));
-
-            let mut flags = FastMathFlags::empty();
-
-            if *fast {
-                flags = FastMathFlags::all();
+            if let Some(res2) = res.as_instruction_value() {
+                llvm_to_base_returnless!(res2.set_no_signed_wrap_flag(!*signed_wrap));
+                llvm_to_base_returnless!(res2.set_no_unsigned_wrap_flag(!*unsigned_wrap));
             }
-
-            llvm_to_base_returnless!(res2.set_fast_math_flags(flags));
 
             Some(res.into())
         }

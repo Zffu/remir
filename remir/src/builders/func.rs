@@ -56,3 +56,8 @@ pub fn build_ret(module: &mut Module, val: Option<BaseSSAValue>) {
         module.write(inst);
     }
 }
+pub fn build_argument_grab(module: &mut Module, index: usize) -> Result<BaseSSAValue, ()> {
+    let inst = Instruction::GrabArgument { index };
+
+    module.write(inst).get()
+}

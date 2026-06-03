@@ -40,7 +40,7 @@ impl InstructionWriter for Module {
 
         let mut value = None;
 
-        if inst.outputs_value() {
+        if inst.outputs_value(self) {
             value = Some(BaseSSAValue::new(
                 self.obtain_value_ind(pos_block.clone()),
                 unsafe { inst.get_output_type(self).unwrap_unchecked() },

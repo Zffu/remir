@@ -27,7 +27,9 @@ macro_rules! llvm_to_base {
     ($expr: expr) => {
         match $expr {
             Ok(v) => v,
-            Err(_) => return Err(()),
+            Err(e) => {
+                panic!("Caught {}", e);
+            }
         }
     };
 }
@@ -37,7 +39,9 @@ macro_rules! llvm_to_base_returnless {
     ($expr: expr) => {
         match $expr {
             Ok(_) => {}
-            Err(_) => return Err(()),
+            Err(e) => {
+                panic!("Caught {}", e);
+            }
         }
     };
 }
@@ -91,7 +95,8 @@ pub fn build_llvm_block(
     let func_ref = module.block_to_function[&block.reference].clone();
 
     for inst in &block.instructions {
-        let res = bridge_llvm_instruction(inst.clone(), bridge, func_ref.clone(), module).unwrap();
+        println!("{}", inst);
+        let res = bridge_llvm_instruction(inst.clone(), bridge, func_ref.clone(), module)?;
 
         if res.is_some() {
             unsafe {
@@ -146,7 +151,10 @@ pub fn bridge_llvm_function(bridge: &mut LLVMBridge, func: &Function, module: &m
 }
 
 impl LLVMBridge {
-    pub fn new(ctx: Rc<Context>) -> Self {
+    pub fn new() -> Self {
+        let ctx = Context::create();
+        let ctx = Rc::new(ctx);
+
         LLVMBridge {
             blocks: HashMap::new(),
             values: HashMap::new(),

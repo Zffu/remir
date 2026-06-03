@@ -249,7 +249,7 @@ pub enum Instruction {
 
 impl Instruction {
     /// Checks if the given instruction is supposed to return a value
-    pub fn outputs_value(&self) -> bool {
+    pub fn outputs_value(&self, module: &mut Module) -> bool {
         match self {
             Self::Assume { .. } => false,
             Self::Condbr { .. } => false,
@@ -265,6 +265,14 @@ impl Instruction {
             Self::StoreIndexed { .. } => false,
             Self::UncondBr { .. } => false,
             Self::Unreachable => false,
+
+            Self::Call {
+                func_label,
+                args: _,
+                pure: _,
+                no_return: _,
+                fast_calling_conv: _,
+            } => module.functions[func_label.id].return_type.is_some(),
 
             _ => true,
         }
