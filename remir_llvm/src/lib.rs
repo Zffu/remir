@@ -1,9 +1,14 @@
 use std::{collections::HashMap, mem::transmute, rc::Rc};
 
-use inkwell::{builder::Builder, context::Context, types::VoidType};
+use inkwell::{
+    basic_block::BasicBlock,
+    builder::Builder,
+    context::Context,
+    types::{BasicMetadataTypeEnum, BasicType, VoidType},
+};
 use remir::{
     block::{Block, BlockReference},
-    func::FunctionReference,
+    func::{Function, FunctionReference},
     module::Module,
 };
 
@@ -52,6 +57,28 @@ pub struct LLVMBridge {
     pub void_type: LLVMVoidType,
 }
 
+pub fn build_llvm(bridge: &mut LLVMBridge, module: &mut Module) -> Result<(), ()> {
+    let m = unsafe {
+        transmute::<inkwell::module::Module, inkwell::module::Module<'static>>(
+            bridge.ctx.create_module(&module.name),
+        )
+    };
+
+    bridge
+        .modules
+        .insert(module.name.clone(), LLVMModule::new(m, &bridge.ctx));
+
+    for func in module.functions.clone() {
+        bridge_llvm_function(bridge, &func, module);
+    }
+
+    for block in module.blocks.clone() {
+        build_llvm_block(bridge, &block, module)?;
+    }
+
+    Ok(())
+}
+
 pub fn build_llvm_block(
     bridge: &mut LLVMBridge,
     block: &Block,
@@ -76,6 +103,46 @@ pub fn build_llvm_block(
     }
 
     Ok(())
+}
+
+pub fn bridge_llvm_function(bridge: &mut LLVMBridge, func: &Function, module: &mut Module) {
+    let mut arguments: Vec<BasicMetadataTypeEnum> = vec![];
+
+    for arg in &func.arguments {
+        arguments.push(bridge.type_storage.convert(arg.1.clone()).inner.into());
+    }
+
+    let llvm_func;
+
+    if func.return_type.is_some() {
+        let ret_type = bridge
+            .type_storage
+            .convert(func.return_type.clone().unwrap())
+            .inner;
+
+        llvm_func = ret_type.fn_type(&arguments, false);
+    } else {
+        llvm_func = bridge.void_type.fn_type(&arguments, false);
+    }
+
+    let llvm_f = bridge.modules[&module.name].add_function(&func.reference.name, llvm_func, None);
+
+    for block in &func.blocks {
+        let bb = bridge.ctx.append_basic_block(llvm_f.clone(), &block.name);
+        let ctx = bridge.ctx.clone();
+
+        let b = LLVMBlock::new_owned(
+            unsafe { transmute::<BasicBlock, BasicBlock<'static>>(bb) },
+            ctx,
+        );
+
+        bridge.blocks.insert(block.clone(), b);
+    }
+
+    bridge.functions.insert(
+        func.reference.clone(),
+        LLVMFunction::new(llvm_f, &bridge.ctx),
+    );
 }
 
 impl LLVMBridge {

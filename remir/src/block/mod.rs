@@ -18,6 +18,7 @@ pub struct BlockReference {
 }
 
 /// Represents a function block / branch.
+#[derive(Clone)]
 pub struct Block {
     /// The inner reference to feed.
     pub reference: BlockReference,

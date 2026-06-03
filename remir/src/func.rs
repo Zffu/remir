@@ -13,6 +13,7 @@ pub struct FunctionReference {
 }
 
 /// Represents a function inside of the Remir IR.
+#[derive(Clone)]
 pub struct Function {
     /// The self reference to the function
     pub reference: FunctionReference,

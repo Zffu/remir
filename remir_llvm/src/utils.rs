@@ -42,6 +42,14 @@ impl<T: Clone> LLVMSiblingObject<T> {
         }
     }
 
+    #[cfg(not(feature = "no_sibling_safety"))]
+    pub fn new_owned(val: T, held: Rc<Context>) -> Self {
+        LLVMSiblingObject {
+            inner: unsafe { std::mem::transmute(val) },
+            safety_hold: held,
+        }
+    }
+
     #[cfg(feature = "no_sibling_safety")]
     pub fn new(val: T) -> Self {
         LLVMSiblingObject {
