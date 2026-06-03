@@ -33,3 +33,11 @@ pub fn build_const_ptr(module: &mut Module, addr: usize) -> Result<SSAPointerVal
 
     val.try_into()
 }
+
+pub fn build_const_string(module: &mut Module, str: String) -> Result<SSAPointerValue, ()> {
+    let inst = Instruction::ConstString { str };
+
+    let val = module.write(inst).get()?;
+
+    val.try_into()
+}

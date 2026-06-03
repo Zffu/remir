@@ -1,13 +1,18 @@
 use std::hint::unreachable_unchecked;
 
-use inkwell::{types::StringRadix, values::BasicValueEnum};
-use remir::{block::BlockInstruction, insts::Instruction, values::ValueType};
+use inkwell::{
+    module::Linkage,
+    types::StringRadix,
+    values::{BasicValueEnum, IntValue},
+};
+use remir::{block::BlockInstruction, insts::Instruction, module::Module, values::ValueType};
 
 use crate::{LLVMBridge, llvm_to_base, utils::LLVMBasicValue};
 
 pub fn bridge_llvm_const_instruction(
     instruction: BlockInstruction,
     bridge: &mut LLVMBridge,
+    module: &mut Module,
 ) -> Result<Option<LLVMBasicValue>, ()> {
     let res: Option<BasicValueEnum<'static>> = match &instruction.instruction {
         Instruction::ConstInt { val, size, signed } => {
@@ -50,6 +55,33 @@ pub fn bridge_llvm_const_instruction(
             let ptr = llvm_to_base!(bridge.builder.build_int_to_ptr(addr, ty, ""));
 
             Some(ptr.into())
+        }
+
+        Instruction::ConstString { str } => {
+            let bytes = str.as_bytes();
+            let byte_type = bridge
+                .type_storage
+                .convert(ValueType::Int(false, 8))
+                .into_int_type();
+
+            let arr_type = byte_type.array_type((bytes.len() + 1) as u32);
+
+            let global = bridge.modules[&module.name].add_global(arr_type, None, "");
+
+            global.set_linkage(Linkage::Private);
+            global.set_constant(true);
+            global.set_unnamed_addr(true);
+
+            let mut vals: Vec<IntValue> = bytes
+                .iter()
+                .map(|b| byte_type.const_int(*b as u64, false))
+                .collect();
+
+            vals.push(byte_type.const_zero());
+
+            global.set_initializer(&byte_type.const_array(&vals));
+
+            Some(global.as_pointer_value().into())
         }
 
         _ => unsafe { unreachable_unchecked() },

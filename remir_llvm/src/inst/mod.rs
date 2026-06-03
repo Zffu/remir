@@ -34,7 +34,10 @@ pub fn bridge_llvm_instruction(
     match &instruction.instruction {
         Instruction::ConstInt { .. }
         | Instruction::ConstFloat { .. }
-        | Instruction::ConstPointer { .. } => bridge_llvm_const_instruction(instruction, bridge),
+        | Instruction::ConstPointer { .. }
+        | Instruction::ConstString { .. } => {
+            bridge_llvm_const_instruction(instruction, bridge, module)
+        }
         Instruction::Copy { .. } | Instruction::Load { .. } | Instruction::Store { .. } => {
             bridge_llvm_reg_instructions(instruction, bridge)
         }

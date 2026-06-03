@@ -30,6 +30,10 @@ pub enum Instruction {
         addr: usize,
     },
 
+    ConstString {
+        str: String,
+    },
+
     // Register instructions
     Copy {
         val: BaseSSAValue,
@@ -313,6 +317,7 @@ impl Instruction {
                 size,
                 signed,
             } => Some(ValueType::Int(*signed, *size)),
+            Self::ConstString { .. } => Some(ValueType::new_any_pointer()),
             Self::ConstPointer { .. } => Some(ValueType::new_any_pointer()),
             Self::Copy { val } => Some(val.value_type.clone()),
             Self::ExtractValue { struct_val, index } => Some(struct_val.fields[*index].clone()),
