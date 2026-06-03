@@ -10,19 +10,19 @@ impl Display for Block {
         if !self.origins.is_empty() {
             let origins: Vec<&BlockReference> = self.origins.iter().collect();
 
-            write!(f, "#origins: [{}]", fmt_list(&origins))?;
+            writeln!(f, "#origins: [{}]", fmt_list(&origins))?;
         }
 
         if !self.destinations.is_empty() {
             let destinations: Vec<&BlockReference> = self.destinations.iter().collect();
 
-            write!(f, "#destinations [{}]", fmt_list(&destinations))?;
+            writeln!(f, "#destinations [{}]", fmt_list(&destinations))?;
         }
 
         if !self.variables.is_empty() {
             let variables: Vec<&String> = self.variables.keys().collect();
 
-            write!(f, "#variables [{}]", fmt_list(&variables))?;
+            writeln!(f, "#variables [{}]", fmt_list(&variables))?;
         }
 
         writeln!(f, "{}:", self.reference)?;

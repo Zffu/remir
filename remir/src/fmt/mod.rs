@@ -10,6 +10,7 @@ use crate::{
 };
 
 pub mod blocks;
+pub mod func;
 pub mod insts;
 pub mod utils;
 pub mod vals;
