@@ -3,10 +3,13 @@
 use std::fmt::Display;
 
 use crate::{
+    block::BlockReference,
+    func::FunctionReference,
     misc::{CompareOperator, MathOperator, MemoryOrder},
     values::ValueType,
 };
 
+pub mod insts;
 pub mod vals;
 
 impl Display for ValueType {
@@ -85,5 +88,17 @@ impl Display for CompareOperator {
         };
 
         write!(f, "{}", res)
+    }
+}
+
+impl Display for BlockReference {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "@{}_{}", self.name, self.id)
+    }
+}
+
+impl Display for FunctionReference {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "%{}", self.name)
     }
 }
