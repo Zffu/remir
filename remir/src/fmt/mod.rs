@@ -22,11 +22,11 @@ impl Module {
         let mut f = File::create(path)?;
 
         for func in &self.functions {
-            write!(f, "{}", func)?;
+            writeln!(f, "{}", func)?;
         }
 
         for block in &self.blocks {
-            write!(f, "{}", block)?;
+            writeln!(f, "{}", block)?;
         }
 
         Ok(())
