@@ -9,7 +9,9 @@ use crate::{
     values::ValueType,
 };
 
+pub mod blocks;
 pub mod insts;
+pub mod utils;
 pub mod vals;
 
 impl Display for ValueType {
