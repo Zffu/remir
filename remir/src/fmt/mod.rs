@@ -1,11 +1,13 @@
 //! Formatting module for every element inside of Remir. Allows Remir to generate IR files
 
-use std::fmt::Display;
+use std::io::Write;
+use std::{fmt::Display, fs::File, io, path::PathBuf};
 
 use crate::{
     block::BlockReference,
     func::FunctionReference,
     misc::{CompareOperator, MathOperator, MemoryOrder},
+    module::Module,
     values::ValueType,
 };
 
@@ -14,6 +16,22 @@ pub mod func;
 pub mod insts;
 pub mod utils;
 pub mod vals;
+
+impl Module {
+    pub fn save_to_file(&self, path: PathBuf) -> io::Result<()> {
+        let mut f = File::create(path)?;
+
+        for func in &self.functions {
+            write!(f, "{}", func)?;
+        }
+
+        for block in &self.blocks {
+            write!(f, "{}", block)?;
+        }
+
+        Ok(())
+    }
+}
 
 impl Display for ValueType {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
