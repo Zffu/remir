@@ -75,4 +75,10 @@ impl Module {
         self.functions.push(function);
         reference
     }
+
+    pub fn get_function(&mut self, r: &FunctionReference) -> &'static mut Function {
+        unsafe {
+            std::mem::transmute::<&mut Function, &'static mut Function>(&mut self.functions[r.id])
+        }
+    }
 }
