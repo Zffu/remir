@@ -2,7 +2,10 @@
 
 use std::collections::{HashMap, HashSet};
 
-use crate::{block::vars::BlockVariable, insts::Instruction, module::Module, values::BaseSSAValue};
+use crate::{
+    block::vars::BlockVariable, errs::RemirResult, insts::Instruction, module::Module, return_err,
+    values::BaseSSAValue,
+};
 
 pub mod resolver;
 pub mod vars;
@@ -84,9 +87,11 @@ impl BlockInstruction {
         Self { instruction, value }
     }
 
-    pub fn get(&self) -> Result<BaseSSAValue, ()> {
+    pub fn get(&self) -> RemirResult<BaseSSAValue> {
         match &self.value {
-            Option::None => Err(()),
+            Option::None => {
+                return_err!("Tried unwrapping a nonvalued BlockInstruction into a value")
+            }
             Option::Some(v) => Ok(v.clone()),
         }
     }

@@ -1,7 +1,9 @@
 use crate::{
     block::BlockReference,
+    errs::RemirResult,
     insts::Instruction,
     module::Module,
+    return_err,
     values::{
         BaseSSAValue, ValueType, float::SSAFloatValue, int::SSAIntValue, structs::SSAStructValue,
     },
@@ -12,9 +14,9 @@ pub fn build_bit_cast(
     module: &mut Module,
     src: BaseSSAValue,
     into: ValueType,
-) -> Result<BaseSSAValue, ()> {
+) -> RemirResult<BaseSSAValue> {
     if src.value_type == into {
-        return Err(()); // Cannot use bit cast where source == into type
+        return_err!("Cannot use bitcast with a same-type value and into"); // Cannot use bit cast where source == into type
     }
 
     let inst = Instruction::BitCast { src, into };
@@ -27,7 +29,7 @@ pub fn build_select(
     cond: SSAIntValue,
     true_val: BaseSSAValue,
     false_val: BaseSSAValue,
-) -> Result<BaseSSAValue, ()> {
+) -> RemirResult<BaseSSAValue> {
     cond.enforces_boolean()?;
 
     let inst = Instruction::Select {
@@ -43,7 +45,7 @@ pub fn build_int_to_float(
     module: &mut Module,
     val: SSAIntValue,
     into: ValueType,
-) -> Result<SSAFloatValue, ()> {
+) -> RemirResult<SSAFloatValue> {
     if let ValueType::Float(_) = into {
         let inst = Instruction::IntToFloat { val, into };
 
@@ -51,7 +53,7 @@ pub fn build_int_to_float(
 
         val.try_into()
     } else {
-        Err(()) // Target type is not a float
+        return_err!("target type is not a float") // Target type is not a float
     }
 }
 
@@ -59,7 +61,7 @@ pub fn build_float_to_int(
     module: &mut Module,
     val: SSAFloatValue,
     into: ValueType,
-) -> Result<SSAIntValue, ()> {
+) -> RemirResult<SSAIntValue> {
     if let ValueType::Int(_, _) = into {
         let inst = Instruction::FloatToInt { val, into };
 
@@ -67,7 +69,7 @@ pub fn build_float_to_int(
 
         val.try_into()
     } else {
-        Err(()) // Target type is not an int
+        return_err!("target type is not an int") // Target type is not an int
     }
 }
 
@@ -75,10 +77,10 @@ pub fn build_int_extend(
     module: &mut Module,
     val: SSAIntValue,
     into: ValueType,
-) -> Result<SSAIntValue, ()> {
+) -> RemirResult<SSAIntValue> {
     if let ValueType::Int(_, size) = &into {
         if val.size >= *size {
-            return Err(()); // Use int truncate instead
+            return_err!("val.size >= size for int extend! use int_truncate instead"); // Use int truncate instead
         }
 
         let inst = Instruction::IntExtend { val, into };
@@ -87,7 +89,7 @@ pub fn build_int_extend(
 
         val.try_into()
     } else {
-        Err(()) // Target type is not an int
+        return_err!("target type is not an int") // Target type is not an int
     }
 }
 
@@ -95,10 +97,10 @@ pub fn build_int_truncate(
     module: &mut Module,
     val: SSAIntValue,
     into: ValueType,
-) -> Result<SSAIntValue, ()> {
+) -> RemirResult<SSAIntValue> {
     if let ValueType::Int(_, size) = &into {
         if val.size <= *size {
-            return Err(()); // Use int extend instead
+            return_err!("val.size <= size for int truncate! use int_extend instead"); // Use int extend instead
         }
 
         let inst = Instruction::IntTruncate { val, into };
@@ -107,7 +109,7 @@ pub fn build_int_truncate(
 
         val.try_into()
     } else {
-        Err(()) // Target type is not an int
+        return_err!("target type is not an int") // Target type is not an int
     }
 }
 
@@ -115,10 +117,10 @@ pub fn build_float_extend(
     module: &mut Module,
     val: SSAFloatValue,
     into: ValueType,
-) -> Result<SSAFloatValue, ()> {
+) -> RemirResult<SSAFloatValue> {
     if let ValueType::Float(size) = &into {
         if val.size >= *size {
-            return Err(()); // Use float truncate instead
+            return_err!("val.size >= size for float extend! use float_truncate instead"); // Use float truncate instead
         }
 
         let inst = Instruction::FloatExtend { val, into };
@@ -127,7 +129,7 @@ pub fn build_float_extend(
 
         val.try_into()
     } else {
-        Err(()) // Target type is not a float
+        return_err!("target type is not a float") // Target type is not a float
     }
 }
 
@@ -135,10 +137,10 @@ pub fn build_float_truncate(
     module: &mut Module,
     val: SSAFloatValue,
     into: ValueType,
-) -> Result<SSAFloatValue, ()> {
+) -> RemirResult<SSAFloatValue> {
     if let ValueType::Float(size) = &into {
         if val.size <= *size {
-            return Err(()); // Use float extend instead
+            return_err!("val.size <= size for float truncate! use float_extend instead"); // Use float extend instead
         }
 
         let inst = Instruction::FloatTruncate { val, into };
@@ -147,7 +149,7 @@ pub fn build_float_truncate(
 
         val.try_into()
     } else {
-        Err(()) // Target type is not a float
+        return_err!("target type is not a float") // Target type is not a float
     }
 }
 
@@ -155,7 +157,7 @@ pub fn build_int_change_size(
     module: &mut Module,
     val: SSAIntValue,
     into: ValueType,
-) -> Result<SSAIntValue, ()> {
+) -> RemirResult<SSAIntValue> {
     if let ValueType::Int(_, size) = &into {
         if val.size > *size {
             build_int_truncate(module, val, into)
@@ -163,7 +165,7 @@ pub fn build_int_change_size(
             build_int_extend(module, val, into)
         }
     } else {
-        Err(()) // Target type is not an int
+        return_err!("target type is not an int") // Target type is not an int
     }
 }
 
@@ -171,7 +173,7 @@ pub fn build_float_change_size(
     module: &mut Module,
     val: SSAFloatValue,
     into: ValueType,
-) -> Result<SSAFloatValue, ()> {
+) -> RemirResult<SSAFloatValue> {
     if let ValueType::Float(size) = &into {
         if val.size > *size {
             build_float_truncate(module, val, into)
@@ -179,7 +181,7 @@ pub fn build_float_change_size(
             build_float_extend(module, val, into)
         }
     } else {
-        Err(()) // Target type is not an float
+        return_err!("target type is not a float") // Target type is not an float
     }
 }
 
@@ -187,7 +189,7 @@ pub fn build_extract_value(
     module: &mut Module,
     struct_val: SSAStructValue,
     index: usize,
-) -> Result<BaseSSAValue, ()> {
+) -> RemirResult<BaseSSAValue> {
     let inst = Instruction::ExtractValue { struct_val, index };
 
     module.write(inst).get()
@@ -198,9 +200,9 @@ pub fn build_insert_value(
     struct_val: SSAStructValue,
     index: usize,
     val: BaseSSAValue,
-) -> Result<(), ()> {
+) -> RemirResult<()> {
     if struct_val.fields[index] != val.value_type {
-        return Err(()); // Cannot put into diff field type
+        return_err!("Cannot put val into a different typed field"); // Cannot put into diff field type
     }
 
     let inst = Instruction::InsertValue {
@@ -218,10 +220,10 @@ pub fn build_switch(
     value: SSAIntValue,
     else_block: BlockReference,
     cases: Vec<(SSAIntValue, BlockReference)>,
-) -> Result<BaseSSAValue, ()> {
+) -> RemirResult<()> {
     for case in &cases {
         if case.0.base.value_type != value.base.value_type {
-            return Err(()); // Every choice must be of the same type
+            return_err!("every choice must be of the same type in a switch!"); // Every choice must be of the same type
         }
     }
 
@@ -231,5 +233,6 @@ pub fn build_switch(
         cases,
     };
 
-    module.write(inst).get()
+    module.write(inst);
+    Ok(())
 }

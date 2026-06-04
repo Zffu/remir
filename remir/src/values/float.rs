@@ -1,6 +1,10 @@
 //! Definitions for float values in the MIR
 
-use crate::values::{BaseSSAValue, SSAValueLike, ValueType, consts::ConstantData};
+use crate::{
+    errs::RemirReturnableError,
+    return_err,
+    values::{BaseSSAValue, SSAValueLike, ValueType, consts::ConstantData},
+};
 
 /// A variant of [`BaseSSAValue`] that is a float
 #[derive(Clone)]
@@ -24,7 +28,7 @@ impl SSAFloatValue {
 }
 
 impl TryFrom<BaseSSAValue> for SSAFloatValue {
-    type Error = ();
+    type Error = RemirReturnableError;
 
     fn try_from(value: BaseSSAValue) -> Result<Self, Self::Error> {
         if let ValueType::Float(size) = (&value).value_type {
@@ -33,7 +37,7 @@ impl TryFrom<BaseSSAValue> for SSAFloatValue {
                 size: size,
             })
         } else {
-            Err(())
+            return_err!("Tried casting a non float value into a float")
         }
     }
 }

@@ -22,7 +22,7 @@ pub struct Function {
     pub blocks: Vec<BlockReference>,
 
     /// The argument types of the function
-    pub arguments: Vec<(String, ValueType)>,
+    pub arguments: Vec<ValueType>,
 
     /// The return type of the function
     pub return_type: Option<ValueType>,
@@ -35,7 +35,7 @@ impl Function {
     /// Creates a new [`Function`] with the given reference, argument types and return types
     pub fn new(
         reference: FunctionReference,
-        arguments: Vec<(String, ValueType)>,
+        arguments: Vec<ValueType>,
         return_type: Option<ValueType>,
     ) -> Self {
         Self {

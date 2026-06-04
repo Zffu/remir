@@ -1,6 +1,10 @@
 //! Definitions for the int values in the MIR
 
-use crate::values::{BaseSSAValue, SSAValueLike, ValueType, consts::ConstantData};
+use crate::{
+    errs::{RemirResult, RemirReturnableError},
+    return_err,
+    values::{BaseSSAValue, SSAValueLike, ValueType, consts::ConstantData},
+};
 
 /// A variant of [`BaseSSAValue`] that is an integer
 #[derive(Clone)]
@@ -26,9 +30,9 @@ impl SSAIntValue {
         }
     }
 
-    pub fn enforces_boolean(&self) -> Result<(), ()> {
+    pub fn enforces_boolean(&self) -> RemirResult<()> {
         if self.size != 1 {
-            return Err(());
+            return_err!("Int value is not a boolean");
         }
 
         Ok(())
@@ -36,7 +40,7 @@ impl SSAIntValue {
 }
 
 impl TryFrom<BaseSSAValue> for SSAIntValue {
-    type Error = ();
+    type Error = RemirReturnableError;
 
     fn try_from(value: BaseSSAValue) -> Result<Self, Self::Error> {
         if let ValueType::Int(signed, size) = (&value).value_type {
@@ -46,7 +50,7 @@ impl TryFrom<BaseSSAValue> for SSAIntValue {
                 size: size,
             })
         } else {
-            Err(())
+            return_err!("Tried casting a non int value into an int");
         }
     }
 }

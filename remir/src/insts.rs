@@ -306,7 +306,7 @@ impl Instruction {
             Self::GrabArgument { index } => {
                 let curr_func = module.pos_function.as_ref().unwrap();
 
-                Some(module.functions[curr_func.id].arguments[*index].1.clone())
+                Some(module.functions[curr_func.id].arguments[*index].clone())
             }
 
             Self::CompareOperationFloat { .. } => Some(ValueType::Int(false, 1)),

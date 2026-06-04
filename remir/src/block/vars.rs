@@ -5,8 +5,10 @@ use crate::{
         atomic::{build_load_atomic, build_store_atomic},
         build_load, build_store,
     },
+    errs::RemirResult,
     misc::MemoryOrder,
     module::Module,
+    return_err,
     values::{BaseSSAValue, ptr::SSAPointerValue},
 };
 
@@ -52,7 +54,7 @@ impl BlockVariable {
         }
     }
 
-    pub fn write(&mut self, module: &mut Module, val: BaseSSAValue) -> Result<(), ()> {
+    pub fn write(&mut self, module: &mut Module, val: BaseSSAValue) -> RemirResult<()> {
         if !self.write_as_pointer {
             self.held_value = Some(val);
             return Ok(());
@@ -75,11 +77,11 @@ impl BlockVariable {
         build_store_atomic(module, ptr, val, atomic_state)
     }
 
-    pub fn read(&self, module: &mut Module) -> Result<BaseSSAValue, ()> {
+    pub fn read(&self, module: &mut Module) -> RemirResult<BaseSSAValue> {
         if !self.write_as_pointer {
             return match &self.held_value {
                 Some(v) => Ok(v.clone()),
-                None => Err(()),
+                None => return_err!("tried reading an empty block variable"),
             };
         }
 

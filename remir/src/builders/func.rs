@@ -1,6 +1,6 @@
 use crate::{
-    func::FunctionReference, insts::Instruction, module::Module, values::BaseSSAValue,
-    writer::InstructionWriter,
+    errs::RemirResult, func::FunctionReference, insts::Instruction, module::Module, return_err,
+    values::BaseSSAValue, writer::InstructionWriter,
 };
 
 pub fn build_call(
@@ -10,14 +10,14 @@ pub fn build_call(
     pure: bool,
     no_return: bool,
     fast_calling_conv: bool,
-) -> Result<Option<BaseSSAValue>, ()> {
+) -> RemirResult<Option<BaseSSAValue>> {
     let arguments = module.functions[label.id].arguments.clone();
     let return_type = module.functions[label.id].return_type.clone();
 
     let mut ind = 0;
     for arg in &args {
-        if arg.value_type != arguments[ind].1 {
-            return Err(());
+        if arg.value_type != arguments[ind] {
+            return_err!("Argument types do not match the declaration")
         }
 
         ind += 1;
@@ -56,7 +56,7 @@ pub fn build_ret(module: &mut Module, val: Option<BaseSSAValue>) {
         module.write(inst);
     }
 }
-pub fn build_argument_grab(module: &mut Module, index: usize) -> Result<BaseSSAValue, ()> {
+pub fn build_argument_grab(module: &mut Module, index: usize) -> RemirResult<BaseSSAValue> {
     let inst = Instruction::GrabArgument { index };
 
     module.write(inst).get()

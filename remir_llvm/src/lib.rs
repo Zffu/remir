@@ -95,14 +95,13 @@ pub fn build_llvm_block(
     let func_ref = module.block_to_function[&block.reference].clone();
 
     for inst in &block.instructions {
-        println!("{}", inst);
         let res = bridge_llvm_instruction(inst.clone(), bridge, func_ref.clone(), module)?;
 
         if res.is_some() {
             unsafe {
                 bridge
                     .values
-                    .insert(inst.get()?.inst_ind, res.unwrap_unchecked())
+                    .insert(inst.get().unwrap().inst_ind, res.unwrap_unchecked())
             };
         }
     }
@@ -114,7 +113,7 @@ pub fn bridge_llvm_function(bridge: &mut LLVMBridge, func: &Function, module: &m
     let mut arguments: Vec<BasicMetadataTypeEnum> = vec![];
 
     for arg in &func.arguments {
-        arguments.push(bridge.type_storage.convert(arg.1.clone()).inner.into());
+        arguments.push(bridge.type_storage.convert(arg.clone()).inner.into());
     }
 
     let llvm_func;

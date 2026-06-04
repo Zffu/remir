@@ -1,7 +1,9 @@
 use crate::{
+    errs::RemirResult,
     insts::Instruction,
     misc::MathOperator,
     module::Module,
+    return_err,
     values::{float::SSAFloatValue, int::SSAIntValue},
     writer::InstructionWriter,
 };
@@ -15,9 +17,9 @@ pub fn build_math_op_int(
     signed_wrap: bool,
     unsigned_wrap: bool,
     fast: bool,
-) -> Result<SSAIntValue, ()> {
+) -> RemirResult<SSAIntValue> {
     if (a.signed != b.signed && !signed) || (a.signed && !signed) {
-        return Err(()); // Enforces sign	
+        return_err!("The sign of the math op and the signed states of the values are not the same"); // Enforces sign	
     }
 
     let inst = Instruction::MathOperationInt {
@@ -43,7 +45,7 @@ pub fn build_math_op_float(
     signed_wrap: bool,
     unsigned_wrap: bool,
     fast: bool,
-) -> Result<SSAFloatValue, ()> {
+) -> RemirResult<SSAFloatValue> {
     let inst = Instruction::MathOperationFloat {
         a,
         b,

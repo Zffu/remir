@@ -1,7 +1,9 @@
 use crate::{
+    errs::RemirResult,
     insts::Instruction,
     misc::CompareOperator,
     module::Module,
+    return_err,
     values::{float::SSAFloatValue, int::SSAIntValue},
     writer::InstructionWriter,
 };
@@ -12,9 +14,9 @@ pub fn build_int_compare(
     b: SSAIntValue,
     op: CompareOperator,
     signed: bool,
-) -> Result<SSAIntValue, ()> {
+) -> RemirResult<SSAIntValue> {
     if (a.signed != b.signed && !signed) || (a.signed && !signed) {
-        return Err(()); // Enforces sign	
+        return_err!("The sign of the compare and the signed states of the values are not the same"); // Enforces sign	
     }
 
     let inst = Instruction::CompareOperationInt { a, b, op, signed };
@@ -29,7 +31,7 @@ pub fn build_float_compare(
     a: SSAFloatValue,
     b: SSAFloatValue,
     op: CompareOperator,
-) -> Result<SSAFloatValue, ()> {
+) -> RemirResult<SSAFloatValue> {
     let inst = Instruction::CompareOperationFloat { a, b, op };
 
     let val = module.write(inst).get()?;

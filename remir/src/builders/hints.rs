@@ -1,20 +1,19 @@
 use crate::{
-    insts::Instruction, module::Module, values::int::SSAIntValue, writer::InstructionWriter,
+    errs::RemirResult, insts::Instruction, module::Module, values::int::SSAIntValue,
+    writer::InstructionWriter,
 };
 
-pub fn build_unreachable(module: &mut Module) -> Result<(), ()> {
+pub fn build_unreachable(module: &mut Module) {
     module.write(Instruction::Unreachable);
-    Ok(())
 }
 
-pub fn build_crash(module: &mut Module, message: Option<String>) -> Result<(), ()> {
+pub fn build_crash(module: &mut Module, message: Option<String>) {
     let inst = Instruction::Crash { message };
 
     module.write(inst);
-    Ok(())
 }
 
-pub fn build_assume(module: &mut Module, val: SSAIntValue) -> Result<(), ()> {
+pub fn build_assume(module: &mut Module, val: SSAIntValue) -> RemirResult<()> {
     val.enforces_boolean()?;
 
     let inst = Instruction::Assume { val };

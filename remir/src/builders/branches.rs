@@ -1,7 +1,9 @@
 use crate::{
     block::BlockReference,
+    errs::RemirResult,
     insts::Instruction,
     module::Module,
+    return_err,
     values::{BaseSSAValue, int::SSAIntValue, ptr::SSAPointerValue},
     writer::InstructionWriter,
 };
@@ -23,7 +25,7 @@ pub fn build_conditional_branch(
     cond: SSAIntValue,
     true_branch: BlockReference,
     false_branch: BlockReference,
-) -> Result<(), ()> {
+) -> RemirResult<()> {
     cond.enforces_boolean()?;
 
     let origin = module.pos_block.clone().unwrap();
@@ -70,12 +72,12 @@ pub fn build_indirect_branch(
 pub fn build_phi(
     module: &mut Module,
     label_set: Vec<(BlockReference, BaseSSAValue)>,
-) -> Result<BaseSSAValue, ()> {
+) -> RemirResult<BaseSSAValue> {
     let ty = label_set[0].1.value_type.clone();
 
     for entry in &label_set {
         if entry.1.value_type != ty {
-            return Err(());
+            return_err!("The label set values are not of the same type");
         }
     }
 
