@@ -7,4 +7,5 @@ name = "remir"
 
 [features]
 fmt = []
-default = ["fmt"]
+errors = []
+default = ["fmt", "errors"]
