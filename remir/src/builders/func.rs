@@ -16,7 +16,7 @@ pub fn build_call(
 
     let mut ind = 0;
     for arg in &args {
-        if arg.value_type != arguments[ind].1 {
+        if arg.value_type != arguments[ind] {
             return Err(());
         }
 

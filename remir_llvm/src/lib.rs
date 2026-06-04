@@ -114,7 +114,7 @@ pub fn bridge_llvm_function(bridge: &mut LLVMBridge, func: &Function, module: &m
     let mut arguments: Vec<BasicMetadataTypeEnum> = vec![];
 
     for arg in &func.arguments {
-        arguments.push(bridge.type_storage.convert(arg.1.clone()).inner.into());
+        arguments.push(bridge.type_storage.convert(arg.clone()).inner.into());
     }
 
     let llvm_func;

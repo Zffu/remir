@@ -11,7 +11,7 @@ impl Display for Function {
         }
 
         if !self.arguments.is_empty() {
-            let types: Vec<&ValueType> = self.arguments.iter().map(|f| &f.1).collect();
+            let types: Vec<&ValueType> = self.arguments.iter().collect();
 
             writeln!(f, "#arguments [{}]", fmt_list(&types))?;
         }
