@@ -95,7 +95,6 @@ pub fn build_llvm_block(
     let func_ref = module.block_to_function[&block.reference].clone();
 
     for inst in &block.instructions {
-        println!("{}", inst);
         let res = bridge_llvm_instruction(inst.clone(), bridge, func_ref.clone(), module)?;
 
         if res.is_some() {
