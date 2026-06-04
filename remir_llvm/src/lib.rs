@@ -102,7 +102,7 @@ pub fn build_llvm_block(
             unsafe {
                 bridge
                     .values
-                    .insert(inst.get()?.inst_ind, res.unwrap_unchecked())
+                    .insert(inst.get().unwrap().inst_ind, res.unwrap_unchecked())
             };
         }
     }
