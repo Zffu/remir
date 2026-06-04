@@ -8,7 +8,11 @@ remir = { path = "../remir", default-features = false }
 remir_llvm = { path = "../remir_llvm" }
 
 [[bench]]
-name = "helloworld"
+name = "remir"
+harness = false
+
+[[bench]]
+name = "llvm"
 harness = false
 
 [dev-dependencies]
