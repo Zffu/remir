@@ -2,8 +2,7 @@ use criterion::{Criterion, criterion_group, criterion_main};
 use remir::{
     builders::{
         build_argument_grab, build_call, build_conditional_branch, build_const_int,
-        build_const_string, build_int_compare, build_math_op_int, build_phi, build_ret,
-        build_unconditional_branch,
+        build_const_string, build_int_compare, build_math_op_int, build_ret,
     },
     misc::{CompareOperator, MathOperator},
     module::Module,
@@ -38,7 +37,7 @@ fn fib() {
     );
     let fib_ref = m.get_function(&fib);
 
-    let main = m.create_function("main".into(), vec![], None);
+    let _ = m.create_function("main".into(), vec![], None);
 
     let entry = fib_ref.append_block(&mut m, "entry".into());
     let then = fib_ref.append_block(&mut m, "then".into());

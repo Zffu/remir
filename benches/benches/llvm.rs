@@ -42,7 +42,7 @@ fn fib_llvm() {
     );
     let fib_ref = m.get_function(&fib);
 
-    let main = m.create_function("main".into(), vec![], None);
+    let _ = m.create_function("main".into(), vec![], None);
 
     let entry = fib_ref.append_block(&mut m, "entry".into());
     let then = fib_ref.append_block(&mut m, "then".into());
