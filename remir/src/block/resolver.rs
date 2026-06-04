@@ -1,6 +1,7 @@
 use crate::{
     block::{Block, BlockReference},
     builders::build_phi,
+    errs::RemirResult,
     module::Module,
     values::BaseSSAValue,
 };
@@ -8,7 +9,7 @@ use crate::{
 impl Block {
     /// Resolves the variable at the given place.
     /// **Warn: This should be at the start
-    pub fn resolve_variables(&mut self, module: &mut Module) -> Result<(), ()> {
+    pub fn resolve_variables(&mut self, module: &mut Module) -> RemirResult<()> {
         let mut vals = vec![];
 
         for (name, var) in self.variables.iter() {
