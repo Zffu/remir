@@ -22,7 +22,7 @@ impl Display for Instruction {
                 write!(f, "constptr v{}", addr)
             }
 
-            Self::ConstString { str } => write!(f, "conststr v{}", str),
+            Self::ConstString { str } => write!(f, "conststr v'{}'", str),
 
             Self::Copy { val } => {
                 write!(f, "copy {}", val)
