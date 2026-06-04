@@ -1,4 +1,5 @@
 use crate::{
+    errs::RemirResult,
     insts::Instruction,
     module::Module,
     values::{BaseSSAValue, ValueType, int::SSAIntValue, ptr::SSAPointerValue},
@@ -9,7 +10,7 @@ pub fn build_alloc(
     module: &mut Module,
     size: SSAIntValue,
     val_type: Option<ValueType>,
-) -> Result<SSAPointerValue, ()> {
+) -> RemirResult<SSAPointerValue> {
     let inst;
 
     if val_type.is_none() {
@@ -30,7 +31,7 @@ pub fn build_alloca(
     module: &mut Module,
     size: SSAIntValue,
     val_type: Option<ValueType>,
-) -> Result<SSAPointerValue, ()> {
+) -> RemirResult<SSAPointerValue> {
     let inst;
 
     if val_type.is_none() {
@@ -57,7 +58,7 @@ pub fn build_gep(
     module: &mut Module,
     base: SSAPointerValue,
     offset: SSAIntValue,
-) -> Result<SSAPointerValue, ()> {
+) -> RemirResult<SSAPointerValue> {
     let inst = Instruction::Gep { base, offset };
 
     let val = module.write(inst).get()?;
@@ -69,7 +70,7 @@ pub fn build_load_indexed(
     module: &mut Module,
     base: SSAPointerValue,
     index: SSAIntValue,
-) -> Result<BaseSSAValue, ()> {
+) -> RemirResult<BaseSSAValue> {
     let inst = Instruction::LoadIndexed { base, index };
 
     module.write(inst).get()

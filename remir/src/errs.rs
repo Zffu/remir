@@ -1,8 +1,12 @@
 #[cfg(feature = "errors")]
 pub type RemirResult<K> = Result<K, RemirError>;
+#[cfg(feature = "errors")]
+pub type RemirReturnableError = RemirError;
 
 #[cfg(not(feature = "errors"))]
 pub type RemirResult<K> = Result<K, ()>;
+#[cfg(not(feature = "errors"))]
+pub type RemirReturnableError = ();
 
 #[cfg(feature = "errors")]
 #[derive(Debug)]
@@ -23,7 +27,7 @@ impl RemirError {
 #[macro_export]
 macro_rules! return_err {
     ($msg: literal) => {
-        return Err(RemirError::new($msg))
+        return Err(crate::errs::RemirError::new($msg))
     };
 }
 

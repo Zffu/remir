@@ -1,6 +1,10 @@
 //! Definitions for the structure values in the MIR
 
-use crate::values::{BaseSSAValue, SSAValueLike, ValueType, consts::ConstantData};
+use crate::{
+    errs::RemirReturnableError,
+    return_err,
+    values::{BaseSSAValue, SSAValueLike, ValueType, consts::ConstantData},
+};
 
 /// A variant of [`BaseSSAValue`] that is a structure
 #[derive(Clone)]
@@ -23,7 +27,7 @@ impl SSAStructValue {
 }
 
 impl TryFrom<BaseSSAValue> for SSAStructValue {
-    type Error = ();
+    type Error = RemirReturnableError;
 
     fn try_from(value: BaseSSAValue) -> Result<Self, Self::Error> {
         if let ValueType::Struct(fields) = (&value).value_type.clone() {
@@ -32,7 +36,7 @@ impl TryFrom<BaseSSAValue> for SSAStructValue {
                 fields: fields.iter().map(|f| *f.clone()).collect(),
             })
         } else {
-            Err(())
+            return_err!("Tried casting a non struct value into a struct");
         }
     }
 }

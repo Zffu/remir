@@ -1,4 +1,5 @@
 use crate::{
+    errs::RemirResult,
     insts::Instruction,
     module::Module,
     values::{float::SSAFloatValue, int::SSAIntValue, ptr::SSAPointerValue},
@@ -10,7 +11,7 @@ pub fn build_const_int(
     val: i128,
     size: usize,
     signed: bool,
-) -> Result<SSAIntValue, ()> {
+) -> RemirResult<SSAIntValue> {
     let inst = Instruction::ConstInt { val, size, signed };
 
     let val = module.write(inst).get()?;
@@ -18,7 +19,7 @@ pub fn build_const_int(
     val.try_into()
 }
 
-pub fn build_const_float(module: &mut Module, val: f64, size: usize) -> Result<SSAFloatValue, ()> {
+pub fn build_const_float(module: &mut Module, val: f64, size: usize) -> RemirResult<SSAFloatValue> {
     let inst = Instruction::ConstFloat { val, size };
 
     let val = module.write(inst).get()?;
@@ -26,7 +27,7 @@ pub fn build_const_float(module: &mut Module, val: f64, size: usize) -> Result<S
     val.try_into()
 }
 
-pub fn build_const_ptr(module: &mut Module, addr: usize) -> Result<SSAPointerValue, ()> {
+pub fn build_const_ptr(module: &mut Module, addr: usize) -> RemirResult<SSAPointerValue> {
     let inst = Instruction::ConstPointer { addr };
 
     let val = module.write(inst).get()?;
@@ -34,7 +35,7 @@ pub fn build_const_ptr(module: &mut Module, addr: usize) -> Result<SSAPointerVal
     val.try_into()
 }
 
-pub fn build_const_string(module: &mut Module, str: String) -> Result<SSAPointerValue, ()> {
+pub fn build_const_string(module: &mut Module, str: String) -> RemirResult<SSAPointerValue> {
     let inst = Instruction::ConstString { str };
 
     let val = module.write(inst).get()?;
