@@ -378,4 +378,45 @@ impl Instruction {
             _ => ConstantData::None,
         }
     }
+
+    /// Is the instruction compatible with attribute inheritance.
+    pub fn is_inheritance_instruction(&self) -> bool {
+        match self {
+            Self::IntToFloat { .. } => true,
+            Self::FloatToInt { .. } => true,
+            Self::IntExtend { .. } => true,
+            Self::IntTruncate { .. } => true,
+            Self::FloatExtend { .. } => true,
+            Self::FloatTruncate { .. } => true,
+            Self::BitCast { .. } => true,
+            Self::MathOperationInt { .. } => true,
+            Self::MathOperationFloat { .. } => true,
+            Self::CompareOperationInt { .. } => true,
+            Self::CompareOperationFloat { .. } => true,
+            Self::Switch { .. } => true,
+            Self::Phi { .. } => true,
+
+            _ => false,
+        }
+    }
+
+    /// Can the instruction be passed into the const instruction optimizer.
+    pub fn is_const_optimizable(&self) -> bool {
+        match self {
+            Self::IntToFloat { .. } => true,
+            Self::FloatToInt { .. } => true,
+            Self::IntExtend { .. } => true,
+            Self::IntTruncate { .. } => true,
+            Self::FloatExtend { .. } => true,
+            Self::FloatTruncate { .. } => true,
+            Self::BitCast { .. } => true,
+            Self::MathOperationInt { .. } => true,
+            Self::MathOperationFloat { .. } => true,
+            Self::Switch { .. } => true,
+            Self::Phi { .. } => true,
+            Self::Condbr { .. } => true,
+
+            _ => false,
+        }
+    }
 }
