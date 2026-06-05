@@ -56,6 +56,10 @@ impl Display for ValueType {
                 format!("ptr({})", inner)
             }
 
+            Self::Reference(inner) => {
+                format!("ref({})", inner)
+            }
+
             Self::Unknown => "??".to_string(),
         };
 

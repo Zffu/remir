@@ -13,6 +13,9 @@ pub enum ValueType {
     /// The pointer value type.
     Pointer(Box<ValueType>),
 
+    /// A non null pointer value type
+    Reference(Box<ValueType>),
+
     /// The unkown value type
     Unknown,
 }
