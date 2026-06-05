@@ -290,7 +290,7 @@ impl Instruction {
             Self::AllocUntyped { .. } => Some(ValueType::new_any_pointer()),
 
             Self::Alloca { size: _, val_type } => {
-                Some(ValueType::Pointer(Box::new(val_type.clone())))
+                Some(ValueType::Reference(Box::new(val_type.clone())))
             }
             Self::AllocaUntyped { .. } => Some(ValueType::new_any_pointer()),
 
