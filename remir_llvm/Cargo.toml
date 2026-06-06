@@ -1,11 +1,18 @@
 [package]
 name = "remir_llvm"
-version = "0.1.0"
+version = "1.0.0"
+authors = ["Zffu <zffu@zffu.dev>"]
+description = "The LLVM binding for the Remir library"
+repository = "https://github.com/Zffu/remir"
+readme = "../README.md"
+keywords = ["mir", "programming language", "language", "llvm"]
+license = "MIT"
+categories = ["compilers"]
 edition = "2024"
+
+[features]
+no_sibling_safety = []
 
 [dependencies]
 inkwell = { version = "0.9.0", features = ["llvm22-1"] }
 remir = { path = "../remir" }
-
-[features]
-no_sibling_safety = []
