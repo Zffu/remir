@@ -1,11 +1,19 @@
 [package]
-version = "0.0.0"
+name = "remir"
+version = "1.0.0"
+authors = ["Zffu <zffu@zffu.dev>"]
+description = "Remir is an MIR library designed to be used easily and be efficient."
+repository = "https://github.com/Zffu/remir"
+readme = "../README.md"
+keywords = ["mir", "programming language", "language"]
+license = "MIT"
+categories = ["compilers"]
 edition = "2024"
 
-name = "remir"
-[dependencies]
-
 [features]
+default = ["fmt", "errors"]
+
 fmt = []
 errors = []
-default = ["fmt", "errors"]
+
+[dependencies]
