@@ -1,6 +1,6 @@
 use std::fmt::Display;
 
-use crate::{block::BlockInstruction, insts::Instruction, values::ValueType};
+use crate::{block::BlockInstruction, fmt::utils::fmt_list, insts::Instruction, values::ValueType};
 
 impl Display for Instruction {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -23,6 +23,10 @@ impl Display for Instruction {
             }
 
             Self::ConstString { str } => write!(f, "conststr v'{}'", str),
+
+            Self::ConstStruct { values, ty } => {
+                write!(f, "conststruct t{}, [{}]", ty, fmt_list(&values))
+            }
 
             Self::Copy { val } => {
                 write!(f, "copy {}", val)

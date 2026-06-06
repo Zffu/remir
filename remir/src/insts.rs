@@ -34,6 +34,11 @@ pub enum Instruction {
         str: String,
     },
 
+    ConstStruct {
+        ty: ValueType,
+        values: Vec<BaseSSAValue>,
+    },
+
     // Register instructions
     Copy {
         val: BaseSSAValue,

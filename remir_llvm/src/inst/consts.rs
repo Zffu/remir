@@ -84,6 +84,19 @@ pub fn bridge_llvm_const_instruction(
             Some(global.as_pointer_value().into())
         }
 
+        Instruction::ConstStruct { ty, values } => {
+            let ty = bridge.type_storage.convert(ty.clone()).into_struct_type();
+            let mut vals = vec![];
+
+            for value in values {
+                vals.push(bridge.values[&value.inst_ind].clone().inner);
+            }
+
+            let val = ty.const_named_struct(&vals).into();
+
+            Some(val)
+        }
+
         _ => unsafe { unreachable_unchecked() },
     };
 
