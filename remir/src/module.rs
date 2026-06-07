@@ -23,6 +23,9 @@ pub struct Module {
     /// The functions contained in the module
     pub functions: Vec<Function>,
 
+    /// A name -> index hashmap for function names
+    pub function_names: HashMap<String, usize>,
+
     pub pos_block: Option<BlockReference>,
     pub pos_function: Option<FunctionReference>,
     pub pos_is_start: bool,
@@ -37,6 +40,7 @@ impl Module {
             block_to_function: HashMap::new(),
 
             functions: vec![],
+            function_names: HashMap::new(),
 
             pos_block: None,
             pos_function: None,
@@ -74,6 +78,18 @@ impl Module {
 
         self.functions.push(function);
         reference
+    }
+
+    /// Gets the function reference by name if it is currently registered inside of the module
+    pub fn get_function_by_name(&self, name: String) -> Option<FunctionReference> {
+        if !self.function_names.contains_key(&name) {
+            return None;
+        }
+
+        Some(FunctionReference::new(
+            name.clone(),
+            self.function_names[&name],
+        ))
     }
 
     pub fn get_function(&mut self, r: &FunctionReference) -> &'static mut Function {
