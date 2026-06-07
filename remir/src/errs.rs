@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 #[cfg(feature = "errors")]
 pub type RemirResult<K> = Result<K, RemirError>;
 #[cfg(feature = "errors")]
@@ -37,4 +39,11 @@ macro_rules! return_err {
     ($msg: literal) => {
         return Err(())
     };
+}
+
+#[cfg(feature = "errors")]
+impl Display for RemirError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        self.msg.fmt(f)
+    }
 }
