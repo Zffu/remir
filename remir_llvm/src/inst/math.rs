@@ -10,6 +10,14 @@ pub fn bridge_llvm_math_instruction(
     bridge: &mut LLVMBridge,
 ) -> Result<Option<LLVMBasicValue>, ()> {
     let res: Option<BasicValueEnum<'static>> = match &instruction.instruction {
+        Instruction::Not { val } => {
+            let val = bridge.values[&val.base.inst_ind].into_int_value();
+
+            let res = llvm_to_base!(bridge.builder.build_not(val, ""));
+
+            Some(res.into())
+        }
+
         Instruction::MathOperationInt {
             a,
             b,

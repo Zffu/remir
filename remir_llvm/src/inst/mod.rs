@@ -43,7 +43,9 @@ pub fn bridge_llvm_instruction(
             bridge_llvm_reg_instructions(instruction, bridge)
         }
 
-        Instruction::MathOperationInt { .. } | Instruction::MathOperationFloat { .. } => {
+        Instruction::Not { .. }
+        | Instruction::MathOperationInt { .. }
+        | Instruction::MathOperationFloat { .. } => {
             bridge_llvm_math_instruction(instruction, bridge)
         }
 

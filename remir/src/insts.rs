@@ -54,6 +54,10 @@ pub enum Instruction {
     },
 
     // Math instructions
+    Not {
+        val: SSAIntValue,
+    },
+
     MathOperationInt {
         a: SSAIntValue,
         b: SSAIntValue,
@@ -314,6 +318,7 @@ impl Instruction {
                 Some(module.functions[curr_func.id].arguments[*index].clone())
             }
 
+            Self::Not { .. } => Some(ValueType::Int(false, 1)),
             Self::CompareOperationFloat { .. } => Some(ValueType::Int(false, 1)),
             Self::CompareOperationInt { .. } => Some(ValueType::Int(false, 1)),
             Self::ConstFloat { val: _, size } => Some(ValueType::Float(*size)),

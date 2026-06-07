@@ -8,6 +8,15 @@ use crate::{
     writer::InstructionWriter,
 };
 
+pub fn build_int_not(module: &mut Module, val: SSAIntValue) -> RemirResult<SSAIntValue> {
+    val.enforces_boolean()?;
+
+    let inst = Instruction::Not { val };
+
+    let val = module.write(inst).get()?;
+    val.try_into()
+}
+
 pub fn build_math_op_int(
     module: &mut Module,
     a: SSAIntValue,

@@ -43,6 +43,8 @@ impl Display for Instruction {
                 write!(f, "store d{} s{}", destination, source)
             }
 
+            Self::Not { val } => write!(f, "not {}", val),
+
             Self::MathOperationInt {
                 a,
                 b,
