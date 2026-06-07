@@ -31,7 +31,7 @@ pub fn build_float_compare(
     a: SSAFloatValue,
     b: SSAFloatValue,
     op: CompareOperator,
-) -> RemirResult<SSAFloatValue> {
+) -> RemirResult<SSAIntValue> {
     let inst = Instruction::CompareOperationFloat { a, b, op };
 
     let val = module.write(inst).get()?;
