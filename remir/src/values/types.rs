@@ -55,4 +55,9 @@ impl ValueType {
     pub fn new_any_pointer() -> Self {
         Self::new_pointer(ValueType::Unknown)
     }
+
+    #[inline(always)]
+    pub fn new_array(inner_ty: ValueType) -> Self {
+        Self::Array(Box::new(inner_ty))
+    }
 }

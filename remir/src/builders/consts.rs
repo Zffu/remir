@@ -1,5 +1,5 @@
 use crate::{
-    errs::{RemirError, RemirResult},
+    errs::RemirResult,
     insts::Instruction,
     module::Module,
     return_err,

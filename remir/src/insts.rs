@@ -338,6 +338,12 @@ impl Instruction {
             } => Some(ValueType::Int(*signed, *size)),
             Self::ConstString { .. } => Some(ValueType::new_any_pointer()),
             Self::ConstPointer { .. } => Some(ValueType::new_any_pointer()),
+            Self::ConstStruct { ty, values: _ } => Some(ty.clone()),
+            Self::ConstArray { values } => Some(ValueType::new_array(values[0].value_type.clone())),
+            Self::ConstArraySame { value, count: _ } => {
+                Some(ValueType::new_array(value.value_type.clone()))
+            }
+
             Self::Copy { val } => Some(val.value_type.clone()),
             Self::ExtractValue { struct_val, index } => Some(struct_val.fields[*index].clone()),
             Self::FloatExtend { val: _, into } => Some(into.clone()),
