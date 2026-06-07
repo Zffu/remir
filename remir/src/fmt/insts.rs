@@ -28,6 +28,14 @@ impl Display for Instruction {
                 write!(f, "conststruct t{}, [{}]", ty, fmt_list(&values))
             }
 
+            Self::ConstArray { values } => {
+                write!(f, "constarr [{}]", fmt_list(values))
+            }
+
+            Self::ConstArraySame { value, count } => {
+                write!(f, "constarr [{}]x{}", value, count)
+            }
+
             Self::Copy { val } => {
                 write!(f, "copy {}", val)
             }

@@ -2,8 +2,8 @@ use std::hint::unreachable_unchecked;
 
 use inkwell::{
     module::Linkage,
-    types::StringRadix,
-    values::{BasicValueEnum, IntValue},
+    types::{BasicType, BasicTypeEnum, StringRadix},
+    values::{ArrayValue, BasicValueEnum, FloatValue, IntValue, PointerValue, StructValue},
 };
 use remir::{block::BlockInstruction, insts::Instruction, module::Module, values::ValueType};
 
@@ -97,6 +97,37 @@ pub fn bridge_llvm_const_instruction(
             Some(val)
         }
 
+        Instruction::ConstArray { values } => {
+            let vals: Vec<BasicValueEnum<'_>> = values
+                .iter()
+                .map(|v| bridge.values[&v.inst_ind].inner.clone())
+                .collect();
+
+            let elem_ty = bridge
+                .type_storage
+                .convert(values[0].value_type.clone())
+                .inner;
+
+            let array = bridge_llvm_array(elem_ty, vals);
+
+            Some(array.into())
+        }
+
+        Instruction::ConstArraySame { value, count } => {
+            let mut vals = vec![];
+            let v = bridge.values[&value.inst_ind].inner.clone();
+
+            for _ in 0..*count {
+                vals.push(v.clone());
+            }
+
+            let elem_ty = bridge.type_storage.convert(value.value_type.clone()).inner;
+
+            let array = bridge_llvm_array(elem_ty, vals);
+
+            Some(array.into())
+        }
+
         _ => unsafe { unreachable_unchecked() },
     };
 
@@ -105,4 +136,40 @@ pub fn bridge_llvm_const_instruction(
     }
 
     return Ok(None);
+}
+
+pub fn bridge_llvm_array<'a>(
+    elem_ty: BasicTypeEnum<'a>,
+    vals: Vec<BasicValueEnum<'a>>,
+) -> ArrayValue<'a> {
+    let array = match elem_ty.as_basic_type_enum() {
+        BasicTypeEnum::IntType(ty) => {
+            let vals: Vec<IntValue<'_>> = vals.iter().map(|v| v.into_int_value()).collect();
+            ty.const_array(&vals).into()
+        }
+
+        BasicTypeEnum::FloatType(ty) => {
+            let vals: Vec<FloatValue<'_>> = vals.iter().map(|v| v.into_float_value()).collect();
+            ty.const_array(&vals).into()
+        }
+
+        BasicTypeEnum::ArrayType(ty) => {
+            let vals: Vec<ArrayValue<'_>> = vals.iter().map(|v| v.into_array_value()).collect();
+            ty.const_array(&vals).into()
+        }
+
+        BasicTypeEnum::PointerType(ty) => {
+            let vals: Vec<PointerValue<'_>> = vals.iter().map(|v| v.into_pointer_value()).collect();
+            ty.const_array(&vals).into()
+        }
+
+        BasicTypeEnum::StructType(ty) => {
+            let vals: Vec<StructValue<'_>> = vals.iter().map(|v| v.into_struct_value()).collect();
+            ty.const_array(&vals).into()
+        }
+
+        _ => panic!(),
+    };
+
+    array
 }

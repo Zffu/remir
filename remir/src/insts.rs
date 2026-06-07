@@ -39,6 +39,15 @@ pub enum Instruction {
         values: Vec<BaseSSAValue>,
     },
 
+    ConstArray {
+        values: Vec<BaseSSAValue>,
+    },
+
+    ConstArraySame {
+        value: BaseSSAValue,
+        count: usize,
+    },
+
     // Register instructions
     Copy {
         val: BaseSSAValue,
