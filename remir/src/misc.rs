@@ -25,6 +25,7 @@ pub enum MathOperator {
     Xor,
     Shl,
     Shr,
+    Nor,
 }
 
 /// The operators for compare instructions

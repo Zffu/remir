@@ -95,6 +95,7 @@ impl Display for MathOperator {
             Self::Xor => "xor",
             Self::Shl => "shl",
             Self::Shr => "shr",
+            Self::Nor => "nor",
         };
 
         write!(f, "{}", res)

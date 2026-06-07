@@ -55,6 +55,10 @@ pub fn bridge_llvm_math_instruction(
                 MathOperator::Xor => bridge.builder.build_xor(a, b, ""),
                 MathOperator::Shl => bridge.builder.build_left_shift(a, b, ""),
                 MathOperator::Shr => bridge.builder.build_right_shift(a, b, *signed, ""),
+                MathOperator::Nor => {
+                    let val = llvm_to_base!(bridge.builder.build_or(a, b, ""));
+                    bridge.builder.build_not(val, "")
+                }
             };
 
             let res = llvm_to_base!(res);
