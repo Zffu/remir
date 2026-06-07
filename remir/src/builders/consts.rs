@@ -1,11 +1,11 @@
 use crate::{
-    errs::RemirResult,
+    errs::{RemirError, RemirResult},
     insts::Instruction,
     module::Module,
     return_err,
     values::{
-        BaseSSAValue, ValueType, float::SSAFloatValue, int::SSAIntValue, ptr::SSAPointerValue,
-        structs::SSAStructValue,
+        BaseSSAValue, ValueType, array::SSAArrayValue, float::SSAFloatValue, int::SSAIntValue,
+        ptr::SSAPointerValue, structs::SSAStructValue,
     },
     writer::InstructionWriter,
 };
@@ -66,4 +66,33 @@ pub fn build_const_struct(
     } else {
         return_err!("type is not struct")
     }
+}
+
+pub fn build_const_array(
+    module: &mut Module,
+    values: Vec<BaseSSAValue>,
+) -> RemirResult<SSAArrayValue> {
+    let ty = values[0].value_type.clone();
+
+    for val in &values {
+        if val.value_type != ty {
+            return_err!("mismatched types");
+        }
+    }
+
+    let inst = Instruction::ConstArray { values };
+    let val = module.write(inst).get()?;
+
+    val.try_into()
+}
+
+pub fn build_const_array_same(
+    module: &mut Module,
+    value: BaseSSAValue,
+    count: usize,
+) -> RemirResult<SSAArrayValue> {
+    let inst = Instruction::ConstArraySame { value, count };
+    let val = module.write(inst).get()?;
+
+    val.try_into()
 }

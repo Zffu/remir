@@ -60,6 +60,10 @@ impl Display for ValueType {
                 format!("ref({})", inner)
             }
 
+            Self::Array(inner) => {
+                format!("arr({})", inner)
+            }
+
             Self::Unknown => "??".to_string(),
         };
 

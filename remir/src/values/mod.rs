@@ -2,6 +2,7 @@
 
 use crate::values::consts::ConstantData;
 
+pub mod array;
 pub mod consts;
 pub mod float;
 pub mod int;

@@ -56,7 +56,7 @@ impl TryFrom<BaseSSAValue> for SSAPointerValue {
 
 impl Into<BaseSSAValue> for SSAPointerValue {
     fn into(self) -> BaseSSAValue {
-        self.base.clone()
+        self.base
     }
 }
 
