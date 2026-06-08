@@ -1,3 +1,5 @@
+//! The writer for instructions
+
 use crate::{
     block::{BlockInstruction, BlockReference},
     func::FunctionReference,

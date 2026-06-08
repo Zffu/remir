@@ -1,16 +1,22 @@
+//! Definitions for the array values in the MIR
+
 use crate::{
     errs::RemirReturnableError,
     return_err,
     values::{BaseSSAValue, SSAValueLike, ValueType},
 };
 
+/// A variant of [`BaseSSAValue`] that is an array
 pub struct SSAArrayValue {
+    /// The base of the SSA value
     pub base: BaseSSAValue,
 
+    /// The inner type of the array. Represents the type of values contained inside of the array
     pub inner_type: ValueType,
 }
 
 impl SSAArrayValue {
+    /// Creates a new [`SSAArrayValue`]
     pub fn new(inst_ind: usize, inner_type: ValueType) -> Self {
         Self {
             base: BaseSSAValue::new(inst_ind, ValueType::Array(Box::new(inner_type.clone()))),

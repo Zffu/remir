@@ -1,3 +1,5 @@
+//! Formatting for instructions
+
 use std::fmt::Display;
 
 use crate::{block::BlockInstruction, fmt::utils::fmt_list, insts::Instruction, values::ValueType};

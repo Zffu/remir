@@ -1,6 +1,6 @@
 [package]
 name = "remir_llvm"
-version = "1.0.0"
+version = "1.0.1"
 authors = ["Zffu <zffu@zffu.dev>"]
 description = "The LLVM binding for the Remir library"
 repository = "https://github.com/Zffu/remir"

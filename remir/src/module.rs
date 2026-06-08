@@ -1,8 +1,12 @@
+//! A module is a storage for instructions, functions and blocks. It holds the context of the entire Remir library.
+
 use std::collections::HashMap;
 
 use crate::{
     block::{Block, BlockReference},
+    errs::RemirResult,
     func::{Function, FunctionReference},
+    return_err,
     values::ValueType,
 };
 
@@ -26,8 +30,11 @@ pub struct Module {
     /// A name -> index hashmap for function names
     pub function_names: HashMap<String, usize>,
 
+    /// The current block of the module. Is used for the [`InstructionWriter`][`crate::writer::InstructionWriter`] trait
     pub pos_block: Option<BlockReference>,
+    /// The current function of the module. Is used for the [`InstructionWriter`][`crate::writer::InstructionWriter`] trait
     pub pos_function: Option<FunctionReference>,
+    /// Should instructions be added at the start of the block or at the end? Is used for the [`InstructionWriter`][`crate::writer::InstructionWriter`] trait
     pub pos_is_start: bool,
 }
 
@@ -54,15 +61,23 @@ impl Module {
     }
 
     /// Creates a [`Block`] with the given name for the given function.
-    pub fn create_block(&mut self, name: String, func: FunctionReference) -> BlockReference {
+    pub fn create_block(&mut self, name: String) -> RemirResult<BlockReference> {
+        if self.pos_function.is_none() {
+            return_err!("The current function is null! use Module::move_function first");
+        }
+
         let reference = BlockReference::new(name, self.blocks.len());
 
         let block = Block::new(reference.clone());
 
-        self.block_to_function.insert(reference.clone(), func);
+        let func_ref = self.pos_function.clone().unwrap();
+
+        self.functions[func_ref.id].blocks.push(reference.clone());
+
+        self.block_to_function.insert(reference.clone(), func_ref);
 
         self.blocks.push(block);
-        reference
+        Ok(reference)
     }
 
     /// Creates a new function with the given name, arguments and return type inside of the module
@@ -92,9 +107,8 @@ impl Module {
         ))
     }
 
-    pub fn get_function(&mut self, r: &FunctionReference) -> &'static mut Function {
-        unsafe {
-            std::mem::transmute::<&mut Function, &'static mut Function>(&mut self.functions[r.id])
-        }
+    /// Moves the current function indicator to the given reference.
+    pub fn move_function(&mut self, func: FunctionReference) {
+        self.pos_function = Some(func);
     }
 }

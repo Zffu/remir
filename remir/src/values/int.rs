@@ -30,6 +30,11 @@ impl SSAIntValue {
         }
     }
 
+    /// Enforces that the value type is a boolean.
+    ///
+    /// # Errors
+    /// This function will return an error if the value's type is not of a boolean.
+    ///
     pub fn enforces_boolean(&self) -> RemirResult<()> {
         if self.size != 1 {
             return_err!("Int value is not a boolean");

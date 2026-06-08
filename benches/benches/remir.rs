@@ -16,9 +16,9 @@ fn hello_world() {
     let printf = m.create_function("printf".into(), vec![ValueType::new_any_pointer()], None);
 
     let main = m.create_function("main".into(), vec![], None);
-    let main_ref = m.get_function(&main);
+    m.move_function(main.clone());
 
-    let block = main_ref.append_block(&mut m, "entry".into());
+    let block = m.create_block("entry".into()).unwrap();
 
     m.move_end(block, main);
 
@@ -35,13 +35,14 @@ fn fib() {
         vec![ValueType::Int(false, 32)],
         Some(ValueType::Int(false, 32)),
     );
-    let fib_ref = m.get_function(&fib);
+
+    m.move_function(fib.clone());
 
     let _ = m.create_function("main".into(), vec![], None);
 
-    let entry = fib_ref.append_block(&mut m, "entry".into());
-    let then = fib_ref.append_block(&mut m, "then".into());
-    let else_block = fib_ref.append_block(&mut m, "else".into());
+    let entry = m.create_block("entry".into()).unwrap();
+    let then = m.create_block("then".into()).unwrap();
+    let else_block = m.create_block("else".into()).unwrap();
 
     m.move_end(entry, fib.clone());
 
