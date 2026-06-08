@@ -18,6 +18,7 @@ pub mod utils;
 pub mod vals;
 
 impl Module {
+    /// Saves the module as a text-like format to the given path
     pub fn save_to_file(&self, path: PathBuf) -> io::Result<()> {
         let mut f = File::create(path)?;
 
