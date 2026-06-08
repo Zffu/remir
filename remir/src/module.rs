@@ -4,7 +4,9 @@ use std::collections::HashMap;
 
 use crate::{
     block::{Block, BlockReference},
+    errs::RemirResult,
     func::{Function, FunctionReference},
+    return_err,
     values::ValueType,
 };
 
@@ -59,15 +61,23 @@ impl Module {
     }
 
     /// Creates a [`Block`] with the given name for the given function.
-    pub fn create_block(&mut self, name: String, func: FunctionReference) -> BlockReference {
+    pub fn create_block(&mut self, name: String) -> RemirResult<BlockReference> {
+        if self.pos_function.is_none() {
+            return_err!("The current function is null! use Module::move_function first");
+        }
+
         let reference = BlockReference::new(name, self.blocks.len());
 
         let block = Block::new(reference.clone());
 
-        self.block_to_function.insert(reference.clone(), func);
+        let func_ref = self.pos_function.clone().unwrap();
+
+        self.functions[func_ref.id].blocks.push(reference.clone());
+
+        self.block_to_function.insert(reference.clone(), func_ref);
 
         self.blocks.push(block);
-        reference
+        Ok(reference)
     }
 
     /// Creates a new function with the given name, arguments and return type inside of the module
@@ -97,15 +107,8 @@ impl Module {
         ))
     }
 
-    /// Gets a static reference of a function based on the [`FunctionReference`]
-    ///
-    /// # Safety
-    /// This function is unsafe as it calls [`std::mem::transmute`] and will be shortly removed
-    ///
-    #[deprecated = "will be shortly removed in favor of a better system"]
-    pub fn get_function(&mut self, r: &FunctionReference) -> &'static mut Function {
-        unsafe {
-            std::mem::transmute::<&mut Function, &'static mut Function>(&mut self.functions[r.id])
-        }
+    /// Moves the current function indicator to the given reference.
+    pub fn move_function(&mut self, func: FunctionReference) {
+        self.pos_function = Some(func);
     }
 }

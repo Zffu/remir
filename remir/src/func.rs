@@ -1,6 +1,6 @@
 //! Declarations related to functions
 
-use crate::{block::BlockReference, module::Module, values::ValueType};
+use crate::{block::BlockReference, errs::RemirResult, module::Module, values::ValueType};
 
 /// Represents a reference to a [`Function`]
 #[derive(Clone, Hash, PartialEq, Eq)]
@@ -51,15 +51,17 @@ impl Function {
     ///
     /// The block will be marked as owned by the function
     ///
-    pub fn append_block(&mut self, module: &mut Module, name: String) -> BlockReference {
-        let reference = module.create_block(
-            format!("{}::{}", self.reference.name, name),
-            self.reference.clone(),
-        );
+    pub fn append_block(
+        &mut self,
+        module: &mut Module,
+        name: String,
+    ) -> RemirResult<BlockReference> {
+        module.move_function(self.reference.clone());
+        let reference = module.create_block(format!("{}::{}", self.reference.name, name))?;
 
         self.blocks.push(reference.clone());
 
-        reference
+        Ok(reference)
     }
 
     /// Obtains an index for the creation of a new [`BaseSSAValue`][`crate::values::BaseSSAValue`].
