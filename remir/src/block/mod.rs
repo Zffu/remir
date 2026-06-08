@@ -73,6 +73,11 @@ impl Block {
         }
     }
 
+    /// Appends a variable into the [`Block`]
+    pub fn append_variable(&mut self, variable: BlockVariable) {
+        self.variables.insert(variable.name.clone(), variable);
+    }
+
     /// Grabs the block's variables.
     ///
     /// This is useful when making blocks that share the same function.
