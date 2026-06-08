@@ -16,10 +16,14 @@ use crate::{
 /// Allows to automatically handle things like atomic state, pointer writing and more.
 #[derive(Clone)]
 pub struct BlockVariable {
+    /// The name of the block variable
     pub name: String,
 
+    /// The held value of the block variable.
+    /// Is an option simply for the case where a value isn't initialized yet
     pub held_value: Option<BaseSSAValue>,
 
+    /// Should the variable be written like a pointer.
     pub write_as_pointer: bool,
 
     /// Atomic state requires a pointer
@@ -27,6 +31,7 @@ pub struct BlockVariable {
 }
 
 impl BlockVariable {
+    /// Creates a new SSA [`BlockVariable`]
     pub fn new_ssa(name: String, val: Option<BaseSSAValue>) -> Self {
         Self {
             name,
@@ -36,6 +41,7 @@ impl BlockVariable {
         }
     }
 
+    /// Creates a new pointer version of [`BlockVariable`]
     pub fn new_pointer(name: String, val: SSAPointerValue) -> Self {
         Self {
             name,
@@ -45,6 +51,7 @@ impl BlockVariable {
         }
     }
 
+    /// Creates a new atomic pointer version of [`BlockVariable`]
     pub fn new_atomic(name: String, val: SSAPointerValue, order: MemoryOrder) -> Self {
         Self {
             name,
@@ -54,6 +61,7 @@ impl BlockVariable {
         }
     }
 
+    /// Writes in the variable
     pub fn write(&mut self, module: &mut Module, val: BaseSSAValue) -> RemirResult<()> {
         if !self.write_as_pointer {
             self.held_value = Some(val);
@@ -77,6 +85,7 @@ impl BlockVariable {
         build_store_atomic(module, ptr, val, atomic_state)
     }
 
+    /// Reads from the variable
     pub fn read(&self, module: &mut Module) -> RemirResult<BaseSSAValue> {
         if !self.write_as_pointer {
             return match &self.held_value {
