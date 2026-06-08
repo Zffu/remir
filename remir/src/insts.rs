@@ -1,5 +1,7 @@
 //! Definitions of the instruction set of Remir
 
+use std::hint::unreachable_unchecked;
+
 use crate::{
     block::BlockReference,
     func::FunctionReference,
@@ -355,6 +357,13 @@ impl Instruction {
             Self::FloatToInt { val: _, into } => Some(into.clone()),
             Self::FloatTruncate { val: _, into } => Some(into.clone()),
             Self::Gep { base, offset: _ } => Some(base.base.value_type.clone()),
+            Self::GepStruct { base, field } => {
+                if let ValueType::Struct(fields) = &base.inner_type {
+                    Some(ValueType::new_pointer(*fields[*field].clone()))
+                } else {
+                    unsafe { unreachable_unchecked() }
+                }
+            }
             Self::IntExtend { val: _, into } => Some(into.clone()),
             Self::IntToFloat { val: _, into } => Some(into.clone()),
             Self::IntTruncate { val: _, into } => Some(into.clone()),

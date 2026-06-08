@@ -2,6 +2,7 @@ use crate::{
     errs::RemirResult,
     insts::Instruction,
     module::Module,
+    return_err,
     values::{BaseSSAValue, ValueType, int::SSAIntValue, ptr::SSAPointerValue},
     writer::InstructionWriter,
 };
@@ -64,6 +65,25 @@ pub fn build_gep(
     let val = module.write(inst).get()?;
 
     val.try_into()
+}
+
+pub fn build_struct_gep(
+    module: &mut Module,
+    base: SSAPointerValue,
+    field: usize,
+) -> RemirResult<BaseSSAValue> {
+    if let ValueType::Struct(fields) = &base.inner_type {
+        if field >= fields.len() {
+            return_err!("field >= fields.len");
+        }
+
+        let inst = Instruction::GepStruct { base, field };
+        let val = module.write(inst).get()?;
+
+        Ok(val)
+    } else {
+        return_err!("type is not a struct")
+    }
 }
 
 pub fn build_load_indexed(
