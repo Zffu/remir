@@ -15,6 +15,7 @@ pub struct SSAPointerValue {
     /// The reference state of the pointer value, true means that the value is a reference and thus cannot be null
     pub reference: bool,
 
+    /// The inner type of the pointer. Represents the type that the pointer contains.
     pub inner_type: ValueType,
 }
 
