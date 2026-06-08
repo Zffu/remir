@@ -50,6 +50,10 @@ impl VariableSynchronizer for Module {
 
     #[inline]
     fn inherit_sync_point(&self, block: &mut Block) {
+        if self.get_sync_point().is_none() {
+            return;
+        }
+
         let b = &self.blocks[self.get_sync_point().unwrap().id];
 
         for (key, value) in b.variables.clone() {
