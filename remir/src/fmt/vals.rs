@@ -1,3 +1,5 @@
+//! Formatting for values
+
 use std::fmt::Display;
 
 use crate::values::{

@@ -9,7 +9,10 @@ use crate::{
 /// A variant of [`BaseSSAValue`] that is a structure
 #[derive(Clone)]
 pub struct SSAStructValue {
+    /// The base of the struct value.
     pub base: BaseSSAValue,
+
+    /// The field types of the struct value
     pub fields: Vec<ValueType>,
 }
 

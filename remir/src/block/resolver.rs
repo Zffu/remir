@@ -1,3 +1,9 @@
+//! The variable resolver for blocks.
+//! Is used to sync variables from a block into another.
+//!
+//! This resolver might automatically get called in the future
+//!
+
 use crate::{
     block::{Block, BlockReference},
     builders::build_phi,

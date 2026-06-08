@@ -22,12 +22,19 @@ pub struct BaseSSAValue {
     /// The type of value
     pub value_type: ValueType,
 
+    /// The constant data of the value. Holds potentially the constant value
     pub constant: ConstantData,
 }
 
+/// Represents an SSA value with functions to obtain information about the SSA value.
 pub trait SSAValueLike {
+    /// Returns the value's type as an [`ValueType`]
     fn get_type(&self) -> ValueType;
+
+    /// Returns the constant data information of the value.
     fn get_constant_data(&self) -> ConstantData;
+
+    /// Returns the instruction index corresponding to the value's creation.
     fn get_inst_index(&self) -> usize;
 }
 

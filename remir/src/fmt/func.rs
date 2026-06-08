@@ -1,3 +1,5 @@
+//! Formatting for functions
+
 use std::fmt::Display;
 
 use crate::{fmt::utils::fmt_list, func::Function, values::ValueType};

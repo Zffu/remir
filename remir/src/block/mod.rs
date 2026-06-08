@@ -26,8 +26,11 @@ pub struct Block {
     /// The inner reference to feed.
     pub reference: BlockReference,
 
+    /// The instructions contained within the block.
     pub instructions: Vec<BlockInstruction>,
 
+    /// The variables contained within the block.
+    /// Variables are optional and are simply for convenience.
     pub variables: HashMap<String, BlockVariable>,
 
     /// The origins of the block.
@@ -42,7 +45,10 @@ pub struct Block {
 /// Represents instructions that are held in a [`Block`]
 #[derive(Clone)]
 pub struct BlockInstruction {
+    /// The actual instruction held by the [`BlockInstruction`]
     pub instruction: Instruction,
+
+    /// The potential output value of the instruction
     pub value: Option<BaseSSAValue>,
 }
 
@@ -87,6 +93,11 @@ impl BlockInstruction {
         Self { instruction, value }
     }
 
+    /// Returns the held value of the [`BlockInstruction`] if there is one
+    ///
+    /// # Errors
+    /// This function will error if the [`BlockInstruction`] doesn't contain any value
+    ///
     pub fn get(&self) -> RemirResult<BaseSSAValue> {
         match &self.value {
             Option::None => {

@@ -1,3 +1,5 @@
+//! Formatting for blocks
+
 use std::fmt::Display;
 
 use crate::{

@@ -1,3 +1,5 @@
+//! Definitions for value types inside of the MIR
+
 /// The type of the SSA MIR values.
 #[derive(Clone, PartialEq, Hash, Eq)]
 pub enum ValueType {
@@ -48,16 +50,17 @@ impl ValueType {
         Self::Pointer(Box::new(inner_ty))
     }
 
+    /// Creates a new array type with the given inner type
+    #[inline(always)]
+    pub fn new_array(inner_ty: ValueType) -> Self {
+        Self::Array(Box::new(inner_ty))
+    }
+
     /// Creates a new pointer type that contains an unknown and thus represents a pointer address rather than a real pointer.
     ///
     /// Any pointers cannot be used on store and loads as they will just use unknown values
     #[inline(always)]
     pub fn new_any_pointer() -> Self {
         Self::new_pointer(ValueType::Unknown)
-    }
-
-    #[inline(always)]
-    pub fn new_array(inner_ty: ValueType) -> Self {
-        Self::Array(Box::new(inner_ty))
     }
 }

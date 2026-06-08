@@ -1,3 +1,5 @@
+//! A module is a storage for instructions, functions and blocks. It holds the context of the entire Remir library.
+
 use std::collections::HashMap;
 
 use crate::{
@@ -26,8 +28,11 @@ pub struct Module {
     /// A name -> index hashmap for function names
     pub function_names: HashMap<String, usize>,
 
+    /// The current block of the module. Is used for the [`InstructionWriter`][`crate::writer::InstructionWriter`] trait
     pub pos_block: Option<BlockReference>,
+    /// The current function of the module. Is used for the [`InstructionWriter`][`crate::writer::InstructionWriter`] trait
     pub pos_function: Option<FunctionReference>,
+    /// Should instructions be added at the start of the block or at the end? Is used for the [`InstructionWriter`][`crate::writer::InstructionWriter`] trait
     pub pos_is_start: bool,
 }
 
@@ -92,6 +97,12 @@ impl Module {
         ))
     }
 
+    /// Gets a static reference of a function based on the [`FunctionReference`]
+    ///
+    /// # Safety
+    /// This function is unsafe as it calls [`std::mem::transmute`] and will be shortly removed
+    ///
+    #[deprecated = "will be shortly removed in favor of a better system"]
     pub fn get_function(&mut self, r: &FunctionReference) -> &'static mut Function {
         unsafe {
             std::mem::transmute::<&mut Function, &'static mut Function>(&mut self.functions[r.id])
