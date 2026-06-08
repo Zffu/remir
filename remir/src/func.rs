@@ -27,7 +27,7 @@ pub struct Function {
     /// The return type of the function
     pub return_type: Option<ValueType>,
 
-    /// The counter used to generate [`BaseSSAValue`] indexes
+    /// The counter used to generate [`BaseSSAValue`][`crate::values::BaseSSAValue`] indexes
     pub value_index_counter: usize,
 }
 
