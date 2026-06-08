@@ -67,4 +67,7 @@ pub enum VariableAttributes {
     /// - The
     /// This attribute should not be inherited
     NoAlias,
+    
+    /// Represents a pointer that is not null in all cases. Allows for pointer safety selection to only allow pointer safety wrappers on potentially null pointers
+    NonNull
 }
