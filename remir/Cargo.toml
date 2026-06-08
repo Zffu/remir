@@ -1,6 +1,6 @@
 [package]
 name = "remir"
-version = "1.0.0"
+version = "1.0.1"
 authors = ["Zffu <zffu@zffu.dev>"]
 description = "Remir is an MIR library designed to be used easily and be efficient."
 repository = "https://github.com/Zffu/remir"
