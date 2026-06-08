@@ -3,7 +3,7 @@
 use std::collections::{HashMap, HashSet};
 
 use crate::{
-    block::{Block, BlockReference},
+    block::{Block, BlockReference, sync::VariableSynchronizer},
     errs::RemirResult,
     func::{Function, FunctionReference},
     return_err,
@@ -79,7 +79,9 @@ impl Module {
             self.blocks.len(),
         );
 
-        let block = Block::new(reference.clone());
+        let mut block = Block::new(reference.clone());
+
+        self.inherit_sync_point(&mut block);
 
         let func_ref = self.pos_function.clone().unwrap();
 
