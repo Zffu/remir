@@ -8,6 +8,7 @@ use crate::{
 };
 
 pub mod resolver;
+pub mod sync;
 pub mod vars;
 
 /// Represents a reference to a [`Block`]
