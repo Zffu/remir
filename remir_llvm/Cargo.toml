@@ -15,4 +15,4 @@ no_sibling_safety = []
 
 [dependencies]
 inkwell = { version = "0.9.0", features = ["llvm22-1"] }
-remir = { path = "../remir", version = "1.0.0" }
+remir = { path = "../remir", version = "1.0.1" }
