@@ -21,7 +21,7 @@ pub enum FunctionAttributes {
     /// Returns a fresh pointer that doesn't exist inside of the function arguments.
     FreshPointer,
 
-    /// Never returns a null pointer
+    /// Never returns a non null pointer
     ReturnsNonNull,
 
     /// Doesn't call another function besides itself
