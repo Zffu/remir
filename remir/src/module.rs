@@ -1,6 +1,6 @@
 //! A module is a storage for instructions, functions and blocks. It holds the context of the entire Remir library.
 
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 use crate::{
     block::{Block, BlockReference},
@@ -24,6 +24,8 @@ pub struct Module {
     /// A map in order to convert block references into their corresponding functions
     pub block_to_function: HashMap<BlockReference, FunctionReference>,
 
+    pub block_names: HashSet<String>,
+
     /// The functions contained in the module
     pub functions: Vec<Function>,
 
@@ -45,6 +47,7 @@ impl Module {
             name,
             blocks: vec![],
             block_to_function: HashMap::new(),
+            block_names: HashSet::new(),
 
             functions: vec![],
             function_names: HashMap::new(),
@@ -66,7 +69,10 @@ impl Module {
             return_err!("The current function is null! use Module::move_function first");
         }
 
-        let reference = BlockReference::new(name, self.blocks.len());
+        let reference = BlockReference::new(
+            self.find_block_name(name.clone(), name, 0),
+            self.blocks.len(),
+        );
 
         let block = Block::new(reference.clone());
 
@@ -78,6 +84,14 @@ impl Module {
 
         self.blocks.push(block);
         Ok(reference)
+    }
+
+    fn find_block_name(&self, name: String, original: String, ind: usize) -> String {
+        if !self.block_names.contains(&name) {
+            name
+        } else {
+            self.find_block_name(format!("{}_{}", original, ind + 1), original, ind + 1)
+        }
     }
 
     /// Creates a new function with the given name, arguments and return type inside of the module
