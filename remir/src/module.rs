@@ -1,3 +1,5 @@
+//! A module is a storage for instructions, functions and blocks. It holds the context of the entire Remir library.
+
 use std::collections::HashMap;
 
 use crate::{

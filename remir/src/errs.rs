@@ -1,3 +1,5 @@
+//! Error definitions for errors used inside of the Remir codebase
+
 use std::fmt::Display;
 
 #[cfg(feature = "errors")]
