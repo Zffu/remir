@@ -1,7 +1,7 @@
 //! The remir variable synchronizer.
 //! Allows to sync variables between blocks correctly automatically.
 
-use crate::block::BlockReference;
+use crate::{block::BlockReference, module::Module};
 
 /// Represents a variable synchronizer core.
 /// One common implementation is [`Module`][`crate::module::Module`]
@@ -24,4 +24,21 @@ pub trait VariableSynchronizer {
 
     /// Removes the variable sync point.
     fn stop_sync_point(&mut self);
+}
+
+impl VariableSynchronizer for Module {
+    #[inline]
+    fn set_sync_point(&mut self, block: BlockReference) {
+        self.variable_sync_point = Some(block);
+    }
+
+    #[inline]
+    fn stop_sync_point(&mut self) {
+        self.variable_sync_point = None;
+    }
+
+    #[inline]
+    fn get_sync_point(&self) -> Option<BlockReference> {
+        self.variable_sync_point.clone()
+    }
 }

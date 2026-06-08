@@ -38,6 +38,9 @@ pub struct Module {
     pub pos_function: Option<FunctionReference>,
     /// Should instructions be added at the start of the block or at the end? Is used for the [`InstructionWriter`][`crate::writer::InstructionWriter`] trait
     pub pos_is_start: bool,
+
+    /// The variable sync point. Is used for the [`VariableSynchronizer`][`crate::block::sync::VariableSynchronizer`] trait
+    pub(crate) variable_sync_point: Option<BlockReference>,
 }
 
 impl Module {
@@ -55,6 +58,8 @@ impl Module {
             pos_block: None,
             pos_function: None,
             pos_is_start: false,
+
+            variable_sync_point: None,
         }
     }
 
