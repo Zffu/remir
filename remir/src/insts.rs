@@ -173,6 +173,11 @@ pub enum Instruction {
         offset: SSAIntValue,
     },
 
+    GepStruct {
+        base: SSAPointerValue,
+        field: usize,
+    },
+
     LoadIndexed {
         base: SSAPointerValue,
         index: SSAIntValue,

@@ -204,6 +204,7 @@ impl Display for Instruction {
             Instruction::Free { ptr } => write!(f, "free {}", ptr),
 
             Instruction::Gep { base, offset } => write!(f, "gep b{} o{}", base, offset),
+            Instruction::GepStruct { base, field } => write!(f, "structgep b{} o{}", base, field),
             Instruction::LoadIndexed { base, index } => write!(f, "indload b{} i{}", base, index),
             Instruction::StoreIndexed { base, index, val } => {
                 write!(f, "indstore b{} i{} v{}", base, index, val)

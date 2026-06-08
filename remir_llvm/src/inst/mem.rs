@@ -103,6 +103,20 @@ pub fn bridge_llvm_mem_instruction(
             Some(val.into())
         }
 
+        Instruction::GepStruct { base, field } => {
+            let ty = bridge.type_storage.convert(base.inner_type.clone());
+            let base = bridge.values[&base.base.inst_ind].into_pointer_value();
+
+            let val = llvm_to_base!(bridge.builder.build_struct_gep(
+                ty.inner,
+                base,
+                *field as u32,
+                ""
+            ));
+
+            Some(val.into())
+        }
+
         Instruction::LoadIndexed { base, index } => {
             let ty = bridge.type_storage.convert(base.inner_type.clone());
 
