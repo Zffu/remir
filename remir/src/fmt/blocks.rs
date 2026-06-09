@@ -21,6 +21,12 @@ impl Display for Block {
             writeln!(f, "#destinations [{}]", fmt_list(&destinations))?;
         }
 
+        if !self.dependencies.is_empty() {
+            let dependencies: Vec<&BlockReference> = self.dependencies.iter().collect();
+
+            writeln!(f, "#dependencies [{}]", fmt_list(&dependencies))?;
+        }
+
         if !self.variables.is_empty() {
             let variables: Vec<&String> = self.variables.keys().collect();
 
