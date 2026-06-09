@@ -7,7 +7,6 @@ use crate::{
     values::BaseSSAValue,
 };
 
-pub mod resolver;
 pub mod sync;
 pub mod vars;
 
