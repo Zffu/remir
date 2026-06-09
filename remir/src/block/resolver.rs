@@ -21,15 +21,6 @@ impl Block {
         for (name, var) in self.variables.iter() {
             let mut choices: Vec<(BlockReference, BaseSSAValue)> = vec![];
 
-            if var.held_value.is_some() {
-                unsafe {
-                    choices.push((
-                        self.reference.clone(),
-                        var.held_value.clone().unwrap_unchecked(),
-                    ))
-                }
-            }
-
             for block_ref in &self.origins {
                 let block = &module.blocks[block_ref.id];
 
@@ -56,11 +47,6 @@ impl Block {
 
         for val in vals {
             if val.1.is_empty() {
-                continue;
-            }
-
-            if val.1.len() == 1 {
-                self.variables.get_mut(&val.0).unwrap().held_value = Some(val.1[0].1.clone());
                 continue;
             }
 
