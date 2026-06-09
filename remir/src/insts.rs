@@ -274,6 +274,12 @@ pub enum Instruction {
     Assume {
         val: SSAIntValue,
     },
+
+    LazyLoad {
+        block: BlockReference,
+        variable_name: String,
+        ty: ValueType,
+    },
 }
 
 impl Instruction {
@@ -398,6 +404,12 @@ impl Instruction {
                 true_val,
                 false_val: _,
             } => Some(true_val.value_type.clone()),
+
+            Self::LazyLoad {
+                block: _,
+                variable_name: _,
+                ty,
+            } => Some(ty.clone()),
 
             _ => None,
         }

@@ -269,6 +269,12 @@ impl Display for Instruction {
             }
 
             Instruction::Assume { val } => write!(f, "assume {}", val),
+
+            Instruction::LazyLoad {
+                block,
+                variable_name,
+                ty,
+            } => write!(f, "lazyload b{} v{} t{}", block, variable_name, ty),
         }
     }
 }
