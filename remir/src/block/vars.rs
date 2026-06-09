@@ -110,4 +110,14 @@ impl BlockVariable {
 
         return build_load_atomic(module, ptr, atomic_state);
     }
+
+    /// Creates a new [`BlockVariable`], copying every property from the current one and applying a new value
+    pub fn with_value(&self, val: Option<BaseSSAValue>) -> BlockVariable {
+        Self {
+            name: self.name.clone(),
+            held_value: val,
+            write_as_pointer: self.write_as_pointer,
+            atomic_state: self.atomic_state.clone(),
+        }
+    }
 }
