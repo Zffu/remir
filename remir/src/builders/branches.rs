@@ -74,14 +74,29 @@ pub fn build_phi(
     label_set: Vec<(BlockReference, BaseSSAValue)>,
 ) -> RemirResult<BaseSSAValue> {
     let ty = label_set[0].1.value_type.clone();
+    let mut dependencies = vec![];
 
     for entry in &label_set {
         if entry.1.value_type != ty {
             return_err!("The label set values are not of the same type");
         }
+
+        dependencies.push(entry.0.clone());
     }
 
     let inst = Instruction::Phi { label_set };
+
+    // Dependency
+
+    for dep in dependencies {
+        if &dep == module.pos_block.as_ref().unwrap() {
+            continue;
+        }
+
+        module.blocks[module.pos_block.as_ref().unwrap().id]
+            .dependencies
+            .insert(dep);
+    }
 
     module.write(inst).get()
 }

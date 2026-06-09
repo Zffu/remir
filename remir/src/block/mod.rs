@@ -41,6 +41,10 @@ pub struct Block {
     /// The destinations of the block
     /// The blocks that the block is leading to
     pub destinations: HashSet<BlockReference>,
+
+    /// The dependencies of the block
+    /// The blocks that need to be loaded before this block
+    pub dependencies: HashSet<BlockReference>,
 }
 
 /// Represents instructions that are held in a [`Block`]
@@ -71,6 +75,7 @@ impl Block {
             variables: HashMap::new(),
             origins: HashSet::new(),
             destinations: HashSet::new(),
+            dependencies: HashSet::new(),
         }
     }
 
