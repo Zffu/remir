@@ -81,13 +81,13 @@ impl Module {
 
         let mut block = Block::new(reference.clone());
 
-        self.inherit_sync_point(&mut block);
-
         let func_ref = self.pos_function.clone().unwrap();
 
         self.functions[func_ref.id].blocks.push(reference.clone());
 
         self.block_to_function.insert(reference.clone(), func_ref);
+
+        self.inherit_sync_point(&mut block);
 
         self.blocks.push(block);
         Ok(reference)
