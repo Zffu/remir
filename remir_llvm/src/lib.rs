@@ -1,4 +1,8 @@
-use std::{collections::HashMap, mem::transmute, rc::Rc};
+use std::{
+    collections::{HashMap, HashSet},
+    mem::transmute,
+    rc::Rc,
+};
 
 use inkwell::{
     basic_block::BasicBlock,
@@ -48,6 +52,7 @@ macro_rules! llvm_to_base_returnless {
 
 pub struct LLVMBridge {
     pub blocks: HashMap<BlockReference, LLVMBlock>,
+    pub built_blocks: HashSet<BlockReference>,
     pub values: HashMap<usize, LLVMBasicValue>,
 
     pub functions: HashMap<FunctionReference, LLVMFunction>,
@@ -88,6 +93,14 @@ pub fn build_llvm_block(
     block: &Block,
     module: &mut Module,
 ) -> Result<(), ()> {
+    if bridge.built_blocks.contains(&block.reference) {
+        return Ok(());
+    }
+
+    for dependency in &block.dependencies {
+        build_llvm_block(bridge, &module.blocks[dependency.id].clone(), module)?;
+    }
+
     bridge
         .builder
         .position_at_end(bridge.blocks[&block.reference].inner.clone());
@@ -105,6 +118,8 @@ pub fn build_llvm_block(
             };
         }
     }
+
+    bridge.built_blocks.insert(block.reference.clone());
 
     Ok(())
 }
@@ -156,6 +171,7 @@ impl LLVMBridge {
 
         LLVMBridge {
             blocks: HashMap::new(),
+            built_blocks: HashSet::new(),
             values: HashMap::new(),
             functions: HashMap::new(),
             type_storage: LLVMTypeStorage::new(&ctx),
