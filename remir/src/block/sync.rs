@@ -3,6 +3,7 @@
 
 use crate::{
     block::{Block, BlockReference},
+    builders::build_lazy_load,
     module::Module,
 };
 
@@ -29,7 +30,7 @@ pub trait VariableSynchronizer {
     fn stop_sync_point(&mut self);
 
     /// Inherits the variables of the sync point onto the given block
-    fn inherit_sync_point(&self, block: &mut Block);
+    fn inherit_sync_point(&mut self, block: &mut Block);
 }
 
 impl VariableSynchronizer for Module {
@@ -49,15 +50,28 @@ impl VariableSynchronizer for Module {
     }
 
     #[inline]
-    fn inherit_sync_point(&self, block: &mut Block) {
+    fn inherit_sync_point(&mut self, block: &mut Block) {
         if self.get_sync_point().is_none() {
             return;
         }
 
-        let b = &self.blocks[self.get_sync_point().unwrap().id];
+        let variables = self.blocks[self.get_sync_point().unwrap().id]
+            .variables
+            .clone();
+        let reference = self.blocks[self.get_sync_point().unwrap().id]
+            .reference
+            .clone();
 
-        for (key, value) in b.variables.clone() {
-            block.variables.insert(key, value);
+        for (key, value) in variables {
+            let lazy_value = build_lazy_load(
+                self,
+                reference.clone(),
+                key.clone(),
+                value.held_value.as_ref().unwrap().value_type.clone(),
+            )
+            .unwrap();
+
+            block.append_variable(value.with_value(Some(lazy_value)));
         }
     }
 }
