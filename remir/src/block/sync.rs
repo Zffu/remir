@@ -5,6 +5,7 @@ use crate::{
     block::{Block, BlockReference},
     builders::build_lazy_load,
     module::Module,
+    writer::InstructionWriter,
 };
 
 /// Represents a variable synchronizer core.
@@ -55,12 +56,17 @@ impl VariableSynchronizer for Module {
             return;
         }
 
+        let curr_block = self.pos_block.clone();
+        let curr_state = self.pos_is_start;
+
         let variables = self.blocks[self.get_sync_point().unwrap().id]
             .variables
             .clone();
         let reference = self.blocks[self.get_sync_point().unwrap().id]
             .reference
             .clone();
+
+        self.move_end(block.reference.clone(), self.pos_function.clone().unwrap());
 
         for (key, value) in variables {
             let lazy_value = build_lazy_load(
@@ -73,5 +79,8 @@ impl VariableSynchronizer for Module {
 
             block.append_variable(value.with_value(Some(lazy_value)));
         }
+
+        self.pos_block = curr_block;
+        self.pos_is_start = curr_state;
     }
 }
