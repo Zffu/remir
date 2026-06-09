@@ -112,6 +112,8 @@ impl Module {
 
         let function = Function::new(reference.clone(), arguments, return_type);
 
+        self.function_names
+            .insert(reference.name.clone(), reference.id);
         self.functions.push(function);
         reference
     }
