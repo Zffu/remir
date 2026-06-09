@@ -63,8 +63,6 @@ pub fn bridge_llvm_branch_instruction(
             let phi = llvm_to_base!(bridge.builder.build_phi(ty.inner, ""));
 
             for choice in label_set {
-                println!("Test: {}", choice.1.inst_ind);
-
                 let block = bridge.blocks[&choice.0].clone();
                 let value = bridge.values[&choice.1.inst_ind].clone();
 
