@@ -99,5 +99,7 @@ pub fn bridge_llvm_instruction(
         | Instruction::Crash { .. }
         | Instruction::BitCast { .. }
         | Instruction::Unreachable => bridge_llvm_hints_instruction(instruction, bridge, module),
+
+        Instruction::LazyLoad { .. } => todo!("Lazy load intruction escaped"),
     }
 }
