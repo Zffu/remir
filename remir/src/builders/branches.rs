@@ -89,6 +89,10 @@ pub fn build_phi(
     // Dependency
 
     for dep in dependencies {
+        if &dep == module.pos_block.as_ref().unwrap() {
+            continue;
+        }
+
         module.blocks[module.pos_block.as_ref().unwrap().id]
             .dependencies
             .insert(dep);
