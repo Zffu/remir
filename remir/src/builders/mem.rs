@@ -71,7 +71,7 @@ pub fn build_struct_gep(
     module: &mut Module,
     base: SSAPointerValue,
     field: usize,
-) -> RemirResult<BaseSSAValue> {
+) -> RemirResult<SSAPointerValue> {
     if let ValueType::Struct(fields) = &base.inner_type {
         if field >= fields.len() {
             return_err!("field >= fields.len");
@@ -80,7 +80,7 @@ pub fn build_struct_gep(
         let inst = Instruction::GepStruct { base, field };
         let val = module.write(inst).get()?;
 
-        Ok(val)
+        val.try_into()
     } else {
         return_err!("type is not a struct")
     }
