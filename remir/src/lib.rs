@@ -7,6 +7,7 @@ pub mod builders;
 pub mod errs;
 pub mod func;
 pub mod insts;
+pub mod lazy_pass;
 pub mod misc;
 pub mod module;
 pub mod values;

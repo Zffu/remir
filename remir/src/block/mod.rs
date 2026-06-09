@@ -117,4 +117,11 @@ impl BlockInstruction {
             Option::Some(v) => Ok(v.clone()),
         }
     }
+
+    pub(crate) fn with_changed_inst(&self, instruction: Instruction) -> BlockInstruction {
+        BlockInstruction {
+            instruction,
+            value: self.value.clone(),
+        }
+    }
 }
