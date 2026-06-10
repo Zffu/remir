@@ -9,7 +9,7 @@ use inkwell::{
     basic_block::BasicBlock,
     builder::Builder,
     context::Context,
-    targets::{CodeModel, RelocMode, Target, TargetMachine},
+    targets::{CodeModel, InitializationConfig, RelocMode, Target, TargetMachine},
     types::{BasicMetadataTypeEnum, BasicType, VoidType},
 };
 use remir::{
@@ -78,6 +78,8 @@ pub fn compile_llvm(
     build_llvm(bridge, module)?;
 
     let module = bridge.modules[&module.name].clone();
+
+    Target::initialize_native(&InitializationConfig::default()).unwrap();
 
     let triple = TargetMachine::get_default_triple();
     let target = Target::from_triple(&triple).unwrap();
