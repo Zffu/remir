@@ -74,6 +74,7 @@ pub fn compile_llvm(
     module: &mut Module,
     optimization_level: OptimizationLevel,
     path: PathBuf,
+    pie: bool,
 ) -> Result<(), ()> {
     build_llvm(bridge, module)?;
 
@@ -91,13 +92,21 @@ pub fn compile_llvm(
         OptimizationLevel::Aggressive => inkwell::OptimizationLevel::Aggressive,
     };
 
+    let reloc_mode;
+
+    if pie {
+        reloc_mode = RelocMode::PIC
+    } else {
+        reloc_mode = RelocMode::Default;
+    }
+
     let machine = target
         .create_target_machine(
             &triple,
             "generic",
             "",
             level,
-            RelocMode::Default,
+            reloc_mode,
             CodeModel::Default,
         )
         .unwrap();
