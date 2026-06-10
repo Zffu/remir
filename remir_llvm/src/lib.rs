@@ -1,6 +1,7 @@
 use std::{
     collections::{HashMap, HashSet},
     mem::transmute,
+    path::PathBuf,
     rc::Rc,
 };
 
@@ -8,9 +9,11 @@ use inkwell::{
     basic_block::BasicBlock,
     builder::Builder,
     context::Context,
+    targets::{CodeModel, RelocMode, Target, TargetMachine},
     types::{BasicMetadataTypeEnum, BasicType, VoidType},
 };
 use remir::{
+    OptimizationLevel,
     block::{Block, BlockReference},
     func::{Function, FunctionReference},
     module::Module,
@@ -64,6 +67,44 @@ pub struct LLVMBridge {
 
     pub builder: Builder<'static>,
     pub void_type: LLVMVoidType,
+}
+
+pub fn compile_llvm(
+    bridge: &mut LLVMBridge,
+    module: &mut Module,
+    optimization_level: OptimizationLevel,
+    path: PathBuf,
+) -> Result<(), ()> {
+    build_llvm(bridge, module)?;
+
+    let module = bridge.modules[&module.name].clone();
+
+    let triple = TargetMachine::get_default_triple();
+    let target = Target::from_triple(&triple).unwrap();
+
+    let level = match optimization_level {
+        OptimizationLevel::None => inkwell::OptimizationLevel::None,
+        OptimizationLevel::Less => inkwell::OptimizationLevel::Less,
+        OptimizationLevel::Default => inkwell::OptimizationLevel::Default,
+        OptimizationLevel::Aggressive => inkwell::OptimizationLevel::Aggressive,
+    };
+
+    let machine = target
+        .create_target_machine(
+            &triple,
+            "generic",
+            "",
+            level,
+            RelocMode::Default,
+            CodeModel::Default,
+        )
+        .unwrap();
+
+    machine
+        .write_to_file(&module, inkwell::targets::FileType::Object, &path)
+        .unwrap();
+
+    Ok(())
 }
 
 pub fn build_llvm(bridge: &mut LLVMBridge, module: &mut Module) -> Result<(), ()> {
