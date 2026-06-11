@@ -16,4 +16,6 @@ default = ["fmt", "errors"]
 fmt = []
 errors = []
 
+allow_ptr_array_casting = []
+
 [dependencies]

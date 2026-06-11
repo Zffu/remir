@@ -3,7 +3,7 @@
 use crate::{
     errs::RemirReturnableError,
     return_err,
-    values::{BaseSSAValue, SSAValueLike, ValueType, consts::ConstantData},
+    values::{BaseSSAValue, SSAValueLike, ValueType, array::SSAArrayValue, consts::ConstantData},
 };
 
 /// A variant of [`BaseSSAValue`] that is a pointer.
@@ -27,6 +27,15 @@ impl SSAPointerValue {
             inner_type: inner_type.clone(),
             reference,
             base: BaseSSAValue::new(inst_ind, ValueType::Pointer(Box::new(inner_type))),
+        }
+    }
+
+    #[cfg(feature = "allow_ptr_array_casting")]
+    pub unsafe fn convert_from_array(value: SSAArrayValue) -> SSAPointerValue {
+        Self {
+            base: value.base.clone(),
+            reference: false,
+            inner_type: value.inner_type,
         }
     }
 }
