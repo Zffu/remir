@@ -278,7 +278,8 @@ impl Display for BlockInstruction {
         if self.value.is_some() {
             write!(
                 f,
-                "#{} = {}",
+                "({}) #{} = {}",
+                &self.value.as_ref().unwrap().value_type,
                 self.value.as_ref().unwrap().inst_ind,
                 &self.instruction
             )
