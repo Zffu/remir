@@ -1,6 +1,10 @@
 use std::{collections::HashMap, mem::transmute, num::NonZero, rc::Rc};
 
-use inkwell::{AddressSpace, context::Context, types::BasicTypeEnum};
+use inkwell::{
+    AddressSpace,
+    context::Context,
+    types::{BasicType, BasicTypeEnum},
+};
 use remir::values::ValueType;
 
 use crate::utils::LLVMTypeEnum;
@@ -52,7 +56,18 @@ impl LLVMTypeStorage {
                 self.ctx_ref.struct_type(&fs, false).into()
             }
 
-            _ => panic!(),
+            ValueType::Array(inner, size) => {
+                if size.is_none() {
+                    self.ctx_ref.ptr_type(AddressSpace::from(0)).into()
+                } else {
+                    let inner = self.convert(*inner.clone());
+
+                    inner.array_type(size.clone().unwrap() as u32).into()
+                }
+            }
+
+            ValueType::Reference(_) => self.ctx_ref.ptr_type(AddressSpace::from(0)).into(),
+            ValueType::Unknown => panic!("Unkown type found"),
         };
 
         let l = LLVMTypeEnum::new(

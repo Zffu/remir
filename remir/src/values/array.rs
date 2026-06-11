@@ -13,14 +13,20 @@ pub struct SSAArrayValue {
 
     /// The inner type of the array. Represents the type of values contained inside of the array
     pub inner_type: ValueType,
+
+    pub size: Option<usize>,
 }
 
 impl SSAArrayValue {
     /// Creates a new [`SSAArrayValue`]
-    pub fn new(inst_ind: usize, inner_type: ValueType) -> Self {
+    pub fn new(inst_ind: usize, inner_type: ValueType, size: Option<usize>) -> Self {
         Self {
-            base: BaseSSAValue::new(inst_ind, ValueType::Array(Box::new(inner_type.clone()))),
+            base: BaseSSAValue::new(
+                inst_ind,
+                ValueType::Array(Box::new(inner_type.clone()), size.clone()),
+            ),
             inner_type,
+            size,
         }
     }
 }
@@ -29,10 +35,11 @@ impl TryFrom<BaseSSAValue> for SSAArrayValue {
     type Error = RemirReturnableError;
 
     fn try_from(value: BaseSSAValue) -> Result<Self, Self::Error> {
-        if let ValueType::Array(inner) = (&value).value_type.clone() {
+        if let ValueType::Array(inner, size) = (&value).value_type.clone() {
             return Ok(Self {
                 base: value,
                 inner_type: *inner,
+                size: size,
             });
         }
 

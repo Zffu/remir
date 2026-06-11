@@ -61,8 +61,14 @@ impl Display for ValueType {
                 format!("ref({})", inner)
             }
 
-            Self::Array(inner) => {
-                format!("arr({})", inner)
+            Self::Array(inner, size) => {
+                let mut str = format!("arr({})", inner);
+
+                if size.is_some() {
+                    str += &format!("[{}]", size.as_ref().unwrap());
+                }
+
+                str
             }
 
             Self::Unknown => "??".to_string(),

@@ -19,7 +19,7 @@ pub enum ValueType {
     Reference(Box<ValueType>),
 
     /// An array of values
-    Array(Box<ValueType>),
+    Array(Box<ValueType>, Option<usize>),
 
     /// The unkown value type
     Unknown,
@@ -52,8 +52,8 @@ impl ValueType {
 
     /// Creates a new array type with the given inner type
     #[inline(always)]
-    pub fn new_array(inner_ty: ValueType) -> Self {
-        Self::Array(Box::new(inner_ty))
+    pub fn new_array(inner_ty: ValueType, size: Option<usize>) -> Self {
+        Self::Array(Box::new(inner_ty), size)
     }
 
     /// Creates a new pointer type that contains an unknown and thus represents a pointer address rather than a real pointer.
