@@ -33,7 +33,11 @@ impl SSAPointerValue {
     #[cfg(feature = "allow_ptr_array_casting")]
     pub unsafe fn convert_from_array(value: SSAArrayValue) -> SSAPointerValue {
         Self {
-            base: value.base.clone(),
+            base: BaseSSAValue {
+                inst_ind: value.base.inst_ind,
+                value_type: ValueType::new_pointer(value.inner_type.clone()),
+                constant: value.get_constant_data(),
+            },
             reference: false,
             inner_type: value.inner_type,
         }
