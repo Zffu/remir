@@ -74,6 +74,7 @@ pub fn bridge_llvm_instruction(
         | Instruction::Free { .. }
         | Instruction::Gep { .. }
         | Instruction::GepStruct { .. }
+        | Instruction::GepArray { .. }
         | Instruction::LoadIndexed { .. }
         | Instruction::StoreIndexed { .. } => {
             bridge_llvm_mem_instruction(instruction, bridge, module)

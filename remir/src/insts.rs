@@ -8,8 +8,8 @@ use crate::{
     misc::{CompareOperator, MathOperator, MemoryOrder},
     module::Module,
     values::{
-        BaseSSAValue, ValueType, consts::ConstantData, float::SSAFloatValue, int::SSAIntValue,
-        ptr::SSAPointerValue, structs::SSAStructValue,
+        BaseSSAValue, ValueType, array::SSAArrayValue, consts::ConstantData, float::SSAFloatValue,
+        int::SSAIntValue, ptr::SSAPointerValue, structs::SSAStructValue,
     },
 };
 
@@ -370,6 +370,13 @@ impl Instruction {
                     Some(ValueType::new_pointer(*fields[*field].clone()))
                 } else {
                     unsafe { unreachable_unchecked() }
+                }
+            }
+            Self::GepArray { base, index: _ } => {
+                if let ValueType::Array(inner, _) = base.inner_type.clone() {
+                    Some(ValueType::new_pointer(*inner))
+                } else {
+                    panic!()
                 }
             }
             Self::IntExtend { val: _, into } => Some(into.clone()),
