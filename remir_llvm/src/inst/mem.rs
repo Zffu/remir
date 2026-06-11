@@ -117,6 +117,28 @@ pub fn bridge_llvm_mem_instruction(
             Some(val.into())
         }
 
+        Instruction::GepArray { base, index } => {
+            let ty = bridge.type_storage.convert(base.inner_type.clone());
+            let base = bridge.values[&base.base.inst_ind].into_pointer_value();
+
+            let first_offset = bridge
+                .type_storage
+                .convert(ValueType::Int(false, 64))
+                .into_int_type()
+                .const_int(0, false);
+            let index = bridge.values[&index.base.inst_ind].into_int_value();
+
+            let val = unsafe {
+                llvm_to_base!(
+                    bridge
+                        .builder
+                        .build_gep(ty.inner, base, &[first_offset, index], "")
+                )
+            };
+
+            Some(val.into())
+        }
+
         Instruction::LoadIndexed { base, index } => {
             let ty = bridge.type_storage.convert(base.inner_type.clone());
 
