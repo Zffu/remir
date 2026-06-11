@@ -180,6 +180,11 @@ pub enum Instruction {
         field: usize,
     },
 
+    GepArray {
+        base: SSAPointerValue,
+        index: SSAIntValue,
+    },
+
     LoadIndexed {
         base: SSAPointerValue,
         index: SSAIntValue,

@@ -86,6 +86,22 @@ pub fn build_struct_gep(
     }
 }
 
+pub fn build_array_gep(
+    module: &mut Module,
+    base: SSAPointerValue,
+    index: SSAIntValue,
+) -> RemirResult<SSAPointerValue> {
+    if let ValueType::Array(_, _) = &base.inner_type {
+        let inst = Instruction::GepArray { base, index };
+
+        let val = module.write(inst).get()?;
+
+        val.try_into()
+    } else {
+        return_err!("type is not array")
+    }
+}
+
 pub fn build_load_indexed(
     module: &mut Module,
     base: SSAPointerValue,
