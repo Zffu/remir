@@ -8,8 +8,8 @@ use crate::{
     misc::{CompareOperator, MathOperator, MemoryOrder},
     module::Module,
     values::{
-        BaseSSAValue, ValueType, array::SSAArrayValue, consts::ConstantData, float::SSAFloatValue,
-        int::SSAIntValue, ptr::SSAPointerValue, structs::SSAStructValue,
+        BaseSSAValue, ValueType, consts::ConstantData, float::SSAFloatValue, int::SSAIntValue,
+        ptr::SSAPointerValue, structs::SSAStructValue,
     },
 };
 
