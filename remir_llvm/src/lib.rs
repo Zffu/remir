@@ -17,6 +17,7 @@ use remir::{
     block::{Block, BlockReference},
     func::{Function, FunctionReference},
     module::Module,
+    values::ValueType,
 };
 
 use crate::{
@@ -185,11 +186,8 @@ pub fn bridge_llvm_function(bridge: &mut LLVMBridge, func: &Function, module: &m
 
     let llvm_func;
 
-    if func.return_type.is_some() {
-        let ret_type = bridge
-            .type_storage
-            .convert(func.return_type.clone().unwrap())
-            .inner;
+    if func.return_type != ValueType::Void {
+        let ret_type = bridge.type_storage.convert(func.return_type.clone()).inner;
 
         llvm_func = ret_type.fn_type(&arguments, false);
     } else {

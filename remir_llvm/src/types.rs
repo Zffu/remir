@@ -67,7 +67,9 @@ impl LLVMTypeStorage {
             }
 
             ValueType::Reference(_) => self.ctx_ref.ptr_type(AddressSpace::from(0)).into(),
+
             ValueType::Unknown => panic!("Unkown type found"),
+            ValueType::Void => panic!("Void type found"),
         };
 
         let l = LLVMTypeEnum::new(
