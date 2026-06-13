@@ -3,8 +3,11 @@
 use crate::{
     errs::RemirReturnableError,
     return_err,
-    values::{BaseSSAValue, SSAValueLike, ValueType, array::SSAArrayValue, consts::ConstantData},
+    values::{BaseSSAValue, SSAValueLike, ValueType, consts::ConstantData},
 };
+
+#[cfg(feature = "allow_ptr_array_casting")]
+use crate::values::array::SSAArrayValue;
 
 /// A variant of [`BaseSSAValue`] that is a pointer.
 #[derive(Clone)]

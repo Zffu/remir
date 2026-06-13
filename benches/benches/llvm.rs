@@ -14,9 +14,13 @@ use remir_llvm::{LLVMBridge, build_llvm};
 fn hello_world_llvm() {
     let mut m = Module::new("test".into());
 
-    let printf = m.create_function("printf".into(), vec![ValueType::new_any_pointer()], None);
+    let printf = m.create_function(
+        "printf".into(),
+        vec![ValueType::new_any_pointer()],
+        ValueType::Void,
+    );
 
-    let main = m.create_function("main".into(), vec![], None);
+    let main = m.create_function("main".into(), vec![], ValueType::Void);
     m.move_function(main.clone());
 
     let block = m.create_block("entry".into()).unwrap();
@@ -38,12 +42,12 @@ fn fib_llvm() {
     let fib = m.create_function(
         "fib".into(),
         vec![ValueType::Int(false, 32)],
-        Some(ValueType::Int(false, 32)),
+        ValueType::Int(false, 32),
     );
 
     m.move_function(fib.clone());
 
-    let _ = m.create_function("main".into(), vec![], None);
+    let _ = m.create_function("main".into(), vec![], ValueType::Void);
 
     let entry = m.create_block("entry".into()).unwrap();
     let then = m.create_block("then".into()).unwrap();
