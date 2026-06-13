@@ -106,7 +106,7 @@ impl Module {
         &mut self,
         name: String,
         arguments: Vec<ValueType>,
-        return_type: Option<ValueType>,
+        return_type: ValueType,
     ) -> FunctionReference {
         let reference = FunctionReference::new(name, self.functions.len());
 

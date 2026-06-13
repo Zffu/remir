@@ -306,25 +306,21 @@ impl Instruction {
                 pure: _,
                 no_return: _,
                 fast_calling_conv: _,
-            } => module.functions[func_label.id].return_type.is_some(),
+            } => module.functions[func_label.id].return_type != ValueType::Void,
 
             _ => true,
         }
     }
 
-    pub fn get_output_type(&self, module: &mut Module) -> Option<ValueType> {
+    pub fn get_output_type(&self, module: &mut Module) -> ValueType {
         match self {
-            Self::Alloc { size: _, val_type } => {
-                Some(ValueType::Pointer(Box::new(val_type.clone())))
-            }
-            Self::AllocUntyped { .. } => Some(ValueType::new_any_pointer()),
+            Self::Alloc { size: _, val_type } => ValueType::Pointer(Box::new(val_type.clone())),
+            Self::AllocUntyped { .. } => ValueType::new_any_pointer(),
 
-            Self::Alloca { size: _, val_type } => {
-                Some(ValueType::Reference(Box::new(val_type.clone())))
-            }
-            Self::AllocaUntyped { .. } => Some(ValueType::new_any_pointer()),
+            Self::Alloca { size: _, val_type } => ValueType::Reference(Box::new(val_type.clone())),
+            Self::AllocaUntyped { .. } => ValueType::new_any_pointer(),
 
-            Self::BitCast { src: _, into } => Some(into.clone()),
+            Self::BitCast { src: _, into } => into.clone(),
             Self::Call {
                 func_label,
                 args: _,
@@ -336,58 +332,57 @@ impl Instruction {
             Self::GrabArgument { index } => {
                 let curr_func = module.pos_function.as_ref().unwrap();
 
-                Some(module.functions[curr_func.id].arguments[*index].clone())
+                module.functions[curr_func.id].arguments[*index].clone()
             }
 
-            Self::Not { .. } => Some(ValueType::Int(false, 1)),
-            Self::CompareOperationFloat { .. } => Some(ValueType::Int(false, 1)),
-            Self::CompareOperationInt { .. } => Some(ValueType::Int(false, 1)),
-            Self::ConstFloat { val: _, size } => Some(ValueType::Float(*size)),
+            Self::Not { .. } => ValueType::Int(false, 1),
+            Self::CompareOperationFloat { .. } => ValueType::Int(false, 1),
+            Self::CompareOperationInt { .. } => ValueType::Int(false, 1),
+            Self::ConstFloat { val: _, size } => ValueType::Float(*size),
             Self::ConstInt {
                 val: _,
                 size,
                 signed,
-            } => Some(ValueType::Int(*signed, *size)),
-            Self::ConstString { .. } => Some(ValueType::new_any_pointer()),
-            Self::ConstPointer { .. } => Some(ValueType::new_any_pointer()),
-            Self::ConstStruct { ty, values: _ } => Some(ty.clone()),
-            Self::ConstArray { values } => Some(ValueType::new_array(
-                values[0].value_type.clone(),
-                Some(values.len()),
-            )),
+            } => ValueType::Int(*signed, *size),
+            Self::ConstString { .. } => ValueType::new_any_pointer(),
+            Self::ConstPointer { .. } => ValueType::new_any_pointer(),
+            Self::ConstStruct { ty, values: _ } => ty.clone(),
+            Self::ConstArray { values } => {
+                ValueType::new_array(values[0].value_type.clone(), Some(values.len()))
+            }
             Self::ConstArraySame { value, count } => {
-                Some(ValueType::new_array(value.value_type.clone(), Some(*count)))
+                ValueType::new_array(value.value_type.clone(), Some(*count))
             }
 
-            Self::Copy { val } => Some(val.value_type.clone()),
-            Self::ExtractValue { struct_val, index } => Some(struct_val.fields[*index].clone()),
-            Self::FloatExtend { val: _, into } => Some(into.clone()),
-            Self::FloatToInt { val: _, into } => Some(into.clone()),
-            Self::FloatTruncate { val: _, into } => Some(into.clone()),
-            Self::Gep { base, offset: _ } => Some(base.base.value_type.clone()),
+            Self::Copy { val } => val.value_type.clone(),
+            Self::ExtractValue { struct_val, index } => struct_val.fields[*index].clone(),
+            Self::FloatExtend { val: _, into } => into.clone(),
+            Self::FloatToInt { val: _, into } => into.clone(),
+            Self::FloatTruncate { val: _, into } => into.clone(),
+            Self::Gep { base, offset: _ } => base.base.value_type.clone(),
             Self::GepStruct { base, field } => {
                 if let ValueType::Struct(fields) = &base.inner_type {
-                    Some(ValueType::new_pointer(*fields[*field].clone()))
+                    ValueType::new_pointer(*fields[*field].clone())
                 } else {
                     unsafe { unreachable_unchecked() }
                 }
             }
             Self::GepArray { base, index: _ } => {
                 if let ValueType::Array(inner, _) = base.inner_type.clone() {
-                    Some(ValueType::new_pointer(*inner))
+                    ValueType::new_pointer(*inner)
                 } else {
                     panic!()
                 }
             }
-            Self::IntExtend { val: _, into } => Some(into.clone()),
-            Self::IntToFloat { val: _, into } => Some(into.clone()),
-            Self::IntTruncate { val: _, into } => Some(into.clone()),
-            Self::Load { source } => Some(source.inner_type.clone()),
+            Self::IntExtend { val: _, into } => into.clone(),
+            Self::IntToFloat { val: _, into } => into.clone(),
+            Self::IntTruncate { val: _, into } => into.clone(),
+            Self::Load { source } => source.inner_type.clone(),
             Self::LoadAtomic {
                 source,
                 ordering: _,
-            } => Some(source.inner_type.clone()),
-            Self::LoadIndexed { base, index: _ } => Some(base.inner_type.clone()),
+            } => source.inner_type.clone(),
+            Self::LoadIndexed { base, index: _ } => base.inner_type.clone(),
             Self::MathOperationFloat {
                 a,
                 b: _,
@@ -395,7 +390,7 @@ impl Instruction {
                 signed_wrap: _,
                 unsigned_wrap: _,
                 fast: _,
-            } => Some(a.base.value_type.clone()),
+            } => a.base.value_type.clone(),
 
             Self::MathOperationInt {
                 a,
@@ -405,16 +400,16 @@ impl Instruction {
                 signed_wrap: _,
                 unsigned_wrap: _,
                 fast: _,
-            } => Some(a.base.value_type.clone()),
+            } => a.base.value_type.clone(),
 
-            Self::Phi { label_set } => Some(label_set[0].1.value_type.clone()),
+            Self::Phi { label_set } => label_set[0].1.value_type.clone(),
             Self::Select {
                 cond: _,
                 true_val,
                 false_val: _,
-            } => Some(true_val.value_type.clone()),
+            } => true_val.value_type.clone(),
 
-            _ => None,
+            _ => ValueType::Void,
         }
     }
 

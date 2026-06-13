@@ -71,6 +71,8 @@ impl Display for ValueType {
                 str
             }
 
+            Self::Void => format!("void"),
+
             Self::Unknown => "??".to_string(),
         };
 

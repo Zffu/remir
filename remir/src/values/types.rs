@@ -21,6 +21,9 @@ pub enum ValueType {
     /// An array of values
     Array(Box<ValueType>, Option<usize>),
 
+    /// Represents the void type
+    Void,
+
     /// The unkown value type
     Unknown,
 }

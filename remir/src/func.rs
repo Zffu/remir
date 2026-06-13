@@ -25,7 +25,7 @@ pub struct Function {
     pub arguments: Vec<ValueType>,
 
     /// The return type of the function
-    pub return_type: Option<ValueType>,
+    pub return_type: ValueType,
 
     /// The counter used to generate [`BaseSSAValue`][`crate::values::BaseSSAValue`] indexes
     pub value_index_counter: usize,
@@ -36,7 +36,7 @@ impl Function {
     pub fn new(
         reference: FunctionReference,
         arguments: Vec<ValueType>,
-        return_type: Option<ValueType>,
+        return_type: ValueType,
     ) -> Self {
         Self {
             reference,

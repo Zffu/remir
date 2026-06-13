@@ -8,8 +8,8 @@ impl Display for Function {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         writeln!(f, "#val_ind_ctr: {}", self.value_index_counter)?;
 
-        if self.return_type.is_some() {
-            writeln!(f, "#ret_type {}", self.return_type.as_ref().unwrap())?;
+        if self.return_type != ValueType::Void {
+            writeln!(f, "#ret_type {}", self.return_type)?;
         }
 
         if !self.arguments.is_empty() {

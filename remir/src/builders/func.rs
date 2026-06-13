@@ -1,6 +1,11 @@
 use crate::{
-    errs::RemirResult, func::FunctionReference, insts::Instruction, module::Module, return_err,
-    values::BaseSSAValue, writer::InstructionWriter,
+    errs::RemirResult,
+    func::FunctionReference,
+    insts::Instruction,
+    module::Module,
+    return_err,
+    values::{BaseSSAValue, ValueType},
+    writer::InstructionWriter,
 };
 
 pub fn build_call(
@@ -32,7 +37,7 @@ pub fn build_call(
     };
 
     let val = module.write(inst);
-    let has_return = !no_return && return_type.is_some();
+    let has_return = !no_return && return_type != ValueType::Void;
 
     if has_return {
         Ok(Some(val.get()?))
