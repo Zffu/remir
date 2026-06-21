@@ -382,6 +382,7 @@ impl Instruction {
             Self::IntExtend { val: _, into } => into.clone(),
             Self::IntToFloat { val: _, into } => into.clone(),
             Self::IntTruncate { val: _, into } => into.clone(),
+            Self::IntToPtr { val: _, into } => into.clone(),
             Self::Load { source } => source.inner_type.clone(),
             Self::LoadAtomic {
                 source,
