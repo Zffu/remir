@@ -126,7 +126,7 @@ pub fn bridge_llvm_vals_instruction(
         }
 
         Instruction::IntToPtr { val, into } => {
-            let val = bridge.values[&val.base.inst_ind].into_pointer_value();
+            let val = bridge.values[&val.base.inst_ind].into_int_value();
             let into = bridge.type_storage.convert(into.clone());
 
             let res = llvm_to_base!(bridge.builder.build_int_to_ptr(
