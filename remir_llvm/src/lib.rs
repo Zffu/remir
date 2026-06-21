@@ -15,8 +15,10 @@ use inkwell::{
 use remir::{
     OptimizationLevel,
     block::{Block, BlockReference},
+    errs::{RemirError, RemirResult},
     func::{Function, FunctionReference},
     module::Module,
+    return_err,
     values::ValueType,
 };
 
@@ -76,8 +78,22 @@ pub fn compile_llvm(
     optimization_level: OptimizationLevel,
     path: PathBuf,
     pie: bool,
-) -> Result<(), ()> {
-    build_llvm(bridge, module)?;
+) -> RemirResult<()> {
+    match build_llvm(bridge, module) {
+        Ok(_) => {}
+        Err(_) => return_err!("LLVM building failed"),
+    }
+
+    let check = bridge.modules[&module.name].verify();
+
+    if check.is_err() {
+        bridge.modules[&module.name].print_to_stderr();
+
+        return Err(RemirError::new(&format!(
+            "LLVM Check Error: {}",
+            check.unwrap_err()
+        )));
+    }
 
     let module = bridge.modules[&module.name].clone();
 
