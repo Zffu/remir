@@ -224,6 +224,7 @@ impl Display for Instruction {
             Instruction::IntToFloat { val, into } => write!(f, "itf {} {}", val, into),
             Instruction::FloatExtend { val, into } => write!(f, "floate {} {}", val, into),
             Instruction::FloatTruncate { val, into } => write!(f, "floatt {} {}", val, into),
+            Instruction::IntToPtr { val, into } => write!(f, "intoptr {} {}", val, into),
 
             Instruction::ExtractValue { struct_val, index } => {
                 write!(f, "extract {} i{}", struct_val, index)

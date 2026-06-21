@@ -85,7 +85,8 @@ pub fn bridge_llvm_instruction(
         | Instruction::IntExtend { .. }
         | Instruction::IntTruncate { .. }
         | Instruction::FloatExtend { .. }
-        | Instruction::FloatTruncate { .. } => bridge_llvm_vals_instruction(instruction, bridge),
+        | Instruction::FloatTruncate { .. }
+        | Instruction::IntToPtr { .. } => bridge_llvm_vals_instruction(instruction, bridge),
 
         Instruction::Select { .. }
         | Instruction::ExtractValue { .. }

@@ -125,6 +125,19 @@ pub fn bridge_llvm_vals_instruction(
             Some(res.into())
         }
 
+        Instruction::IntToPtr { val, into } => {
+            let val = bridge.values[&val.base.inst_ind].into_pointer_value();
+            let into = bridge.type_storage.convert(into.clone());
+
+            let res = llvm_to_base!(bridge.builder.build_int_to_ptr(
+                val,
+                into.into_pointer_type(),
+                ""
+            ));
+
+            Some(res.into())
+        }
+
         _ => unsafe { unreachable_unchecked() },
     };
 

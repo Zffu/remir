@@ -5,7 +5,8 @@ use crate::{
     module::Module,
     return_err,
     values::{
-        BaseSSAValue, ValueType, float::SSAFloatValue, int::SSAIntValue, structs::SSAStructValue,
+        BaseSSAValue, ValueType, float::SSAFloatValue, int::SSAIntValue, ptr::SSAPointerValue,
+        structs::SSAStructValue,
     },
     writer::InstructionWriter,
 };
@@ -235,4 +236,20 @@ pub fn build_switch(
 
     module.write(inst);
     Ok(())
+}
+
+pub fn build_int_to_ptr(
+    module: &mut Module,
+    val: SSAIntValue,
+    into: ValueType,
+) -> RemirResult<SSAPointerValue> {
+    if let ValueType::Pointer(_) = &into {
+        let inst = Instruction::IntToPtr { val, into };
+
+        let val = module.write(inst).get()?;
+
+        SSAPointerValue::try_from(val)
+    } else {
+        return_err!("expected pointer type to do int -> ptr")
+    }
 }

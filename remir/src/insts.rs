@@ -239,6 +239,11 @@ pub enum Instruction {
         into: ValueType,
     },
 
+    IntToPtr {
+        val: SSAIntValue,
+        into: ValueType,
+    },
+
     // Struct instructions
     ExtractValue {
         struct_val: SSAStructValue,
