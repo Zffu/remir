@@ -81,7 +81,7 @@ pub fn compile_llvm(
 ) -> RemirResult<()> {
     match build_llvm(bridge, module) {
         Ok(_) => {}
-        Err(_) => return_err!("LLVM building failed"),
+        Err(_) => return Err(RemirError::new("Build LLVM failed!")),
     }
 
     let check = bridge.modules[&module.name].verify();
