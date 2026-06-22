@@ -3,7 +3,9 @@ use std::hint::unreachable_unchecked;
 use inkwell::{
     module::Linkage,
     types::{BasicType, BasicTypeEnum, StringRadix},
-    values::{ArrayValue, BasicValueEnum, FloatValue, IntValue, PointerValue, StructValue},
+    values::{
+        ArrayValue, BasicValue, BasicValueEnum, FloatValue, IntValue, PointerValue, StructValue,
+    },
 };
 use remir::{block::BlockInstruction, insts::Instruction, module::Module, values::ValueType};
 
@@ -87,14 +89,37 @@ pub fn bridge_llvm_const_instruction(
         Instruction::ConstStruct { ty, values } => {
             let ty = bridge.type_storage.convert(ty.clone()).into_struct_type();
             let mut vals = vec![];
+            let mut is_const = true;
 
             for value in values {
-                vals.push(bridge.values[&value.inst_ind].clone().inner);
+                let val = bridge.values[&value.inst_ind].clone().inner;
+
+                if !val.is_const() {
+                    is_const = false;
+                }
+
+                vals.push(val);
             }
 
-            let val = ty.const_named_struct(&vals).into();
+            let val;
 
-            Some(val)
+            if is_const {
+                val = ty.const_named_struct(&vals);
+            } else {
+                let mut struct_val = ty.get_undef();
+
+                for (i, v) in vals.iter().enumerate() {
+                    struct_val = bridge
+                        .builder
+                        .build_insert_value(struct_val, *v, i as u32, "")
+                        .expect("valid insert value")
+                        .into_struct_value();
+                }
+
+                val = struct_val;
+            }
+
+            Some(val.into())
         }
 
         Instruction::ConstArray { values } => {
