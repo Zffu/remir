@@ -29,6 +29,10 @@ pub fn build_call(
         arguments.len()
     };
 
+    for arg in &args {
+        println!("- {}", arg);
+    }
+
     for ind in 0..end_to_stop {
         let arg = &args[ind];
 
