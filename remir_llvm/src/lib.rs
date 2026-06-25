@@ -205,9 +205,11 @@ pub fn bridge_llvm_function(bridge: &mut LLVMBridge, func: &Function, module: &m
     if func.return_type != ValueType::Void {
         let ret_type = bridge.type_storage.convert(func.return_type.clone()).inner;
 
-        llvm_func = ret_type.fn_type(&arguments, false);
+        llvm_func = ret_type.fn_type(&arguments, func.triple_dot_position.is_some());
     } else {
-        llvm_func = bridge.void_type.fn_type(&arguments, false);
+        llvm_func = bridge
+            .void_type
+            .fn_type(&arguments, func.triple_dot_position.is_some());
     }
 
     let llvm_f = bridge.modules[&module.name].add_function(&func.reference.name, llvm_func, None);

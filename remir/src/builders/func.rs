@@ -19,8 +19,6 @@ pub fn build_call(
     let arguments = module.functions[label.id].arguments.clone();
     let return_type = module.functions[label.id].return_type.clone();
 
-    let mut ind = 0;
-
     let func = &module.functions[label.id];
 
     let end_to_stop = if func.triple_dot_position.is_some() {
@@ -28,10 +26,6 @@ pub fn build_call(
     } else {
         arguments.len()
     };
-
-    for arg in &args {
-        println!("- {}", arg);
-    }
 
     for ind in 0..end_to_stop {
         let arg = &args[ind];
