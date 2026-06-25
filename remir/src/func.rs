@@ -27,6 +27,10 @@ pub struct Function {
     /// The return type of the function
     pub return_type: ValueType,
 
+    /// The index that points to an argument. After this point, argument checking is disabled.
+    /// This is quite unsafe and should only be used on C function equivalents.
+    pub triple_dot_position: Option<usize>,
+
     /// The counter used to generate [`BaseSSAValue`][`crate::values::BaseSSAValue`] indexes
     pub value_index_counter: usize,
 }
@@ -44,6 +48,7 @@ impl Function {
             arguments,
             return_type,
             value_index_counter: 0,
+            triple_dot_position: None,
         }
     }
 

@@ -20,12 +20,21 @@ pub fn build_call(
     let return_type = module.functions[label.id].return_type.clone();
 
     let mut ind = 0;
-    for arg in &args {
+
+    let func = &module.functions[label.id];
+
+    let end_to_stop = if func.triple_dot_position.is_some() {
+        func.triple_dot_position.clone().unwrap()
+    } else {
+        arguments.len()
+    };
+
+    for ind in 0..end_to_stop {
+        let arg = &args[ind];
+
         if arg.value_type != arguments[ind] {
             return_err!("Argument types do not match the declaration")
         }
-
-        ind += 1;
     }
 
     let inst = Instruction::Call {
