@@ -66,4 +66,25 @@ impl ValueType {
     pub fn new_any_pointer() -> Self {
         Self::new_pointer(ValueType::Unknown)
     }
+
+    pub fn get_size(&self) -> usize {
+        match self {
+            Self::Array(inner, size) => {
+                if size.is_some() {
+                    inner.get_size() * size.as_ref().unwrap()
+                } else {
+                    Self::new_any_pointer().get_size()
+                }
+            }
+
+            Self::Float(size) => *size,
+            Self::Int(_, size) => *size,
+            Self::Pointer(_) => usize::BITS as usize,
+            Self::Reference(_) => usize::BITS as usize, // TODO: change this to be platform dependant
+            Self::Struct(container) => container.iter().map(|f| f.get_size()).sum(),
+
+            Self::Void => 0,
+            Self::Unknown => 0,
+        }
+    }
 }
