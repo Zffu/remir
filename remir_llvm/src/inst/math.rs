@@ -30,10 +30,25 @@ pub fn bridge_llvm_math_instruction(
             let a = bridge.values[&a.base.inst_ind].into_int_value();
             let b = bridge.values[&b.base.inst_ind].into_int_value();
 
+            let mut can_apply = false;
+
             let res = match op {
-                MathOperator::Add => bridge.builder.build_int_add(a, b, ""),
-                MathOperator::Sub => bridge.builder.build_int_sub(a, b, ""),
-                MathOperator::Mul => bridge.builder.build_int_mul(a, b, ""),
+                MathOperator::Add => {
+                    can_apply = true;
+
+                    bridge.builder.build_int_add(a, b, "")
+                }
+                MathOperator::Sub => {
+                    can_apply = true;
+
+                    bridge.builder.build_int_sub(a, b, "")
+                }
+                MathOperator::Mul => {
+                    can_apply = true;
+
+                    bridge.builder.build_int_mul(a, b, "")
+                }
+
                 MathOperator::Div => {
                     if *signed {
                         bridge.builder.build_int_signed_div(a, b, "")
@@ -63,7 +78,9 @@ pub fn bridge_llvm_math_instruction(
 
             let res = llvm_to_base!(res);
 
-            if let Some(res2) = res.as_instruction_value() {
+            if let Some(res2) = res.as_instruction_value()
+                && can_apply
+            {
                 llvm_to_base_returnless!(res2.set_no_signed_wrap_flag(!*signed_wrap));
                 llvm_to_base_returnless!(res2.set_no_unsigned_wrap_flag(!*unsigned_wrap));
             }
@@ -82,10 +99,22 @@ pub fn bridge_llvm_math_instruction(
             let a = bridge.values[&a.base.inst_ind].into_float_value();
             let b = bridge.values[&b.base.inst_ind].into_float_value();
 
+            let mut can_apply = false;
+
             let res = match op {
-                MathOperator::Add => bridge.builder.build_float_add(a, b, ""),
-                MathOperator::Sub => bridge.builder.build_float_sub(a, b, ""),
-                MathOperator::Mul => bridge.builder.build_float_mul(a, b, ""),
+                MathOperator::Add => {
+                    can_apply = true;
+                    bridge.builder.build_float_add(a, b, "")
+                }
+                MathOperator::Sub => {
+                    can_apply = true;
+                    bridge.builder.build_float_sub(a, b, "")
+                }
+
+                MathOperator::Mul => {
+                    can_apply = true;
+                    bridge.builder.build_float_mul(a, b, "")
+                }
                 MathOperator::Div => bridge.builder.build_float_div(a, b, ""),
                 MathOperator::Mod => bridge.builder.build_float_rem(a, b, ""),
 
@@ -95,8 +124,10 @@ pub fn bridge_llvm_math_instruction(
             let res = llvm_to_base!(res);
             let res2 = res.as_instruction().unwrap();
 
-            llvm_to_base_returnless!(res2.set_no_signed_wrap_flag(!*signed_wrap));
-            llvm_to_base_returnless!(res2.set_no_unsigned_wrap_flag(!*unsigned_wrap));
+            if can_apply {
+                llvm_to_base_returnless!(res2.set_no_signed_wrap_flag(!*signed_wrap));
+                llvm_to_base_returnless!(res2.set_no_unsigned_wrap_flag(!*unsigned_wrap));
+            }
 
             let mut flags = FastMathFlags::empty();
 

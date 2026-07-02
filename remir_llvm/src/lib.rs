@@ -18,7 +18,6 @@ use remir::{
     errs::{RemirError, RemirResult},
     func::{Function, FunctionReference},
     module::Module,
-    return_err,
     values::ValueType,
 };
 
